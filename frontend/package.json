@@ -4,7 +4,8 @@
   "description": "software for find and pick music",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -14,5 +15,18 @@
     "music"
   ],
   "author": "George Carpow",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "vue": "^2.5.13",
+    "vue-class-component": "^6.1.2",
+    "vuejs": "^3.0.1"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
+    "css-loader": "^0.28.9",
+    "typescript": "^2.7.1",
+    "vue-loader": "^14.1.1",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^3.10.0"
+  }
 }
