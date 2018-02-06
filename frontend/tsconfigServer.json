@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "outDir": "build",
+    "lib": [
+      "es5"
+    ]
+  },
+  "files": [
+    "server.ts",
+    "webpack.config.ts"
+  ]
+}

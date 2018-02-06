@@ -1,19 +1,19 @@
-import Vue from 'vue'
-import MainComponent from "./components/App/App";
+import Vue from "vue";
+import MainComponent from "./components/App/App.vue";
 
 class AppCore {
   private instance: Vue;
 
-  private init() {
-    this.instance = new Vue({
-      el: '#app',
-      render: h => h(MainComponent),
-    })
-  }
-
   constructor() {
     this.init();
   }
+
+  private init(): void {
+    this.instance = new Vue({
+      render: (h) => h(MainComponent),
+    }).$mount("#app");
+  }
 }
 
-new AppCore();
+// tslint:disable-next-line:no-unused-expression
+const a = new AppCore();
