@@ -1,7 +1,7 @@
 import {Configuration} from "webpack";
 
 const webpackConfig: Configuration = {
-  entry: "./src/index.ts",
+  entry: "./src/index.tsx",
   output: {
     filename: "bundle.js",
     path: __dirname,
@@ -27,9 +27,9 @@ const webpackConfig: Configuration = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".vue"],
+    extensions: [".tsx", ".ts", ".js"],
   },
-  devtool: "source-map",
+  devtool: "inline-source-map",
 };
 
 export default webpackConfig;

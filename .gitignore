@@ -1,4 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 frontend/node_modules/
-frontend/dist/
+frontend/build/
