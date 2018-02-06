@@ -16,23 +16,9 @@ const webpackConfig: Configuration = {
         loader: "tslint-loader",
       },
       {
-        test: /\.ts$/,
+        test: /\.ts(x)$/,
         loader: "awesome-typescript-loader",
         exclude: /node_modules/,
-        options: {
-          configFileName: "tsconfig.json",
-          appendTsSuffixTo: [/\.vue$/],
-        },
-      },
-      {
-        test: /\.vue$/,
-        loader: "vue-loader",
-        options: {
-          loaders: {
-            ts: "awesome-typescript-loader",
-          },
-          esModule: true,
-        },
       },
       {
         test: /\.css$/,

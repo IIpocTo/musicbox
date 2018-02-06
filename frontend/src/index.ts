@@ -1,19 +1,19 @@
-import Vue from "vue";
-import MainComponent from "./components/App/App.vue";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import {ReactNode, Component} from "react";
+import App from "./components/App/App";
 
 class AppCore {
-  private instance: Vue;
+  private routes: Array<{ path: string, component: Component }>;
 
   constructor() {
     this.init();
   }
 
   private init(): void {
-    this.instance = new Vue({
-      render: (h) => h(MainComponent),
-    }).$mount("#app");
+    ReactDOM.render(
+      App,
+      document.getElementById("app"),
+    );
   }
 }
-
-// tslint:disable-next-line:no-unused-expression
-const a = new AppCore();
