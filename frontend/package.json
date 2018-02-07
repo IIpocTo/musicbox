@@ -18,10 +18,14 @@
   "license": "Apache-2.0",
   "dependencies": {
     "express": "^4.16.2",
+    "immutable": "^3.8.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
+    "redux-immutable": "^4.0.0",
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^0.78.1"
   },
@@ -31,6 +35,8 @@
     "@types/react": "^16.0.36",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.14",
+    "@types/react-router": "^4.0.21",
+    "@types/redux-immutable": "^3.0.38",
     "@types/webpack": "^3.8.5",
     "@types/webpack-dev-middleware": "^2.0.0",
     "@types/webpack-hot-middleware": "^2.16.2",
