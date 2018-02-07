@@ -24,6 +24,14 @@ const webpackConfig: Configuration = {
         test: /\.css$/,
         loaders: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: "url-loader?limit=10000",
+      },
+      {
+        test: /\.(jpg|png|gif)$/,
+        use: "file-loader",
+      },
     ],
   },
   resolve: {

@@ -1,9 +1,12 @@
 import * as React from "react";
+import {Button} from "semantic-ui-react";
 
 class App extends React.Component {
   public render(): React.ReactNode {
     return (
-      <div>Hi there</div>
+      <Button primary size="huge">
+        Get Started
+      </Button>
     );
   }
 }
