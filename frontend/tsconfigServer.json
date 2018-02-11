@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "outDir": "build",
-    "lib": [
-      "es5"
-    ]
+    "outDir": "build"
   },
   "files": [
     "server.ts",

@@ -4,6 +4,10 @@
     "jsx": "react",
     "experimentalDecorators": true,
     "noImplicitThis": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
     "noImplicitReturns": true,
     "strict": true,
     "skipLibCheck": true
