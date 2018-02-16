@@ -1,6 +1,6 @@
 import {i18nReducer} from "react-redux-i18n";
 import {combineReducers} from "redux-immutable";
-import {IState} from "../store/index";
+import {IState} from "../store";
 import {Reducer} from "redux";
 
 const rootReducer: Reducer<IState> = combineReducers<IState>({

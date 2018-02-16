@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
 
 const root = path.join(__dirname, "../public");
 app.use(express.static(root));
-app.use(fallback('index.html', { root }));
+app.use(fallback("index.html", { root }));
 
 app.listen(3000, () => {
   // tslint:disable-next-line:no-console

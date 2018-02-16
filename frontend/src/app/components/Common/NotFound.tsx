@@ -1,7 +1,6 @@
 import * as React from "react";
-import {SFC} from "react";
 
-const NotFound: SFC<{}> = () => (
+const NotFound: React.SFC<{}> = () => (
   <div>Not found</div>
 );
 

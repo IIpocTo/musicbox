@@ -1,9 +1,8 @@
-import {Component, ReactNode} from "react";
 import * as React from "react";
 import {Button} from "semantic-ui-react";
 
-class Dashboard extends Component {
-  render(): ReactNode {
+class Dashboard extends React.Component {
+  public render(): React.ReactNode {
     return (
       <div>
         <Button primary size="huge">
