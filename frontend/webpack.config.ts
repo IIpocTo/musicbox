@@ -16,7 +16,7 @@ const webpackConfig: Configuration = {
         loader: "tslint-loader",
       },
       {
-        test: /\.ts(x)$/,
+        test: /\.(ts|tsx)$/,
         loader: "awesome-typescript-loader",
         exclude: /node_modules/,
       },
