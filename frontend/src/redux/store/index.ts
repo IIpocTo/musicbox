@@ -1,9 +1,9 @@
-import {createStore, compose, applyMiddleware, Middleware, Store, GenericStoreEnhancer, Reducer, Action} from "redux";
+import {createStore, compose, applyMiddleware, Middleware, Store, GenericStoreEnhancer, Action} from "redux";
 import {createEpicMiddleware} from "redux-observable";
+import {I18nState, loadTranslations, setLocale, syncTranslationWithStore, TranslationObjects} from "react-redux-i18n";
 import rootEpic from "../epics/root";
 import translations from "../../../resources/locales";
 import rootReducer from "../reducers/index";
-import {I18nState, loadTranslations, setLocale, syncTranslationWithStore, TranslationObjects} from "react-redux-i18n";
 
 export interface IState {
   i18n: I18nState;

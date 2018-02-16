@@ -1,4 +1,3 @@
-import {Component, ReactNode} from "react";
 import * as React from "react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
 import Image from "semantic-ui-react/dist/commonjs/elements/Image/Image";
@@ -7,8 +6,8 @@ import Container from "semantic-ui-react/dist/commonjs/elements/Container/Contai
 // import * as mainImg from '../../../assets/img/main.jpg'; WHY DIS SHIT AINT WORKIN?!!!!
 const mainImg = require('../../../assets/img/main.jpg');
 
-class Dashboard extends Component {
-  render(): ReactNode {
+class Dashboard extends React.Component {
+  public render(): React.ReactNode {
     return (
       <div>
         <Menu>
