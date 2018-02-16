@@ -1,4 +1,6 @@
+import {BundleAnalyzerPlugin} from "webpack-bundle-analyzer";
 import {Configuration} from "webpack";
+import * as webpack from "webpack";
 
 const webpackConfig: Configuration = {
   entry: "./src/index.tsx",
@@ -37,6 +39,10 @@ const webpackConfig: Configuration = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
+  plugins: [
+    new BundleAnalyzerPlugin(),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+  ],
   devtool: "inline-source-map",
 };
 
