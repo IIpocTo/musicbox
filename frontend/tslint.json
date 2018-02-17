@@ -12,7 +12,7 @@
     "ordered-imports": false,
     "no-use-before-declare": false,
     "no-implicit-dependencies": [true, "dev"],
-    "no-submodule-imports": [true, "semantic-ui-css"],
+    "no-submodule-imports": [true, "semantic-ui-css", "semantic-ui-react"],
     "jsx-boolean-value": false
   },
   "rulesDirectory": []
