@@ -40,10 +40,11 @@ const webpackConfig: Configuration = {
     extensions: [".tsx", ".ts", ".js"],
   },
   plugins: [
-    new BundleAnalyzerPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ],
   devtool: "inline-source-map",
 };
+
+if (process.argv.length > 2 && process.argv[2] === "--analyze") webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 
 export default webpackConfig;
