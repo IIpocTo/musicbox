@@ -1,27 +1,34 @@
 import * as React from "react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
 import Image from "semantic-ui-react/dist/commonjs/elements/Image/Image";
-import Menu from "semantic-ui-react/dist/commonjs/collections/Menu/Menu";
 import Container from "semantic-ui-react/dist/commonjs/elements/Container/Container";
-// import * as mainImg from '../../../assets/img/main.jpg'; WHY DIS SHIT AINT WORKIN?!!!!
+import Segment from "semantic-ui-react/dist/commonjs/elements/Segment/Segment";
+import Rail from "semantic-ui-react/dist/commonjs/elements/Rail/Rail";
+import {RouteComponentProps} from "react-router";
+
+// import * as mainImg from '../../../assets/img/main.jpg';
 const mainImg = require('../../../assets/img/main.jpg');
 
-class Dashboard extends React.Component {
+type Props = RouteComponentProps<any>;
+
+class Dashboard extends React.Component<Props> {
   public render(): React.ReactNode {
     return (
       <div>
-        <Menu>
-          <Menu.Menu position="right">
-            <Menu.Item>
-              Home
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
-        <Image src={mainImg} fluid />
+        <Segment textAlign='center' style={{ margin: 0, padding: 0, border: 0 }}>
+          <Image src={mainImg} fluid spaced={false} />
+
+          <Rail internal position="left" style={{ width: '100%' }}>
+            <Container textAlign="center" style={{ marginTop: '25%' }}>
+              <h1 style={{ color: 'white' }}>Welcome</h1>
+              <Button primary size="huge" onClick={() => { this.props.history.push("/docs"); }}>
+                Get Started
+              </Button>
+            </Container>
+          </Rail>
+        </Segment>
         <Container>
-          <Button primary size="huge">
-            Get Started
-          </Button>
+
           This is main page
         </Container>
       </div>

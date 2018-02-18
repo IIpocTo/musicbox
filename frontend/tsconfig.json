@@ -3,14 +3,28 @@
     "target": "es5",
     "jsx": "react",
     "experimentalDecorators": true,
+    "declaration": false,
     "noImplicitThis": true,
     "lib": [
       "es5",
       "dom"
     ],
     "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true, // no errors on commonjs default import
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true, // importing helper functions from tslib
+    "noEmitHelpers": true, // disable emitting inline helper functions
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true
   },
   "files": [
     "node_modules/semantic-ui-react/index.d.ts"
