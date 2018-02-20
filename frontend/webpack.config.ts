@@ -3,7 +3,7 @@ import {Configuration} from "webpack";
 import * as webpack from "webpack";
 
 const webpackConfig: Configuration = {
-  entry: "./src/index.tsx",
+  entry: ["react-hot-loader/patch", "./src/index.tsx"],
   output: {
     filename: "bundle.js",
     path: __dirname,
@@ -19,7 +19,7 @@ const webpackConfig: Configuration = {
       },
       {
         test: /\.(ts|tsx)$/,
-        loader: "awesome-typescript-loader",
+        loaders: ["awesome-typescript-loader"],
         exclude: /node_modules/,
       },
       {
@@ -41,6 +41,8 @@ const webpackConfig: Configuration = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
   ],
   devtool: "inline-source-map",
 };

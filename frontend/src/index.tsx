@@ -1,19 +1,31 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {Provider} from "react-redux";
-import App from "./app/App";
-import configureStore from "./redux/store";
+import {StatelessComponent} from "react-redux";
+import Application from './app';
 
 import "semantic-ui-css/semantic.min.css";
-import {BrowserRouter as Router} from "react-router-dom";
+import {AppContainer} from "react-hot-loader";
 
-const store = configureStore();
+interface INodeModule extends NodeModule {
+  hot: any;
+}
 
-ReactDOM.render(
-  <Provider store={store} key="provider">
-    <Router>
-      <App/>
-    </Router>
-  </Provider>,
+const render = (Component: StatelessComponent<{}>) =>
+  ReactDOM.render(
+    <AppContainer>
+      <Component/>
+    </AppContainer>,
   (document as Document).getElementById("app"),
 );
+
+render(Application);
+
+const mod = module as INodeModule;
+
+if (mod.hot) {
+  console.log("asdasd");
+  mod.hot.accept('./app', () => {
+    console.log("sdfsdf");
+    render(Application);
+  });
+}
