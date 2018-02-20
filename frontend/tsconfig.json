@@ -7,7 +7,7 @@
     "noImplicitThis": true,
     "lib": [
       "es5",
-      "dom"
+      "dom",
     ],
     "noImplicitReturns": true,
     "moduleResolution": "node",

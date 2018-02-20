@@ -12,7 +12,7 @@ class App extends Component<Props> {
     return (
       <div>
         <Sticky>
-          <Menu size="massive" inverted fluid style={{ margin: 0 }}>
+          <Menu size="massive" inverted fluid style={{ margin: 0, borderRadius: 0 }}>
             <Menu.Item>
               Logo
             </Menu.Item>
