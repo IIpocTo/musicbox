@@ -20,7 +20,15 @@ const webpackConfig: Configuration = {
       },
       {
         test: /\.(ts|tsx)$/,
-        loaders: ["react-hot-loader/webpack", "awesome-typescript-loader"],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: true,
+              plugins: ['react-hot-loader/babel'],
+            },
+          },
+          "awesome-typescript-loader"],
         exclude: /node_modules/,
       },
       {
