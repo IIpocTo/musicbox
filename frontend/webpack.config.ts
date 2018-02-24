@@ -1,12 +1,13 @@
 import {BundleAnalyzerPlugin} from "webpack-bundle-analyzer";
 import {Configuration} from "webpack";
 import * as webpack from "webpack";
+import * as path from "path";
 
 const webpackConfig: Configuration = {
-  entry: "./src/index.tsx",
+  entry: ["react-hot-loader/patch", "./src/index.tsx"],
   output: {
     filename: "bundle.js",
-    path: __dirname,
+    path: path.join(__dirname, './public'),
     publicPath: "/",
   },
   module: {
@@ -19,7 +20,15 @@ const webpackConfig: Configuration = {
       },
       {
         test: /\.(ts|tsx)$/,
-        loader: "awesome-typescript-loader",
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: true,
+              plugins: ['react-hot-loader/babel'],
+            },
+          },
+          "awesome-typescript-loader"],
         exclude: /node_modules/,
       },
       {
@@ -41,8 +50,16 @@ const webpackConfig: Configuration = {
   },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
   ],
   devtool: "inline-source-map",
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './public',
+    hot: true,
+    port: 3000,
+  },
 };
 
 if (process.argv.length > 2 && process.argv[2] === "--analyze") webpackConfig.plugins.push(new BundleAnalyzerPlugin());

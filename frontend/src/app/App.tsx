@@ -4,6 +4,7 @@ import Menu from "semantic-ui-react/dist/commonjs/collections/Menu/Menu";
 import Sticky from "semantic-ui-react/dist/commonjs/modules/Sticky/Sticky";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Component, ReactNode} from "react";
+import {hot} from "react-hot-loader";
 
 type Props = RouteComponentProps<any>;
 
@@ -28,4 +29,4 @@ class App extends Component<Props> {
   }
 }
 
-export default withRouter(App);
+export default hot(module)(withRouter(App));
