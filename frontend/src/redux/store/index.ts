@@ -4,6 +4,7 @@ import {I18nState, loadTranslations, setLocale, syncTranslationWithStore, Transl
 import rootEpic from "../epics/root";
 import translations from "../../../resources/locales";
 import rootReducer from "../reducers/index";
+import {INodeModule} from "../../index";
 
 export interface IState {
   i18n: I18nState;
@@ -45,6 +46,14 @@ function configureStore(): Store<IState> {
   syncTranslationWithStore(store);
   loadTranslations(translations as TranslationObjects);
   setLocale("en");
+
+  if ((module as INodeModule).hot) {
+    // Enable Webpack hot module replacement for reducers
+    (module as INodeModule).hot.accept("../reducers", () => {
+      const nextRootReducer = require("../reducers/index");
+      store.replaceReducer(nextRootReducer);
+    });
+  }
 
   return store;
 }

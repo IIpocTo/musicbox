@@ -28,7 +28,7 @@ class Dashboard extends Component<Props> {
           </Rail>
         </Segment>
         <Container>
-          This is main pageas
+          This is main pageasdasd
         </Container>
       </div>
     );

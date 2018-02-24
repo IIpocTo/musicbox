@@ -4,9 +4,11 @@
   "description": "software for find and pick music",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc -p tsconfigServer.json && cross-env NODE_ENV=development node build/server.js",
+    "dev2": "tsc -p tsconfigServer.json && cross-env NODE_ENV=development node build/server.js",
+    "dev": "tsc -p tsconfigServer.json && webpack-dev-server --config ./build/webpack.config.js",
     "dev:analyze": "tsc -p tsconfigServer.json && cross-env NODE_ENV=development node build/server.js --analyze",
-    "start": "tsc -p tsconfigServer.json && cross-env NODE_ENV=production node build/server.js"
+    "start": "tsc -p tsconfigServer.json && cross-env NODE_ENV=production node build/server.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "author": "George Carpow",
   "license": "Apache-2.0",
   "dependencies": {
+    "babel-loader": "^7.1.2",
     "express": "^4.16.2",
     "express-history-api-fallback": "^2.2.1",
     "immutable": "^3.8.2",
@@ -64,6 +67,7 @@
     "webpack": "^3.11.0",
     "webpack-bundle-analyzer": "^2.10.0",
     "webpack-dev-middleware": "^2.0.5",
+    "webpack-dev-server": "^2.11.1",
     "webpack-hot-middleware": "^2.21.0"
   }
 }
