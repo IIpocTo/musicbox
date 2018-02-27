@@ -7,7 +7,7 @@ import configureStore from "../redux/store";
 const store = configureStore();
 
 export default () =>
-  <Provider store={store} key="provider">
+  <Provider store={store}>
     <Router>
       <App/>
     </Router>

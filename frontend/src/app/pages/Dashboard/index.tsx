@@ -6,9 +6,8 @@ import {RouteComponentProps} from "react-router";
 import {Component, ReactNode} from "react";
 import Segment from "semantic-ui-react/dist/commonjs/elements/Segment/Segment";
 import Rail from "semantic-ui-react/dist/commonjs/elements/Rail/Rail";
-
-// import * as mainImg from '../../../assets/img/main.jpg';
-const mainImg = require('../../../assets/img/main.jpg');
+import {Translate} from "react-redux-i18n";
+import * as mainImg from '../../../assets/img/main.jpg';
 
 type Props = RouteComponentProps<any>;
 
@@ -20,9 +19,9 @@ class Dashboard extends Component<Props> {
           <Image src={mainImg} fluid spaced={false} />
           <Rail internal position="left" style={{ width: '100%' }}>
             <Container textAlign="center" style={{ marginTop: '25%' }}>
-              <h1 style={{ color: 'white' }}>Welcome</h1>
+              <h1 style={{ color: 'white' }}><Translate value="welcome" /></h1>
               <Button primary size="huge" onClick={() => { this.props.history.push("/docs"); }}>
-                Get Started
+                <Translate value="getStarted" />
               </Button>
             </Container>
           </Rail>

@@ -12,6 +12,11 @@ declare module "webpack-bundle-analyzer" {
 declare module "*.jpg";
 
 declare module "*.png" {
-  const value: string;
+  const value: any;
+  export default value;
+}
+
+declare module "*.json" {
+  const value: any;
   export default value;
 }
