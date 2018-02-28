@@ -6,13 +6,16 @@ import thunk from "redux-thunk";
 import rootReducer from "../reducers/index";
 import * as en from "../../../resources/locales/en.json";
 import * as ru from "../../../resources/locales/ru.json";
+import * as Immutable from "immutable";
+
+import * as reactI18nify from "react-i18nify";
 
 const translations: TranslationObjects = {
   en,
   ru,
 };
 
-export interface IState {
+export interface IState extends Immutable.Map<string, any> {
   i18n: I18nState;
 }
 
@@ -49,13 +52,12 @@ function configureStore(): Store<IState> {
     store = createStore<IState>(rootReducer, enhancer);
   }
   syncTranslationWithStore(store);
-  // IMPLEMENTATION FROM REACT_REDUX_I18N
-  // reactI18nify.I18n.setTranslationsGetter(function () {
-  //   return store.getState().i18n.translations || {}; //TODO: change getState().i18n to something is not undefined
-  // });
-  // reactI18nify.I18n.setLocaleGetter(function () {
-  //   return store.getState().i18n.locale || '';
-  // });
+  reactI18nify.I18n.setTranslationsGetter(() => {
+    return store.getState().toObject().i18n.translations || {};
+  });
+  reactI18nify.I18n.setLocaleGetter(() => {
+    return store.getState().toObject().i18n.locale || "";
+  });
   store.dispatch(loadTranslations(translations));
   store.dispatch(setLocale("en"));
 

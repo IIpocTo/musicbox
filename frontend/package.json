@@ -21,6 +21,7 @@
     "immutable": "^3.8.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-i18nify": "^1.11.12",
     "react-redux": "^5.0.6",
     "react-redux-i18n": "^1.9.2",
     "react-router-dom": "^4.2.2",
