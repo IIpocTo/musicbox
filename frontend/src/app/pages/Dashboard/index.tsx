@@ -1,11 +1,13 @@
 import * as React from "react";
-import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
-import {Image, Card, Container} from "semantic-ui-react";
+import {Image, Card} from "semantic-ui-react";
 import {RouteComponentProps} from "react-router";
 import {Component, ReactNode} from "react";
 import {Translate} from "react-redux-i18n";
 import * as mainImg from '../../../assets/img/main.jpg';
-import {ContainerWith25Margin, FullWidthRail, NullMarginSegment, WhiteH1} from "./Dashboard.style";
+import {
+  ButtonWithoutMargin, CardGroup, ContainerWith25Margin, FullWidthRail, NullMarginSegment,
+  WhiteH1
+} from "./Dashboard.style";
 
 type Props = RouteComponentProps<any>;
 
@@ -18,14 +20,14 @@ class Dashboard extends Component<Props> {
           <FullWidthRail internal position="left">
             <ContainerWith25Margin textAlign="center">
               <WhiteH1><Translate value="welcome" /></WhiteH1>
-              <Button primary size="huge" onClick={() => { this.props.history.push("/docs"); }}>
+              <ButtonWithoutMargin primary size="huge" onClick={() => { this.props.history.push("/docs"); }}>
                 <Translate value="getStarted" />
-              </Button>
+              </ButtonWithoutMargin>
             </ContainerWith25Margin>
           </FullWidthRail>
         </NullMarginSegment>
         <NullMarginSegment>
-          <Card.Group>
+          <CardGroup>
             <Card>
               <Card.Content>
                 <Card.Header>Matthew Harris</Card.Header>
@@ -55,11 +57,8 @@ class Dashboard extends Component<Props> {
               meta='Friend'
               description='Jenny is a student studying Media Management at the New School'
             />
-          </Card.Group>
+          </CardGroup>
         </NullMarginSegment>
-        <Container>
-          This is main page
-        </Container>
       </div>
     );
   }

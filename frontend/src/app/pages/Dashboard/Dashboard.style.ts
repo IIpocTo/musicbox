@@ -1,6 +1,8 @@
-import {Segment, Rail, Container, SemanticTEXTALIGNMENTS} from "semantic-ui-react";
+import {Segment, Card, Rail, Button, Container, SemanticTEXTALIGNMENTS} from "semantic-ui-react";
 import styled from "../../../utils/styled";
-import {SemanticFLOATS} from "semantic-ui-react/dist/commonjs";
+import {SemanticFLOATS, SemanticSIZES} from "semantic-ui-react/dist/commonjs";
+import {ButtonProps} from "semantic-ui-react/dist/commonjs/elements/Button/Button";
+import * as React from "react";
 
 // TODO: donna know  why SegmentProps or RailProps are not valid
 
@@ -37,4 +39,22 @@ export const ContainerWith25Margin = styled<ISegment>(Container)`
 
 export const WhiteH1 = styled.h1`
   color: white;
+`;
+
+interface IButton {
+  primary?: boolean;
+  size?: SemanticSIZES;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) => void;
+}
+
+export const ButtonWithoutMargin = styled<IButton>(Button)`
+  &&& {
+    margin: 0;
+  }
+`;
+
+export const CardGroup = styled(Card.Group)`
+  &&& {
+    margin: 0;
+  }
 `;

@@ -19,7 +19,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "immutable": "^3.8.2",
-    "material-ui": "^1.0.0-beta.35",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-i18nify": "^1.11.12",
