@@ -1,11 +1,12 @@
 import * as React from "react";
 import Routes from "./router";
-import Menu from "semantic-ui-react/dist/commonjs/collections/Menu/Menu";
-import Sticky from "semantic-ui-react/dist/commonjs/modules/Sticky/Sticky";
+import {Menu} from "semantic-ui-react";
+import {Sticky} from "semantic-ui-react";
 import {RouteComponentProps, withRouter} from "react-router";
 import {Component, ReactNode} from "react";
 import {hot} from "react-hot-loader";
 import {Translate} from "react-redux-i18n";
+import {MarginlessMenu} from "./App.style";
 
 type Props = RouteComponentProps<any>;
 
@@ -14,7 +15,7 @@ class App extends Component<Props> {
     return (
       <div>
         <Sticky>
-          <Menu size="massive" inverted fluid style={{ margin: 0, borderRadius: 0 }}>
+          <MarginlessMenu size="massive" inverted fluid>
             <Menu.Item>
               <Translate value="logo" />
             </Menu.Item>
@@ -26,7 +27,7 @@ class App extends Component<Props> {
                 <Translate value="signIn" />
               </Menu.Item>
             </Menu.Menu>
-          </Menu>
+          </MarginlessMenu>
         </Sticky>
         <Routes/>
           {/*<div className="ui inverted vertical footer segment" style={{ bottom: '0px', position: 'absolute' }}>*/}

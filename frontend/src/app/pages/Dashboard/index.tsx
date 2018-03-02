@@ -1,13 +1,12 @@
 import * as React from "react";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
-import Image from "semantic-ui-react/dist/commonjs/elements/Image/Image";
-import Container from "semantic-ui-react/dist/commonjs/elements/Container/Container";
+import {Image} from "semantic-ui-react";
+import {Container} from "semantic-ui-react";
 import {RouteComponentProps} from "react-router";
 import {Component, ReactNode} from "react";
-import Segment from "semantic-ui-react/dist/commonjs/elements/Segment/Segment";
-import Rail from "semantic-ui-react/dist/commonjs/elements/Rail/Rail";
 import {Translate} from "react-redux-i18n";
 import * as mainImg from '../../../assets/img/main.jpg';
+import {ContainerWith25Margin, FullWidthRail, NullMarginSegment, WhiteH1} from "./Dashboard.style";
 
 type Props = RouteComponentProps<any>;
 
@@ -15,17 +14,17 @@ class Dashboard extends Component<Props> {
   public render(): ReactNode {
     return (
       <div>
-        <Segment textAlign='center' style={{  margin: 0, padding: 0, border: 0 }}>
+        <NullMarginSegment textAlign='center'>
           <Image src={mainImg} fluid spaced={false} />
-          <Rail internal position="left" style={{ width: '100%' }}>
-            <Container textAlign="center" style={{ marginTop: '25%' }}>
-              <h1 style={{ color: 'white' }}><Translate value="welcome" /></h1>
+          <FullWidthRail internal position="left">
+            <ContainerWith25Margin textAlign="center">
+              <WhiteH1><Translate value="welcome" /></WhiteH1>
               <Button primary size="huge" onClick={() => { this.props.history.push("/docs"); }}>
                 <Translate value="getStarted" />
               </Button>
-            </Container>
-          </Rail>
-        </Segment>
+            </ContainerWith25Margin>
+          </FullWidthRail>
+        </NullMarginSegment>
         <Container>
           This is main page
         </Container>
