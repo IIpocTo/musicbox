@@ -24,6 +24,8 @@ interface IRail {
 export const FullWidthRail = styled<IRail>(Rail)`
   &&& {
     width: 100%;
+    margin: 0;
+    padding: 0;
   }
 `;
 
