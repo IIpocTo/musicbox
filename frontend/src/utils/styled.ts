@@ -4,4 +4,4 @@ const {
   default: styled,
 } = styledComponents as styledComponents.ThemedStyledComponentsModule<{}>;
 
-export default styled; //Maybe we'll need it
+export default styled;
