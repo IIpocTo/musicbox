@@ -1,24 +1,27 @@
 package musicbox
 
 import akka.actor.ActorSystem
-import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
+import musicbox.service.auth.AuthService
 
 import scala.concurrent.ExecutionContextExecutor
 
-object Server extends App with Service {
-  override implicit val system: ActorSystem = ActorSystem("musicbox-server-system")
-  override implicit def executor: ExecutionContextExecutor = system.dispatcher
-  override implicit val materializer: Materializer = ActorMaterializer()
+object Server extends App {
 
-  override def config: Config = ConfigFactory.load()
-  override val logger: LoggingAdapter = Logging(system, getClass)
+  implicit val system: ActorSystem = ActorSystem("musicbox-server-system")
+  implicit def executor: ExecutionContextExecutor = system.dispatcher
+  implicit val materializer: Materializer = ActorMaterializer()
 
+  def config: Config = ConfigFactory.load()
+
+  val authService = new AuthService("key")
+
+  private val mainRouter = new HttpRoute(authService)
   private val interface = config.getString("http.interface")
   private val port = config.getInt("http.port")
 
-  Http().bindAndHandle(routes, interface, port)
+  Http().bindAndHandle(mainRouter.routes, interface, port)
   println(s"Server online at http://$interface:$port/")
 }
