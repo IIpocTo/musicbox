@@ -13,7 +13,8 @@ import scala.concurrent.ExecutionContext
 case class SignInData(login: String, password: String)
 case class SignUpData(username: String, password: String, email: String)
 
-class AuthRouter(authService: AuthService)(implicit executionContext: ExecutionContext) extends FailFastCirceSupport {
+class AuthRouter(authService: AuthService)(implicit executionContext: ExecutionContext)
+    extends FailFastCirceSupport {
 
   import StatusCodes._
   import authService._
@@ -27,8 +28,8 @@ class AuthRouter(authService: AuthService)(implicit executionContext: ExecutionC
               println(signInData)
               complete(
                 signIn(signInData).map {
-                  case Some(token) => OK -> token.asJson
-                  case None => BadRequest -> None.asJson
+                  case Some(token) => OK         -> token.asJson
+                  case None        => BadRequest -> None.asJson
                 }
               )
             }

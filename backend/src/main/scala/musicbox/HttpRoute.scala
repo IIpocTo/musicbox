@@ -13,12 +13,11 @@ class HttpRoute(authService: AuthService)(implicit executionContext: ExecutionCo
 
   val routes: Route =
     pathPrefix("v1") {
-      authRouter.route
-    } ~
-    pathPrefix("healthcheck") {
-      get {
-        complete("OK")
+      authRouter.route ~
+      path("healthcheck") {
+        get {
+          complete("OK")
+        }
       }
     }
-
 }

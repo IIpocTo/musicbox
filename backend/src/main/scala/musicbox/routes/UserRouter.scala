@@ -1,5 +1,3 @@
 package musicbox.routes
 
-class UserRouter {
-
-}
+class UserRouter {}

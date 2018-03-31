@@ -12,7 +12,8 @@ class AuthService(secretKey: String)(implicit executionContext: ExecutionContext
   }
 
   def signUp(signUpData: SignUpData): Future[String] = {
-    Connection.createUser(User(signUpData.username, signUpData.password, signUpData.email))
+    Connection
+      .createUser(User(signUpData.username, signUpData.password, signUpData.email))
       .map(wr => if (wr.ok) "success" else "failure")
   }
 
