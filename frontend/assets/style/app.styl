@@ -2,4 +2,11 @@
 @require '~vuetify/src/stylus/main.styl'
 
 .page
-  @extend .fade-transition
+    @extend .fade-transition
+
+// some music player slider hacks
+.music-player-slider > .input-group__input
+    min-height: unset
+    & > .slider
+        height: unset
+

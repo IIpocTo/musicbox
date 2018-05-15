@@ -75,13 +75,21 @@
             <v-container>
                 <nuxt />
             </v-container>
+            <div v-if="playerVisible" style="height: 100px;"></div>
         </v-content>
-        <v-footer :fixed="fixed" app class="px-3">
-            <span>&copy; 2018 TITANY</span>
+        <v-footer
+            :fixed="fixed" app
+            dark class="px-3"
+        >
+            <music-player></music-player>
+            <v-spacer></v-spacer>
+            <div>&copy; 2018 TITANY</div>
         </v-footer>
     </v-app>
 </template>
 <script>
+import MusicPlayer from '@/components/MusicPlayer';
+
 export default {
     data() {
         return {
@@ -94,6 +102,12 @@ export default {
         };
     },
     computed: {
+        playerVisible() {
+            return this.$store.state.player.visible;
+        }
+    },
+    components: {
+        MusicPlayer
     }
 };
 </script>
