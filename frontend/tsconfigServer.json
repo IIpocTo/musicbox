@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "outDir": "build"
-  },
-  "files": [
-    "webpack.config.ts"
-  ]
-}
