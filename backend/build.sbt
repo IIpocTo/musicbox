@@ -1,6 +1,10 @@
+lazy val akkaVersion = "2.5.12"
+lazy val akkaHttpVersion = "10.1.1"
+lazy val macwireVersion = "2.3.1"
+
 lazy val root = (project in file(".")).settings(
   name := "musicbox-backend",
-  scalaVersion := "2.12.5",
+  scalaVersion := "2.12.6",
   version := "0.1",
   scalacOptions := Seq(
     "-unchecked",
@@ -10,22 +14,22 @@ lazy val root = (project in file(".")).settings(
     "-encoding",
     "utf8"
   ),
-  mainClass := Some("musicbox.Server"),
+  mainClass in (Compile, run) := Some("musicbox.Server"),
   libraryDependencies ++= Seq(
-    "com.typesafe.akka" %% "akka-actor" % "2.5.11",
-    "com.typesafe.akka" %% "akka-stream" % "2.5.11",
-    "com.typesafe.akka" %% "akka-slf4j" % "2.5.11",
-    "com.typesafe.akka" %% "akka-http" % "10.1.0",
+    "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+    "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
     "org.reactivemongo" %% "reactivemongo" % "0.13.0",
-    "io.circe" %% "circe-core" % "0.9.3",
-    "io.circe" %% "circe-generic" % "0.9.3",
-    "io.circe" %% "circe-parser" % "0.9.3",
-    "de.heikoseeberger" %% "akka-http-circe" % "1.20.0",
-    "com.jason-goodwin" %% "authentikat-jwt" % "0.4.5",
+    "org.json4s" %% "json4s-jackson" % "3.5.4",
+    "com.softwaremill.macwire" %% "macros" % macwireVersion % "provided",
+    "com.softwaremill.macwire" %% "macrosakka" % macwireVersion % "provided",
+    "com.softwaremill.macwire" %% "util" % macwireVersion,
+    "com.softwaremill.macwire" %% "proxy" % macwireVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "com.typesafe.akka" %% "akka-testkit" % "2.5.11" % Test,
-    "com.typesafe.akka" %% "akka-stream-testkit" % "2.5.11" % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % "10.1.0" % Test
-  ),
-  scalafmtOnCompile in ThisBuild := true
+    "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
+    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
+  )
 )

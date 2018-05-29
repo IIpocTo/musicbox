@@ -4,7 +4,18 @@ Content-Type: application/json
 {
     "username": "Marcus",
     "password": "some_password",
-    "email": "marc@gmail.com"
+    "email": "marc@gmail.com",
+    "phone": "+79876543211"
+}
+
+###
+
+POST http://localhost:9000/v1/auth/signIn
+Content-Type: application/json
+
+{
+    "username": "Marcus",
+    "password": "some_password"
 }
 
 ###
