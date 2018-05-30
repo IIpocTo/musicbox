@@ -5,3 +5,6 @@ frontend/build/
 backend/project/target/
 backend/target/
 *.sublime-workspace
+scripts/build/
+scripts/dist/
+scripts/spotify_importer.egg-info
