@@ -8,3 +8,4 @@ backend/target/
 scripts/build/
 scripts/dist/
 scripts/spotify_importer.egg-info
+scripts/result.json
