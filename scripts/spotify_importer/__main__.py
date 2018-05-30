@@ -28,6 +28,7 @@ if __name__ == '__main__':
     res_artists = []
     res_albums = []
     res_tracks = []
+
     for i, artist in enumerate(artists['items']):
         el = {}
         el['name'] = artist['name']

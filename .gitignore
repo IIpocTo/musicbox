@@ -8,4 +8,7 @@ backend/target/
 scripts/build/
 scripts/dist/
 scripts/spotify_importer.egg-info
-scripts/result.json
+scripts/tracks.json
+scripts/artists.json
+scripts/albums.json
+scripts/spotify_importer/__pycache__/
