@@ -7,4 +7,3 @@ setup(name='spotify_importer',
 	packages=['spotify_importer'],
 	install_requires=['spotipy'],
 )
-
