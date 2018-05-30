@@ -2,6 +2,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import json
 import sys
+import subprocess
 
 if __name__ == '__main__':
     args = sys.argv
@@ -104,3 +105,13 @@ if __name__ == '__main__':
     file = open('tracks.json', 'w')
     file.write(out_tracks)
     file.close()
+
+    try:
+        mongod = subprocess.Popen(['mongod'])
+        if mongod.poll() != 0:
+            sys.exit(1)
+        subprocess.call('mongoimport -v --jsonArray -c artists -d musicbox --mode insert --file artists.json')
+        subprocess.call('mongoimport -v --jsonArray -c albums -d musicbox --mode insert --file albums.json')
+        subprocess.call('mongoimport -v --jsonArray -c tracks -d musicbox --mode insert --file tracks.json')
+    except FileNotFoundError:
+        sys.exit(2)
