@@ -11,6 +11,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "node-fetch": "^2.1.2",
     "nuxt": "^1.0.0",
     "vuetify": "^1.0.0"
   },

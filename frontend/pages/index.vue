@@ -71,7 +71,7 @@
                         <artist-card :artist="iron"></artist-card>
                     </v-flex>
                     <v-flex xs6 lg4>
-                        <album-card :album="rise"></album-card>
+                        <artist-card :artist="rise"></artist-card>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -81,10 +81,24 @@
 <script>
 import ArtistCard from '@/components/ArtistCard';
 import AlbumCard from '@/components/AlbumCard';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'HomePage',
-    data() {
+    methods: {
+        showLoginForm() {
+
+        },
+        ...mapActions({
+            add: 'getArtists'
+        })
+    },
+    computed: {
+        ...mapGetters([
+            'artists'
+        ])
+    },
+    data: () => {
         return {
             bau: {
                 name: 'Б.А.У.',
@@ -105,9 +119,6 @@ export default {
                 tags: ['Метал', 'Мелодик-Дэт']
             }
         };
-    },
-    methods: {
-        showLoginForm() {}
     },
     components: {
         ArtistCard,
