@@ -105,13 +105,10 @@ if __name__ == '__main__':
                                 tr['time_signature'] = features['time_signature']
                             res_tracks.append(tr)
                         except Exception:
-                            time.sleep(5)
                             continue
                 except Exception:
-                    time.sleep(5)
                     continue
         except Exception:
-            time.sleep(5)
             continue
 
 
