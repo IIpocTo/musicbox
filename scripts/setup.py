@@ -5,5 +5,5 @@ setup(name='spotify_importer',
 	description='Spotify import data',
 	author='George Carpow',
 	packages=['spotify_importer'],
-	install_requires=['spotipy'],
+	install_requires=['spotipy', 'pymongo'],
 )

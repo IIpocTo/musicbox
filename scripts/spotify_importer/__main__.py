@@ -1,9 +1,13 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-import json
 import sys
-import subprocess
-import time
+from pymongo import MongoClient
+from bson import ObjectId, DBRef
+
+
+def id(id):
+    return ObjectId(id[:12].encode('utf-8'))
+
 
 amount = 20
 
@@ -41,14 +45,11 @@ if __name__ == '__main__':
             el['name'] = artist['name']
             el['genres'] = artist['genres']
             el['image'] = artist['images'][0]['url']
-            el['_id'] = {'$oid': artist['id']}
+            el['_id'] = id(artist['id'])
             el['popularity'] = artist['popularity']
             albums_by_artist = sp.artist_albums(artist['id'])['items']
             el['albums'] = list(map(
-                lambda x: {
-                    '$ref': 'albums',
-                    '$id': {'$oid': x['id']}
-                },
+                lambda x: DBRef(collection='albums', id=id(x['id'])),
                 albums_by_artist
             ))
             res_artists.append(el)
@@ -56,12 +57,9 @@ if __name__ == '__main__':
             for j, album in enumerate(albums_by_artist):
                 try:
                     alb = {}
-                    alb['_id'] = {'$oid': album['id']}
+                    alb['_id'] = id(album['id'])
                     alb['artists'] = list(map(
-                        lambda x: {
-                            '$ref': 'artists',
-                            '$id': {'$oid': x['id']}
-                        },
+                        lambda x: DBRef(collection='artists', id=id(x['id'])),
                         album['artists']
                     ))
                     alb['name'] = album['name']
@@ -69,10 +67,7 @@ if __name__ == '__main__':
                     alb['release_date'] = album['release_date']
                     track_by_albums = sp.album_tracks(album['id'])['items']
                     alb['tracks'] = list(map(
-                        lambda x: {
-                            '$ref': 'tracks',
-                            '$id': {'$oid': x['id']}
-                        },
+                        lambda x: DBRef(collection='tracks', id=id(x['id'])),
                         track_by_albums
                     ))
                     res_albums.append(alb)
@@ -80,14 +75,11 @@ if __name__ == '__main__':
                     for k, track in enumerate(track_by_albums):
                         try:
                             tr = {}
-                            tr['_id'] = {'$oid': track['id']}
+                            tr['_id'] = id(track['id'])
                             tr['name'] = track['name']
                             tr['duration'] = track['duration_ms']
                             tr['number'] = track['track_number']
-                            tr['album'] = {
-                                '$ref': 'albums',
-                                '$id': {'$oid': album['id']}
-                            }
+                            tr['album'] = DBRef(collection='albums', id=id(album['id']))
                             tr['content'] = track['href']
                             features = sp.audio_features([track['id']])[0]
                             if features is not None:
@@ -104,49 +96,29 @@ if __name__ == '__main__':
                                 tr['liveness'] = features['liveness']
                                 tr['time_signature'] = features['time_signature']
                             res_tracks.append(tr)
-                        except Exception:
+                        except Exception as e:
+                            print(e)
                             continue
-                except Exception:
+                except Exception as e:
+                    print(e)
                     continue
-        except Exception:
+        except Exception as e:
+            print(e)
             continue
 
-
-    out_artists = json.dumps(
-        res_artists,
-        sort_keys=True,
-        indent=2
-    )
-    file = open('artists.json', 'w')
-    file.write(out_artists)
-    file.close()
-
-    out_albums = json.dumps(
-        res_albums,
-        sort_keys=True,
-        indent=2
-    )
-    file = open('albums.json', 'w')
-    file.write(out_albums)
-    file.close()
-
-    out_tracks = json.dumps(
-        res_tracks,
-        sort_keys=True,
-        indent=2
-    )
-    file = open('tracks.json', 'w')
-    file.write(out_tracks)
-    file.close()
-
     try:
-        mongod = subprocess.Popen(['mongod'])
-        if mongod.poll() != 0:
-            print('Error occured while calling mongod')
-            sys.exit(1)
-        subprocess.call('mongoimport --jsonArray -c artists -d musicbox --mode merge --file artists.json')
-        subprocess.call('mongoimport --jsonArray -c albums -d musicbox --mode merge --file albums.json')
-        subprocess.call('mongoimport --jsonArray -c tracks -d musicbox --mode merge --file tracks.json')
-    except FileNotFoundError:
-        print('There is no mongod service started on your machine')
+        client = MongoClient()
+        db = client.musicbox
+        artists = db.artists
+        albums = db.albums
+        tracks = db.tracks
+        artists.insert_many(res_artists)
+        albums.insert_many(res_albums)
+        tracks.insert_many(res_tracks)
+        collection = db.collection_names(include_system_collections=False)
+        if len(collection) != 3:
+            print(collection)
+            sys.exit(3)
+    except Exception as e:
+        print(e)
         sys.exit(2)
