@@ -105,6 +105,8 @@
     </v-layout>
 </template>
 <script>
+import connector from '../util/connector';
+
 export default {
     name: 'LoginPage',
     data() {
@@ -130,12 +132,29 @@ export default {
     methods: {
         submitLogin() {
             if (this.$refs.loginForm.validate()) {
-                // TODO: login
+                // TODO: login and password instead of strings
+                connector().login('login', 'password').then(logged => {
+                  if (logged) {
+                    // TODO: enter the app
+                  } else {
+                    // TODO: show login error
+                  }
+                });
             }
         },
         submitRegister() {
             if (this.$refs.registerForm.validate()) {
-                // TODO: register
+              // TODO: login and password instead of strings
+              connector().register(
+                'login',
+                'password',
+                'email',
+                'phone'
+              ).then(registered => {
+                if (registered) {
+                  // User registered successfully
+                }
+              });
             }
         },
 

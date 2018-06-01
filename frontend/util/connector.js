@@ -1,9 +1,11 @@
 import fetch from 'node-fetch';
+import { getCookie, setCookie } from "./cooker";
 
 export const SERVER = {
     HOST: process.env.NODE_ENV === 'production' ? 'shit.com' : 'localhost',
     PORT: 9000,
-    PROTOCOL: 'http'
+    PROTOCOL: 'http',
+    V_API: 'api/v1'
 };
 
 export const SERVICES = {
@@ -58,11 +60,12 @@ function mocker(service, params) {
 }
 
 export default function () {
+    const server = `${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${SERVER.V_API}`;
     return {
         post: (route, params) => {
             if (SERVICES[route] === void 0) return void 0;
             if (mocked) return Promise.resolve(true);
-            return fetch(`${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${route}`, {
+            return fetch(`${server}/${route}`, {
                 method: 'POST',
                 ...params
             });
@@ -70,10 +73,48 @@ export default function () {
         get: (route, params) => {
             if (SERVICES[route] === void 0) return void 0;
             if (mocked) return Promise.resolve(mocker(route, params));
-            return fetch(`${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${route}`, {
+            return fetch(`${server}/${route}`, {
                 method: 'GET',
                 ...(params || {})
             });
-        }
+        },
+        login: (login, password) => {
+            if (mocked) return false;
+            return fetch(`${server}/auth/login`, {
+                method: 'POST',
+                body: {
+                    login,
+                    password
+                },
+            }).then(response => {
+                if (response.status !== 201) return false;
+                else return response.json();
+            }).then(res => {
+                const {
+                    access_token,
+                    refresh_token,
+                    csrf_token
+                } = res;
+                setCookie('access_token', access_token);
+                setCookie('refresh_token', refresh_token);
+                setCookie('csrf_token', csrf_token);
+                return true;
+            });
+        },
+        register: (login, password, email, phone) => {
+          if (mocked) return false;
+          return fetch(`${server}/auth/register`, {
+            method: 'POST',
+            body: {
+              login,
+              password,
+              email,
+              phone
+            },
+          }).then(response => {
+            return response.status === 201;
+          });
+        },
+        logout: () => {}
     };
 }
