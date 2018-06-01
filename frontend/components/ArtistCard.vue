@@ -18,8 +18,7 @@
             ><v-icon>play_arrow</v-icon>Слушать</v-btn>
             <v-btn
                 icon ripple
-                outline
-                color="red"
+                flat color="red"
             ><v-icon>favorite</v-icon></v-btn>
         </v-card-actions>
     </v-card>

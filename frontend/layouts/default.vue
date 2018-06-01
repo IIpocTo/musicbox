@@ -8,7 +8,7 @@
         >
             <v-list>
                 <template v-if="!loggedIn">
-                    <v-list-tile>
+                    <v-list-tile to="/login?tab=login" exact>
                         <v-list-tile-action>
                             <v-icon>input</v-icon>
                         </v-list-tile-action>
@@ -16,7 +16,7 @@
                             <v-list-tile-title>Войти</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                    <v-list-tile>
+                    <v-list-tile to="/login?tab=register" exact>
                         <v-list-tile-action>
                             <v-icon>edit</v-icon>
                         </v-list-tile-action>
@@ -25,7 +25,7 @@
                         </v-list-tile-content>
                     </v-list-tile>
                 </template>
-                <v-list-tile>
+                <v-list-tile to="/artists">
                     <v-list-tile-action>
                         <v-icon>person</v-icon>
                     </v-list-tile-action>
@@ -33,7 +33,7 @@
                         <v-list-tile-title>Исполнители</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile>
+                <v-list-tile to="/albums">
                     <v-list-tile-action>
                         <v-icon>album</v-icon>
                     </v-list-tile-action>
@@ -41,7 +41,7 @@
                         <v-list-tile-title>Альбомы</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile>
+                <v-list-tile to="/playlists">
                     <v-list-tile-action>
                         <v-icon>playlist_play</v-icon>
                     </v-list-tile-action>
@@ -49,7 +49,7 @@
                         <v-list-tile-title>Плейлисты</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-if="loggedIn">
+                <v-list-tile v-if="loggedIn" to="/recomends">
                     <v-list-tile-action>
                         <v-icon>stars</v-icon>
                     </v-list-tile-action>
