@@ -134,27 +134,27 @@ export default {
             if (this.$refs.loginForm.validate()) {
                 // TODO: login and password instead of strings
                 connector().login('login', 'password').then(logged => {
-                  if (logged) {
-                    // TODO: enter the app
-                  } else {
-                    // TODO: show login error
-                  }
+                    if (logged) {
+                        // TODO: enter the app
+                    } else {
+                        // TODO: show login error
+                    }
                 });
             }
         },
         submitRegister() {
             if (this.$refs.registerForm.validate()) {
-              // TODO: login and password instead of strings
-              connector().register(
-                'login',
-                'password',
-                'email',
-                'phone'
-              ).then(registered => {
-                if (registered) {
-                  // User registered successfully
-                }
-              });
+                // TODO: login and password instead of strings
+                connector().register(
+                    'login',
+                    'password',
+                    'email',
+                    'phone'
+                ).then(registered => {
+                    if (registered) {
+                        // User registered successfully
+                    }
+                });
             }
         },
 

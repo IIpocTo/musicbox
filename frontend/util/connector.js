@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { getCookie, setCookie } from "./cooker";
+import { setCookie } from './cooker';
 
 export const SERVER = {
     HOST: process.env.NODE_ENV === 'production' ? 'shit.com' : 'localhost',
@@ -79,41 +79,44 @@ export default function () {
             });
         },
         login: (login, password) => {
-            if (mocked) return false;
+            if (mocked) return Promise.resolve(false);
             return fetch(`${server}/auth/login`, {
                 method: 'POST',
                 body: {
                     login,
                     password
-                },
+                }
             }).then(response => {
                 if (response.status !== 201) return false;
                 else return response.json();
             }).then(res => {
                 const {
-                    access_token,
-                    refresh_token,
-                    csrf_token
+                    // eslint-disable-nex-line camelcase
+                    access_token: accessToken,
+                    // eslint-disable-nex-line camelcase
+                    refresh_token: refreshToken,
+                    // eslint-disable-nex-line camelcase
+                    csrf_token: csrfToken
                 } = res;
-                setCookie('access_token', access_token);
-                setCookie('refresh_token', refresh_token);
-                setCookie('csrf_token', csrf_token);
+                setCookie('access_token', accessToken);
+                setCookie('refresh_token', refreshToken);
+                setCookie('csrf_token', csrfToken);
                 return true;
             });
         },
         register: (login, password, email, phone) => {
-          if (mocked) return false;
-          return fetch(`${server}/auth/register`, {
-            method: 'POST',
-            body: {
-              login,
-              password,
-              email,
-              phone
-            },
-          }).then(response => {
-            return response.status === 201;
-          });
+            if (mocked) return Promise.resolve(false);
+            return fetch(`${server}/auth/register`, {
+                method: 'POST',
+                body: {
+                    login,
+                    password,
+                    email,
+                    phone
+                }
+            }).then(response => {
+                return response.status === 201;
+            });
         },
         logout: () => {}
     };
