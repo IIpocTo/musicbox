@@ -1,8 +1,35 @@
 <template>
-    <div>This is artist list page</div>
+    <div>
+        <v-card
+            hover
+            raised
+            v-for="(value, key) in artists" :key="key"
+            @click.prevent="() => showArtist(value.id)"
+        >
+            {{ value.name }}
+        </v-card>
+    </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-    name: 'ArtistsPage'
+    name: 'ArtistsPage',
+    beforeMount() {
+        this.getArtists();
+    },
+    methods: {
+        ...mapActions({
+            getArtists: 'artists/getArtists'
+        }),
+        showArtist(id) {
+            this.$router.push(`/artists/${id}`);
+        }
+    },
+    computed: {
+        ...mapGetters({
+            artists: 'artists/artists'
+        })
+    }
 };
 </script>

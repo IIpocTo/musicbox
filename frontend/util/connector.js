@@ -85,7 +85,8 @@ export default function () {
         get: (route, params) => {
             if (SERVICES[route] === void 0) return void 0;
             if (mocked) return Promise.resolve(mocker(route, params));
-            return fetch(`${server}/${route}`, {
+            const q = params.query ? `?${params.query}` : '';
+            return fetch(`${server}/${route}${q}`, {
                 method: 'GET',
                 ...(params || {})
             });
