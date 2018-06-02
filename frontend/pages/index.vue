@@ -8,7 +8,7 @@
             <v-flex xs12 md10 lg8>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-alert type="info" :value="true" dismissible>
+                        <v-alert type="info" v-model="loginAlert" dismissible>
                             <span>Чтобы мы могли подбирать Вам персональные рекомендации, вам необходимо представиться. </span>
                             <a
                                 href="#"
@@ -81,6 +81,13 @@ export default {
     name: 'HomePage',
     beforeMount() {
         this.getArtists();
+    },
+    data() {
+        // TODO: false if user is logged in
+        let loginAlert = true;
+        return {
+            loginAlert
+        };
     },
     methods: {
         showLoginForm() {
