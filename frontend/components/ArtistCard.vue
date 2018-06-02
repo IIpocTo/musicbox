@@ -1,6 +1,12 @@
 <template>
     <v-card>
-        <v-card-media :src="artist.image" height="250px"></v-card-media>
+        <v-card-media
+            :src="artist.image"
+            height="250px"
+            @click.prevent="() => showPage(artist.id)"
+            :style="{ cursor: 'pointer' }"
+        >
+        </v-card-media>
         <v-card-title class="headline">{{ artist.name }}</v-card-title>
         <v-card-text>
             <v-chip
@@ -28,6 +34,11 @@ export default {
     name: 'ArtistCard',
     props: {
         artist: Object
+    },
+    methods: {
+        showPage(id) {
+            this.$router.push(`/artists/${id}`);
+        }
     }
 };
 </script>

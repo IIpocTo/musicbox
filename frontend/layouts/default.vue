@@ -49,7 +49,7 @@
                         <v-list-tile-title>Плейлисты</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-if="loggedIn" to="/recomends">
+                <v-list-tile v-if="loggedIn" to="/recommends">
                     <v-list-tile-action>
                         <v-icon>stars</v-icon>
                     </v-list-tile-action>
