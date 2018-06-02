@@ -12,7 +12,8 @@ export const SERVICES = {
     albums: 'albums',
     artists: 'artists',
     users: 'users',
-    tracks: 'tracks'
+    tracks: 'tracks',
+    search: 'search'
 };
 
 let mocked = true; // void 0
@@ -53,6 +54,19 @@ function mocker(service, params) {
                 tags: ['Метал', 'Мелодик-Дэт']
             }
         ];
+    case SERVICES.search:
+        return {
+            albums: [],
+            tracks: [],
+            artists: [
+                {
+                    id: 'bau',
+                    name: 'Б.А.У.',
+                    image: require('@/assets/image/bau.jpeg'),
+                    tags: ['Метал', 'Пародия', 'Гроул']
+                }
+            ]
+        };
     default: return [];
     }
 }

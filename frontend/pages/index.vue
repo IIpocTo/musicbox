@@ -95,28 +95,6 @@ export default {
             artists: 'artists/artists'
         })
     },
-    data: () => {
-        return {
-            bau: {
-                name: 'Б.А.У.',
-                image: require('@/assets/image/bau.jpeg'),
-                tags: ['Метал', 'Пародия', 'Гроул']
-            },
-            iron: {
-                name: 'Iron Maiden',
-                image: require('@/assets/image/iron.jpg'),
-                tags: ['Хэви-Метал', 'Метал', 'Рок']
-            },
-            rise: {
-                name: 'Rise of Tyrant',
-                artist: {
-                    name: 'Arch Enemy'
-                },
-                image: require('@/assets/image/rise.jpg'),
-                tags: ['Метал', 'Мелодик-Дэт']
-            }
-        };
-    },
     components: {
         ArtistCard,
         AlbumCard
