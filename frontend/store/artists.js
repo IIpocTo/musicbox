@@ -1,15 +1,19 @@
 import {default as connector, SERVICES} from '../util/connector';
 
 export const actions = {
-    getArtists: (context) => connector.get(SERVICES.artists).then(res => context.commit('set', res))
+    getArtists: (context) => connector().get(SERVICES.artists).then(res => context.commit('set', res))
 };
 
-export const state = () => [];
+export const state = () => ({
+    artistList: []
+});
 
 export const mutations = {
-    set: (newState) => newState
+    set: (state, newState) => {
+        state.artistList = newState;
+    }
 };
 
 export const getters = {
-    artists: state => state
+    artists: state => state.artistList
 };

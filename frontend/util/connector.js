@@ -15,7 +15,7 @@ export const SERVICES = {
     tracks: 'tracks'
 };
 
-let mocked = void 0;
+let mocked = true; // void 0
 
 function init() {
     fetch(`${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}`)

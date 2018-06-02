@@ -64,14 +64,8 @@
                             </v-list>
                         </v-card>
                     </v-flex>
-                    <v-flex xs6 lg4>
-                        <artist-card :artist="bau"></artist-card>
-                    </v-flex>
-                    <v-flex xs6 lg4>
-                        <artist-card :artist="iron"></artist-card>
-                    </v-flex>
-                    <v-flex xs6 lg4>
-                        <artist-card :artist="rise"></artist-card>
+                    <v-flex xs6 lg4 v-for="(value, key) in artists" :key="key">
+                        <artist-card :artist="value"></artist-card>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -85,18 +79,21 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'HomePage',
+    beforeMount() {
+        this.getArtists();
+    },
     methods: {
         showLoginForm() {
 
         },
         ...mapActions({
-            add: 'getArtists'
+            getArtists: 'artists/getArtists'
         })
     },
     computed: {
-        ...mapGetters([
-            'artists'
-        ])
+        ...mapGetters({
+            artists: 'artists/artists'
+        })
     },
     data: () => {
         return {
