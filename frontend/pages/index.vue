@@ -84,7 +84,7 @@ export default {
     },
     methods: {
         showLoginForm() {
-
+            this.$router.push('/login?tab=login');
         },
         ...mapActions({
             getArtists: 'artists/getArtists'

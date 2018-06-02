@@ -61,7 +61,12 @@
         </v-navigation-drawer>
         <v-toolbar fixed app :clipped-left="clipped" color="primary" dark>
             <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title>{{ title }}</v-toolbar-title>
+            <v-toolbar-title
+                @click.prevent="goHome()"
+                :style="{ cursor: 'pointer' }"
+            >
+                {{ title }}
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field
                 v-model="search"
@@ -104,6 +109,11 @@ export default {
     computed: {
         playerVisible() {
             return this.$store.state.player.visible;
+        }
+    },
+    methods: {
+        goHome() {
+            this.$router.push('/');
         }
     },
     components: {
