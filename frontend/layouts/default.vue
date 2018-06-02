@@ -74,6 +74,7 @@
                 placeholder="Поиск музыки..."
                 clearable
                 solo-inverted flat
+                @keyup.enter="goSearch"
             ></v-text-field>
         </v-toolbar>
         <v-content>
@@ -114,6 +115,10 @@ export default {
     methods: {
         goHome() {
             this.$router.push('/');
+        },
+        goSearch() {
+            this.$router.push(`/search?q=${this.search}`);
+            this.search = '';
         }
     },
     components: {
