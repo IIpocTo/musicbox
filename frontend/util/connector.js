@@ -17,7 +17,7 @@ export const SERVICES = {
 
 let mocked = true; // void 0
 
-function init() {
+export function init() {
     fetch(`${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}`)
         .then(() => {
             mocked = false;
@@ -26,8 +26,6 @@ function init() {
             mocked = true;
         });
 }
-
-init();
 
 function mocker(service, params) {
     switch (service) {
