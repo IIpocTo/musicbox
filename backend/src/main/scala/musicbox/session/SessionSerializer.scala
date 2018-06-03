@@ -30,15 +30,16 @@ class MultiValueSessionSerializer[T](
       .map { case (k, v) => urlDecode(k) + "~" + urlEncode(v) }
       .mkString("&")
 
-  override def deserialize(r: String): Try[T] = Try {
-    if (r.isEmpty) Map.empty[String, String]
-    else {
-      r.split("&")
-        .map(_.split("~", 2))
-        .map(pair => urlDecode(pair(0)) -> urlDecode(pair(1)))
-        .toMap
-    }
-  }.flatMap(fromMap)
+  override def deserialize(r: String): Try[T] =
+    Try {
+      if (r.isEmpty) Map.empty[String, String]
+      else {
+        r.split("&")
+          .map(_.split("~", 2))
+          .map(pair => urlDecode(pair(0)) -> urlDecode(pair(1)))
+          .toMap
+      }
+    }.flatMap(fromMap)
 
 }
 

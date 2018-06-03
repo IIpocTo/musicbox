@@ -40,3 +40,5 @@ trait CsrfDirectives {
   }
 
 }
+
+object CsrfDirectives extends CsrfDirectives
