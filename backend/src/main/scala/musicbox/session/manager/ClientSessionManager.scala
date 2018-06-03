@@ -30,7 +30,7 @@ trait ClientSessionManager[T] {
       .get
   }
 
-  private def createCookieWithValue(value: String) =
+  def createCookieWithValue(value: String) =
     HttpCookie(
       name = config.sessionCookieConfig.name,
       value = value,
@@ -42,7 +42,7 @@ trait ClientSessionManager[T] {
       httpOnly = config.sessionCookieConfig.httpOnly
     )
 
-  private def createHeaderWithValue(value: String) =
+  def createHeaderWithValue(value: String) =
     RawHeader(name = config.sessionHeaderConfig.sendToClientHeaderName, value = value)
 
   def createCookie(data: T): HttpCookie = createCookieWithValue(encode(data))
