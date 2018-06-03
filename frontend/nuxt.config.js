@@ -16,8 +16,7 @@ module.exports = {
     ]
   },
   plugins: [
-    '~/plugins/vuetify.js',
-    '~/plugins/connectify.js'
+    '~/plugins/vuetify.js'
   ],
   css: [
     '~/assets/style/app.styl'

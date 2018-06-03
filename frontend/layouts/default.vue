@@ -79,7 +79,13 @@
         </v-toolbar>
         <v-content>
             <v-container>
-                <nuxt />
+                <div v-if="appView === void 0" />
+                <div v-else-if="appView === true">
+                    <nuxt />
+                </div>
+                <div v-else>
+                    Ошибка при соединении с сервером
+                </div>
             </v-container>
             <div v-if="playerVisible" style="height: 100px;"></div>
         </v-content>
@@ -95,10 +101,15 @@
 </template>
 <script>
 import MusicPlayer from '@/components/MusicPlayer';
+import connector from '../util/connector';
 
 export default {
+    async beforeMount() {
+        this.appView = await connector().check();
+    },
     data() {
         return {
+            appView: void 0,
             clipped: true,
             drawer: false,
             fixed: false,

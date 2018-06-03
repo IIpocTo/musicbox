@@ -1,11 +1,11 @@
 import fetch from 'node-fetch';
-import { setCookie } from './cooker';
+import {getCookie, setCookie} from './cooker';
 
 export const SERVER = {
     HOST: process.env.NODE_ENV === 'production' ? 'shit.com' : 'localhost',
     PORT: 9000,
     PROTOCOL: 'http',
-    V_API: 'api/v1'
+    V_API: 'v1'
 };
 
 export const SERVICES = {
@@ -16,85 +16,88 @@ export const SERVICES = {
     search: 'search'
 };
 
-let mocked = true; // void 0
+export const TOKENS = {
+    XSRF: 'XSRF-TOKEN'
+};
 
-export function init() {
-    fetch(`${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}`)
-        .then(() => {
-            mocked = false;
-        })
-        .catch(() => {
-            mocked = true;
-        });
-}
-
-function mocker(service, params) {
-    switch (service) {
-    case SERVICES.artists:
-        return [
-            {
-                id: 'bau',
-                name: 'Б.А.У.',
-                image: require('@/assets/image/bau.jpeg'),
-                tags: ['Метал', 'Пародия', 'Гроул']
-            },
-            {
-                id: 'iron',
-                name: 'Iron Maiden',
-                image: require('@/assets/image/iron.jpg'),
-                tags: ['Хэви-Метал', 'Метал', 'Рок']
-            },
-            {
-                id: 'rise',
-                name: 'Rise of Tyrant',
-                artist: {
-                    name: 'Arch Enemy'
-                },
-                image: require('@/assets/image/rise.jpg'),
-                tags: ['Метал', 'Мелодик-Дэт']
-            }
-        ];
-    case SERVICES.search:
-        return {
-            albums: [],
-            tracks: [],
-            artists: [
-                {
-                    id: 'bau',
-                    name: 'Б.А.У.',
-                    image: require('@/assets/image/bau.jpeg'),
-                    tags: ['Метал', 'Пародия', 'Гроул']
-                }
-            ]
-        };
-    default: return [];
-    }
-}
+// function mocker(service, params) {
+//     switch (service) {
+//     case SERVICES.artists:
+//         return [
+//             {
+//                 id: 'bau',
+//                 name: 'Б.А.У.',
+//                 image: require('@/assets/image/bau.jpeg'),
+//                 tags: ['Метал', 'Пародия', 'Гроул']
+//             },
+//             {
+//                 id: 'iron',
+//                 name: 'Iron Maiden',
+//                 image: require('@/assets/image/iron.jpg'),
+//                 tags: ['Хэви-Метал', 'Метал', 'Рок']
+//             },
+//             {
+//                 id: 'rise',
+//                 name: 'Rise of Tyrant',
+//                 artist: {
+//                     name: 'Arch Enemy'
+//                 },
+//                 image: require('@/assets/image/rise.jpg'),
+//                 tags: ['Метал', 'Мелодик-Дэт']
+//             }
+//         ];
+//     case SERVICES.search:
+//         return {
+//             albums: [],
+//             tracks: [],
+//             artists: [
+//                 {
+//                     id: 'bau',
+//                     name: 'Б.А.У.',
+//                     image: require('@/assets/image/bau.jpeg'),
+//                     tags: ['Метал', 'Пародия', 'Гроул']
+//                 }
+//             ]
+//         };
+//     default: return [];
+//     }
+// }
 
 export default function () {
     const server = `${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${SERVER.V_API}`;
     return {
-        post: (route, params) => {
+        post: (route, params = {}) => {
             if (SERVICES[route] === void 0) return void 0;
-            if (mocked) return Promise.resolve(true);
             return fetch(`${server}/${route}`, {
                 method: 'POST',
-                ...params
+                ...params,
+                headers: {
+                    'X-XSRF-TOKEN': getCookie(TOKENS.XSRF),
+                    ...(params.headers || {})
+                }
             });
         },
-        get: (route, params) => {
+        check: () => {
+            return fetch(`${server}/healthcheck`)
+                .then(() => {
+                    return true;
+                })
+                .catch(() => {
+                    return false;
+                });
+        },
+        get: (route, params = {}) => {
             if (SERVICES[route] === void 0) return void 0;
-            if (mocked) return Promise.resolve(mocker(route, params));
             const q = params.query ? `?${params.query}` : '';
-            return fetch(`${server}/${route}${q}`, {
-                method: 'GET',
-                ...(params || {})
-            });
+            return fetch(`${server}/${route}${q}`, params || {});
         },
         login: (login, password) => {
-            if (mocked) return Promise.resolve(false);
             return fetch(`${server}/auth/login`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': getCookie(TOKENS.XSRF)
+                },
                 body: {
                     login,
                     password
@@ -107,18 +110,14 @@ export default function () {
                     // eslint-disable-nex-line camelcase
                     access_token: accessToken,
                     // eslint-disable-nex-line camelcase
-                    refresh_token: refreshToken,
-                    // eslint-disable-nex-line camelcase
-                    csrf_token: csrfToken
+                    refresh_token: refreshToken
                 } = res;
                 setCookie('access_token', accessToken);
                 setCookie('refresh_token', refreshToken);
-                setCookie('csrf_token', csrfToken);
                 return true;
             });
         },
         register: (login, password, email, phone) => {
-            if (mocked) return Promise.resolve(false);
             return fetch(`${server}/auth/register`, {
                 method: 'POST',
                 body: {
@@ -126,6 +125,10 @@ export default function () {
                     password,
                     email,
                     phone
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': getCookie(TOKENS.XSRF)
                 }
             }).then(response => {
                 return response.status === 201;

@@ -144,12 +144,11 @@ export default {
         },
         submitRegister() {
             if (this.$refs.registerForm.validate()) {
-                // TODO: login and password instead of strings
                 connector().register(
-                    'login',
-                    'password',
-                    'email',
-                    'phone'
+                    this.username,
+                    this.password,
+                    this.email,
+                    '+79001234543' // TODO: remove hardcoded phone
                 ).then(registered => {
                     if (registered) {
                         // User registered successfully
