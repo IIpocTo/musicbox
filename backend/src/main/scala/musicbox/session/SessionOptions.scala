@@ -1,5 +1,6 @@
 package musicbox.session
 
+import musicbox.refreshtoken.RefreshTokenStorage
 import musicbox.session.manager.SessionManager
 
 import scala.concurrent.ExecutionContext

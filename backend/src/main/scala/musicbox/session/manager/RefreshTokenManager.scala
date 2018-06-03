@@ -3,7 +3,8 @@ package musicbox.session.manager
 import java.util.concurrent.TimeUnit
 
 import akka.http.scaladsl.model.headers.{HttpCookie, RawHeader}
-import musicbox.session.{RefreshTokenData, RefreshTokenStorage, SessionConfig, SessionResult}
+import musicbox.refreshtoken.{RefreshTokenData, RefreshTokenStorage}
+import musicbox.session.{RefreshTokenData, SessionConfig, SessionResult}
 import musicbox.utils.{Crypto, SessionUtil}
 
 import scala.concurrent.{ExecutionContext, Future}

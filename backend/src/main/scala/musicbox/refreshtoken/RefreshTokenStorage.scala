@@ -1,4 +1,4 @@
-package musicbox.session
+package musicbox.refreshtoken
 
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
@@ -12,3 +12,5 @@ trait RefreshTokenStorage[T] {
   def remove(selector: String): Future[Unit]
   def schedule[S](after: Duration)(op: => Future[S]): Unit
 }
+
+

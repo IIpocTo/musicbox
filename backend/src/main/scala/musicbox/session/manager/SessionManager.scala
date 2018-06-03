@@ -1,6 +1,7 @@
 package musicbox.session.manager
 
-import musicbox.session.{RefreshTokenStorage, SessionConfig, SessionEncoder}
+import musicbox.refreshtoken.RefreshTokenStorage
+import musicbox.session.{SessionConfig, SessionEncoder}
 
 class SessionManager[T](val config: SessionConfig)(implicit sessionEncoder: SessionEncoder[T]) {
   manager =>

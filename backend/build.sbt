@@ -27,6 +27,7 @@ lazy val root = (project in file(".")).settings(
     "com.softwaremill.macwire" %% "util" % macwireVersion,
     "com.softwaremill.macwire" %% "proxy" % macwireVersion,
     "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
     "org.scalatest" %% "scalatest" % "3.0.5" % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
