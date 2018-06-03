@@ -21,10 +21,8 @@ object Server extends App with StrictLogging {
   private val interface = config.getString("http.interface")
   private val port = config.getInt("http.port")
 
-  logger.info("Server started")
-
   val bindingFuture = Http().bindAndHandle(mainRouter.routes, interface, port)
-  println(s"Server online at http://$interface:$port/")
+  logger.info(s"Server online at http://$interface:$port/")
 
   StdIn.readLine()
 
@@ -32,6 +30,6 @@ object Server extends App with StrictLogging {
     .flatMap(_.unbind())
     .onComplete { _ =>
       system.terminate()
-      println("Server stopped")
+      logger.info("Server stopped")
     }
 }
