@@ -3,8 +3,7 @@ package musicbox.db
 import musicbox.db.Connection.musicboxDb
 import musicbox.modeles.Models.User
 import reactivemongo.api.collections.bson.BSONCollection
-import reactivemongo.api.commands.WriteResult
-import reactivemongo.bson.{BSONDocumentHandler, Macros, document}
+import reactivemongo.bson.{document, BSONDocumentHandler, Macros}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -17,6 +16,7 @@ case class UserDao()(implicit ec: ExecutionContext) {
   def findUserByUsernameAndPassword(username: String, password: String): Future[Option[User]] =
     userCollection.flatMap(_.find(document("username" -> username, "password" -> password)).one)
 
-  def createUser(user: User): Future[WriteResult] = userCollection.flatMap(_.insert(user))
+  def insertUser(user: User): Future[Boolean] =
+    userCollection.flatMap(_.insert(user)).map(wr => wr.ok || wr.n == 1)
 
 }

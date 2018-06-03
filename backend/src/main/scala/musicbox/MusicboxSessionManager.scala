@@ -8,7 +8,7 @@ import musicbox.session.manager.SessionManager
 import org.json4s.jackson.Serialization
 import org.json4s.{jackson, DefaultFormats, JValue}
 
-case class SessionData(username: String)
+case class SessionData(userId: String)
 
 object MusicboxSessionManager extends StrictLogging {
   implicit val serialization: Serialization.type = jackson.Serialization

@@ -8,15 +8,13 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import musicbox.session.SessionOptions._
 import musicbox.SessionData
 import musicbox.MusicboxSessionManager._
-import musicbox.modeles.Models.LoginRequest
+import musicbox.modeles.Models.{LoginRequest, RegisterRequest}
+import musicbox.service.AuthService
 import musicbox.session.directives.SessionDirectives._
 
 import scala.concurrent.ExecutionContext
 
-case class SignInData(username: String, password: String)
-case class SignUpData(username: String, password: String, email: String, phone: String)
-
-case class AuthRouter()(implicit executionContext: ExecutionContext)
+case class AuthRouter(service: AuthService)(implicit executionContext: ExecutionContext)
     extends StrictLogging {
 
   def musicboxSetSession(value: SessionData): Directive0 =
@@ -26,12 +24,27 @@ case class AuthRouter()(implicit executionContext: ExecutionContext)
   val musicboxInvalidateSession: Directive0 = invalidateSession(refreshable, usingCookies)
 
   val route: Route =
+  path("register") {
+    post {
+      entity(as[RegisterRequest]) { rr =>
+        logger.info(s"Register with $rr")
+        onSuccess(service.register(rr)) { inserted =>
+          if (inserted) complete(StatusCodes.Created)
+          else complete(StatusCodes.Conflict, "Error while registering user!")
+        }
+      }
+    }
+  } ~
   path("login") {
     post {
       entity(as[LoginRequest]) { lr =>
         logger.info(s"Logging with $lr")
-        musicboxSetSession(SessionData(lr.username)) { ctx =>
-          ctx.complete(StatusCodes.OK)
+        onSuccess(service.login(lr)) {
+          case Some(id) =>
+            musicboxSetSession(SessionData(id)) { ctx =>
+              ctx.complete(StatusCodes.OK)
+            }
+          case None => complete(StatusCodes.Conflict, "Wrong login data!")
         }
       }
     }
