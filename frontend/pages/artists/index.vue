@@ -4,7 +4,7 @@
             hover
             raised
             v-for="(value, key) in artists" :key="key"
-            @click.prevent="() => showArtist(value.id)"
+            @click.prevent="showArtist(value.id)"
         >
             {{ value.name }}
         </v-card>
@@ -23,6 +23,8 @@ export default {
             getArtists: 'artists/getArtists'
         }),
         showArtist(id) {
+            // eslint-disable-next-line
+            console.log(id);
             this.$router.push(`/artists/${id}`);
         }
     },

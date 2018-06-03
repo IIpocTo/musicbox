@@ -1,10 +1,10 @@
 <template>
     <div>
         <v-card
-                hover
-                raised
-                v-for="(value, key) in albums" :key="key"
-                @click.prevent="() => showAlbum(value.id)"
+            hover
+            raised
+            v-for="(value, key) in albums" :key="key"
+            @click.prevent="() => showAlbum(value.id)"
         >
             {{ value.name }}
         </v-card>
@@ -14,14 +14,14 @@
 export default {
     name: 'AlbumsPage',
     data() {
-      return {
-        albums: []
-      };
+        return {
+            albums: []
+        };
     },
     methods: {
-      showAlbum() {
+        showAlbum() {
 
-      }
+        }
     }
 };
 </script>
