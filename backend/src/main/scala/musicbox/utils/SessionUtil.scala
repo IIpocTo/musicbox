@@ -1,5 +1,8 @@
 package musicbox.utils
 
+import java.math.BigInteger
+import java.util.concurrent.ThreadLocalRandom
+
 object SessionUtil {
 
   private val HexArray = "0123456789ABCDEF".toCharArray
@@ -38,5 +41,12 @@ object SessionUtil {
       equal == 0
     }
   }
+
+  def randomString(length: Int): String = {
+    val random: ThreadLocalRandom = ThreadLocalRandom.current()
+    new BigInteger(length * 5, random).toString(32) // because 2^5 = 32
+  }
+
+  def randomServerSecret(): String = randomString(128)
 
 }

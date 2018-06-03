@@ -36,7 +36,7 @@ object JwtSessionSerializer {
     }
 
   def caseClass[T <: Product: Manifest](
-    implicit formats: DefaultFormats
+    implicit formats: DefaultFormats = DefaultFormats
   ): SessionSerializer[T, JValue] =
     new SessionSerializer[T, JValue] {
       override def serialize(t: T): JValue = Extraction.decompose(t)
