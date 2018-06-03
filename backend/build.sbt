@@ -19,6 +19,7 @@ lazy val root = (project in file(".")).settings(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-stream" % akkaVersion,
     "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+    "ch.megard" %% "akka-http-cors" % "0.3.0",
     "org.reactivemongo" %% "reactivemongo" % "0.13.0",
     "org.json4s" %% "json4s-jackson" % "3.5.4",
     "de.heikoseeberger" %% "akka-http-json4s" % "1.21.0",
