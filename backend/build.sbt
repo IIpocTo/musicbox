@@ -18,7 +18,6 @@ lazy val root = (project in file(".")).settings(
   libraryDependencies ++= Seq(
     "com.typesafe.akka" %% "akka-actor" % akkaVersion,
     "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-    "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
     "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
     "org.reactivemongo" %% "reactivemongo" % "0.13.0",
     "org.json4s" %% "json4s-jackson" % "3.5.4",
