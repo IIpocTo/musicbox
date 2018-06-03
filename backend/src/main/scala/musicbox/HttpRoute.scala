@@ -2,6 +2,7 @@ package musicbox
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import musicbox.routes.AuthRouter
 import musicbox.session.directives.csrf.CsrfDirectives.randomTokenCsrfProtection
 import musicbox.session.directives.csrf.CsrfOptions.checkHeader
@@ -19,13 +20,15 @@ class HttpRoute(implicit executionContext: ExecutionContext) {
   implicit private val authRouter: AuthRouter = wire[AuthRouter]
 
   val routes: Route =
-    randomTokenCsrfProtection(checkHeader) {
-      pathPrefix("v1") {
-        authRouter.route ~
-        path("healthcheck") {
-          get {
-            complete("OK")
-          }
+    cors() {
+      randomTokenCsrfProtection(checkHeader) {
+        pathPrefix("v1") {
+          authRouter.route ~
+            path("healthcheck") {
+              get {
+                complete("OK")
+              }
+            }
         }
       }
     }
