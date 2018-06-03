@@ -56,3 +56,5 @@ trait SessionDirectives extends OneOffSessionDirectives with RefreshableSessionD
   }
 
 }
+
+object SessionDirectives extends SessionDirectives

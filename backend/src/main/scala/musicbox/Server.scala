@@ -5,10 +5,14 @@ import akka.http.scaladsl.Http
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.StrictLogging
+import musicbox.refreshtoken.InMemoryRefreshTokenStorage
 import musicbox.session.SessionConfig
+import musicbox.session.SessionOptions._
+import musicbox.session.directives.SessionDirectives._
 import musicbox.session.manager.SessionManager
 
 import scala.concurrent.ExecutionContextExecutor
+import scala.io.StdIn
 
 object Server extends App with StrictLogging {
 
@@ -24,14 +28,26 @@ object Server extends App with StrictLogging {
 
   implicit val sessionManager: SessionManager[MusicboxSession] =
     new SessionManager[MusicboxSession](sessionConfig)
-  implicit val refreshTokenStorage = new InMemoryRefreshTokenStorage[MyScalaSession] {
-    def log(msg: String): Unit = logger.info(msg)
-  }
+  implicit val refreshTokenStorage: InMemoryRefreshTokenStorage[MusicboxSession] = (msg: String) =>
+    logger.info(msg)
 
-//  private val mainRouter = new HttpRoute()
+  def musicboxSetSession(value: MusicboxSession) = setSession(refreshable, usingCookies, value)
+  val musicboxRequiredSession = requiredSession(refreshable, usingCookies)
+  val musicboxInvalidateSession = invalidateSession(refreshable, usingCookies)
+
+  private val mainRouter = new HttpRoute()
   private val interface = config.getString("http.interface")
   private val port = config.getInt("http.port")
 
-//  Http().bindAndHandle(mainRouter.routes, interface, port)
-//  println(s"Server online at http://$interface:$port/")
+  val bindingFuture = Http().bindAndHandle(mainRouter.routes, interface, port)
+  println(s"Server online at http://$interface:$port/")
+
+  StdIn.readLine()
+
+  bindingFuture
+    .flatMap(_.unbind())
+    .onComplete { _ =>
+      system.terminate()
+      println("Server stopped")
+    }
 }
