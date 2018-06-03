@@ -1,7 +1,7 @@
 package musicbox.db
 
 import musicbox.db.Connection.musicboxDb
-import musicbox.modles.Models.User
+import musicbox.modeles.Models.User
 import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.commands.WriteResult
 import reactivemongo.bson.{BSONDocumentHandler, Macros, document}
