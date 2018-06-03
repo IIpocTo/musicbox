@@ -3,10 +3,12 @@ package musicbox.routes
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{Directive0, Directive1, Route}
-import musicbox.session.SessionOptions._
 import com.typesafe.scalalogging.StrictLogging
+import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+import musicbox.session.SessionOptions._
 import musicbox.SessionData
 import musicbox.MusicboxSessionManager._
+import musicbox.modeles.Models.LoginRequest
 import musicbox.session.directives.SessionDirectives._
 
 import scala.concurrent.ExecutionContext
@@ -14,7 +16,8 @@ import scala.concurrent.ExecutionContext
 case class SignInData(username: String, password: String)
 case class SignUpData(username: String, password: String, email: String, phone: String)
 
-case class AuthRouter()(implicit executionContext: ExecutionContext) extends StrictLogging {
+case class AuthRouter()(implicit executionContext: ExecutionContext)
+    extends StrictLogging {
 
   def musicboxSetSession(value: SessionData): Directive0 =
     setSession(refreshable, usingCookies, value)
@@ -25,10 +28,10 @@ case class AuthRouter()(implicit executionContext: ExecutionContext) extends Str
   val route: Route =
   path("login") {
     post {
-      entity(as[String]) { body =>
-        logger.info(s"Logging in $body")
-        musicboxSetSession(SessionData(body)) { ctx =>
-          ctx.complete(StatusCodes.OK, "ok")
+      entity(as[LoginRequest]) { lr =>
+        logger.info(s"Logging with $lr")
+        musicboxSetSession(SessionData(lr.username)) { ctx =>
+          ctx.complete(StatusCodes.OK)
         }
       }
     }

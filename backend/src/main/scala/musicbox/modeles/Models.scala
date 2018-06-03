@@ -1,4 +1,4 @@
-package musicbox.modles
+package musicbox.modeles
 
 object Models {
 
@@ -9,5 +9,7 @@ object Models {
     email: String,
     phone: String
   )
+
+  case class LoginRequest(username: String, password: String)
 
 }

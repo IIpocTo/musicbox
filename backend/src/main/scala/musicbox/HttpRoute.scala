@@ -1,5 +1,6 @@
 package musicbox
 
+import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import musicbox.routes.AuthRouter
