@@ -14,8 +14,7 @@ trait CsrfDirectives {
   def submittedCsrfToken[T](checkMode: CsrfCheckMode[T]): Directive1[String] = {
     headerValueByName(checkMode.manager.config.csrfSubmittedName).recover { rejections =>
       checkMode match {
-        case c: CheckHeaderAndForm[T] =>
-          import c.materializer
+        case _: CheckHeaderAndForm[T] =>
           formField(checkMode.manager.config.csrfSubmittedName)
         case _ => reject(rejections: _*)
       }
