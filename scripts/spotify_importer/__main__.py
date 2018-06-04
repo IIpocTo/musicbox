@@ -9,6 +9,30 @@ def id(id):
     return ObjectId(id[:12].encode('utf-8'))
 
 
+ids = [
+    '58lV9VcRSjABbAbfWS6skp', # Bon Jovi
+    '27T030eWyCQRmDyuvr1kxY', # Scorpions
+    '6SLAMfhOi7UJI0fMztaK0m', # Rainbow
+    '568ZhdwyaiCyOGJRtNYhWf', # Deep Purple
+    '7oPftvlwr6VrsViSDV7fJY', # Green Day
+    '5LfGQac0EIXyAN8aUwmNAQ', # The Offspring
+    '5Pwc4xIPtQLFEnJriah9YJ', # OneRepublic
+    '5SHxzwjek1Pipl1Yk11UHv', # Tom Grennan
+    '4f9iBmdUOhQWeP7dcAn1pf', # Rag'n'Bone Man
+    '5ggxe6RGD8zHfaCbwTdtw5', # Алиса
+    '3mF9V7H7yo9AwMXHt08Q9f', # Б.Т.Р.
+    '0ICn3Cbc4mMeLmTvwnqXYu', # Ария
+    '68YlHHmtFXbIFOPp8pMutS', # Щурците
+    '3FUY2gzHeIiaesXtOAdB7A', # Train
+    '0zOcE3mg9nS6l3yxt1Y0bK', # The Fray
+    '4DToQR3aKrHQSSRzSz8Nzt', # The Hives
+    '6cmp7ut7okJAgJOSaMAVf3', # Machinae Supremacy
+    '3WrFJ7ztbogyGnTHbHJFl2', # The Beatles
+    '293zczrfYafIItmnmM3coR', # Chuck Berry
+    '6deZN1bslXzeGvOLaLMOIF' # Nickelback
+]
+
+
 amount = 20
 
 if __name__ == '__main__':
@@ -29,17 +53,12 @@ if __name__ == '__main__':
         client_credentials_manager=client_credentials_manager
     )
 
-    # get list of artists
-    artists = sp.search(
-        q='band',
-        limit=amount,
-        type='artist'
-    )['artists']
+    artists = sp.artists(ids)
     res_artists = []
     res_albums = []
     res_tracks = []
 
-    for i, artist in enumerate(artists['items']):
+    for i, artist in enumerate(artists['artists']):
         try:
             el = {}
             el['name'] = artist['name']
@@ -112,6 +131,9 @@ if __name__ == '__main__':
         artists = db.artists
         albums = db.albums
         tracks = db.tracks
+	artists.remove()
+	albums.remove()
+	tracks.remove()
         artists.insert_many(res_artists)
         albums.insert_many(res_albums)
         tracks.insert_many(res_tracks)
