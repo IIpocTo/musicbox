@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {getCookie} from './cooker';
 
 export const SERVER = {

@@ -125,6 +125,7 @@ import MusicPlayer from '@/components/MusicPlayer';
 
 export default {
     async beforeMount() {
+        console.log(window.location.hash.substring(1));
         await this.checkConnection();
     },
     data() {
