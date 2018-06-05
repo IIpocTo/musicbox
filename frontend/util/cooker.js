@@ -1,9 +1,7 @@
 export function getCookie(name) {
-    const matches = document.cookie.match(new RegExp(
-        // eslint-disable-next-line no-useless-escape
-        '(?:^|; )' + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + '=([^;]*)'
-    ));
-    return matches ? decodeURIComponent(matches[1]) : void 0;
+    const value = '; ' + document.cookie;
+    const parts = value.split('; ' + name + '=');
+    if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
 export function setCookie(name, value, options) {

@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
-import {getCookie, setCookie} from './cooker';
+import {getCookie} from './cooker';
 
 export const SERVER = {
-    HOST: process.env.NODE_ENV === 'production' ? 'shit.com' : 'localhost',
+    HOST: process.env.NODE_ENV === 'production' ? 'shit.com' : '127.0.0.1',
     PORT: 9000,
     PROTOCOL: 'http',
     V_API: 'v1'
@@ -17,51 +17,13 @@ export const SERVICES = {
 };
 
 export const TOKENS = {
-    XSRF: 'XSRF-TOKEN'
+    XSRF: 'XSRF-TOKEN',
+    ACCESS: '_sessiondata'
 };
 
-// function mocker(service, params) {
-//     switch (service) {
-//     case SERVICES.artists:
-//         return [
-//             {
-//                 id: 'bau',
-//                 name: 'Б.А.У.',
-//                 image: require('@/assets/image/bau.jpeg'),
-//                 tags: ['Метал', 'Пародия', 'Гроул']
-//             },
-//             {
-//                 id: 'iron',
-//                 name: 'Iron Maiden',
-//                 image: require('@/assets/image/iron.jpg'),
-//                 tags: ['Хэви-Метал', 'Метал', 'Рок']
-//             },
-//             {
-//                 id: 'rise',
-//                 name: 'Rise of Tyrant',
-//                 artist: {
-//                     name: 'Arch Enemy'
-//                 },
-//                 image: require('@/assets/image/rise.jpg'),
-//                 tags: ['Метал', 'Мелодик-Дэт']
-//             }
-//         ];
-//     case SERVICES.search:
-//         return {
-//             albums: [],
-//             tracks: [],
-//             artists: [
-//                 {
-//                     id: 'bau',
-//                     name: 'Б.А.У.',
-//                     image: require('@/assets/image/bau.jpeg'),
-//                     tags: ['Метал', 'Пародия', 'Гроул']
-//                 }
-//             ]
-//         };
-//     default: return [];
-//     }
-// }
+if (process.browser) {
+    require('../util/sPlayer');
+}
 
 export default function () {
     const server = `${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${SERVER.V_API}`;
@@ -78,7 +40,9 @@ export default function () {
             });
         },
         check: () => {
-            return fetch(`${server}/healthcheck`)
+            return fetch(`${server}/healthcheck`, {
+                credentials: 'include'
+            })
                 .then(() => {
                     return true;
                 })
@@ -91,41 +55,33 @@ export default function () {
             const q = params.query ? `?${params.query}` : '';
             return fetch(`${server}/${route}${q}`, params || {});
         },
-        login: (login, password) => {
+        login: (username, password) => {
             return fetch(`${server}/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-XSRF-TOKEN': getCookie(TOKENS.XSRF)
                 },
-                body: {
-                    login,
+                credentials: 'include',
+                body: JSON.stringify({
+                    username,
                     password
-                }
+                })
             }).then(response => {
-                if (response.status !== 201) return false;
-                else return response.json();
-            }).then(res => {
-                const {
-                    // eslint-disable-nex-line camelcase
-                    access_token: accessToken,
-                    // eslint-disable-nex-line camelcase
-                    refresh_token: refreshToken
-                } = res;
-                setCookie('access_token', accessToken);
-                setCookie('refresh_token', refreshToken);
-                return true;
+                if (response.status === 200) return true;
+                return false;
             });
         },
-        register: (login, password, email, phone) => {
+        register: (username, password, email, phone) => {
             return fetch(`${server}/auth/register`, {
                 method: 'POST',
-                body: {
-                    login,
+                credentials: 'include',
+                body: JSON.stringify({
+                    username,
                     password,
                     email,
                     phone
-                },
+                }),
                 headers: {
                     'Content-Type': 'application/json',
                     'X-XSRF-TOKEN': getCookie(TOKENS.XSRF)
@@ -134,6 +90,16 @@ export default function () {
                 return response.status === 201;
             });
         },
-        logout: () => {}
+        logout: () => {
+            return fetch(`${server}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'X-XSRF-TOKEN': getCookie(TOKENS.XSRF)
+                }
+            }).then(response => {
+                return response.status === 201;
+            });
+        }
     };
 }

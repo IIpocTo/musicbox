@@ -132,9 +132,9 @@ export default {
     methods: {
         submitLogin() {
             if (this.$refs.loginForm.validate()) {
-                // TODO: login and password instead of strings
-                connector().login('login', 'password').then(logged => {
+                connector().login(this.username, this.password).then(logged => {
                     if (logged) {
+                        // connector().logout(); - TO LOGOUT
                         // TODO: enter the app
                     } else {
                         // TODO: show login error
