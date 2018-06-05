@@ -21,6 +21,9 @@
                         <v-tab-item
                             key="login"
                         >
+                            <v-alert :value="!!loginErrorMsg" type="error">
+                                {{ loginErrorMsg }}
+                            </v-alert>
                             <v-form ref="loginForm" @submit.native.prevent="submitLogin">
                                 <v-text-field
                                     v-model="username"
@@ -49,6 +52,9 @@
                         <v-tab-item
                             key="register"
                         >
+                            <v-alert :value="!!registerErrorMsg" type="error">
+                                {{ registerErrorMsg }}
+                            </v-alert>
                             <v-form ref="registerForm" @submit.native.prevent="submitRegister">
                                 <v-text-field
                                     v-model="email"
@@ -56,6 +62,14 @@
                                     label="E-mail"
                                     hint="Укажите действующий адрес электронной почты"
                                     required :rules="[required, validEmail]"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="phone"
+                                    label="Телефон"
+                                    prefix="8"
+                                    mask="(###) ###-##-##"
+                                    hint="Ваш мобильный телефон"
+                                    required :rules="[required, validPhone]"
                                 ></v-text-field>
                                 <v-text-field
                                     v-model="username"
@@ -105,8 +119,6 @@
     </v-layout>
 </template>
 <script>
-import connector from '../util/connector';
-
 export default {
     name: 'LoginPage',
     data() {
@@ -123,37 +135,46 @@ export default {
 
             confirmPassword: '',
             email: '',
+            phone: '',
             agreement: false,
 
-            loading: false
+            loading: false,
+            loginErrorMsg: '',
+            registerErrorMsg: ''
         };
     },
 
     methods: {
-        submitLogin() {
+        async submitLogin() {
             if (this.$refs.loginForm.validate()) {
-                connector().login(this.username, this.password).then(logged => {
-                    if (logged) {
-                        // connector().logout(); - TO LOGOUT
-                        // TODO: enter the app
-                    } else {
-                        // TODO: show login error
-                    }
-                });
+                try {
+                    this.loading = true;
+                    await this.$store.dispatch('user/login', {
+                        username: this.username,
+                        password: this.password
+                    });
+                } catch (error) {
+                    console.error(error);
+                    this.loginErrorMsg = String(error);
+                }
+                this.loading = false;
             }
         },
-        submitRegister() {
+        async submitRegister() {
             if (this.$refs.registerForm.validate()) {
-                connector().register(
-                    this.username,
-                    this.password,
-                    this.email,
-                    '+79001234543' // TODO: remove hardcoded phone
-                ).then(registered => {
-                    if (registered) {
-                        // User registered successfully
-                    }
-                });
+                this.loading = true;
+                try {
+                    await this.$store.dispatch('user/register', {
+                        username: this.username,
+                        password: this.password,
+                        email: this.email,
+                        phone: this.phone
+                    });
+                } catch (error) {
+                    console.error(error);
+                    this.registerErrorMsg = String(error);
+                }
+                this.loading = false;
             }
         },
 
@@ -162,6 +183,7 @@ export default {
         long(v) { return (!!v && v.length >= 5) || 'Пароль слишком короткий!'; },
         agree(v) { return v || 'Для продолжения регистрации необходимо согласие с условиями использования'; },
         validEmail(v) { return (!!v && /^.+@.+\..+$/.test(v)) || 'Введите корректный адрес электронной почты'; },
+        validPhone(v) { return (!!v && /^[0-9]{10,10}$/.test(v)) || 'Введите корректный номер телефона'; },
         passwordsMatch(v) {
             return v === this.password || 'Пароли не совпадают!';
         }

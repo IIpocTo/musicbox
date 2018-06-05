@@ -72,7 +72,7 @@ export default function () {
                 return false;
             });
         },
-        register: (username, password, email, phone) => {
+        register: ({ username, password, email, phone }) => {
             return fetch(`${server}/auth/register`, {
                 method: 'POST',
                 credentials: 'include',
