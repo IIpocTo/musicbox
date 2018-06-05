@@ -33,8 +33,6 @@ ids = [
 ]
 
 
-amount = 20
-
 if __name__ == '__main__':
     args = sys.argv
     if len(args) != 5:
@@ -72,7 +70,7 @@ if __name__ == '__main__':
                 albums_by_artist
             ))
             res_artists.append(el)
-            print('Artist: {}/{}...'.format(i+1, amount))
+            print('Artist: {}/{}...'.format(i+1, len(ids)))
             for j, album in enumerate(albums_by_artist):
                 try:
                     alb = {}
@@ -131,12 +129,12 @@ if __name__ == '__main__':
         artists = db.artists
         albums = db.albums
         tracks = db.tracks
-	artists.remove()
-	albums.remove()
-	tracks.remove()
-        artists.insert_many(res_artists)
-        albums.insert_many(res_albums)
-        tracks.insert_many(res_tracks)
+	for artist in res_artists:
+        	artists.update_one({}, { '$setOnInsert': artist }, upsert=True)
+	for album in res_albums:
+        	albums.update_one({}, { '$setOnInsert': album }, upsert=True)
+	for track in res_tracks:       
+		tracks.update_one({}, { '$setOnInsert': track }, upsert=True)
         collection = db.collection_names(include_system_collections=False)
         if len(collection) != 3:
             print(collection)
