@@ -2,14 +2,16 @@
 
 ## Roadmap from 06/05/2018 to 06/09/2018:
 
+Updated: 06/05/2018 18:51
+
 * George
-1. Python script for importing data from spotify (06/05)
+1. (implemented) Python script for importing data from spotify (06/05)
 2. Client-side authentication (06/05)
 3. State for artists/albums/tracks based onto server API, render data in cards onto pages (06/06)
 4. Connecting to Spotify Web Playback SDK (09/06-07)
 
 * Alexander
-1. Server-side authentication (06/05)
+1. (implemented) Server-side authentication (06/05)
 2. Docker container for nginx (06/05)
 3. API for artists, albums, tracks resource pages (06/05-06)
 
