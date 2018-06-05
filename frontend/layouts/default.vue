@@ -79,15 +79,30 @@
         </v-toolbar>
         <v-content>
             <v-container>
-                <div v-if="appView === void 0" />
-                <div v-else-if="appView === true">
-                    <nuxt />
-                </div>
-                <div v-else>
-                    Ошибка при соединении с сервером
-                </div>
+                <nuxt v-if="backendAvailable"/>
+                <v-layout v-else row justify-center class="pt-5">
+                    <v-flex xs12 md8 lg6 xl4>
+                        <v-card>
+                            <v-card-title class="title">
+                                <v-icon large color="error" class="mr-3">warning</v-icon>
+                                <span>Ошибка соединения</span>
+                            </v-card-title>
+                            <v-card-text>
+                                При соединении с сервером произошла ошибка. Повторите запрос позже.
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    dark color="primary"
+                                    :loading="loading"
+                                    @click="checkConnection"
+                                ><v-icon left>refresh</v-icon>Попробовать снова</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
             </v-container>
-            <div v-if="playerVisible" style="height: 100px;"></div>
+            <div v-if="playerVisible && backendAvailable" style="height: 100px;"></div>
         </v-content>
         <v-footer
             :fixed="fixed" app
@@ -97,19 +112,25 @@
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
         </v-footer>
+        <v-snackbar multi-line top :timeout="0" :value="cookieNotifier">
+            Этот сайт использует cookies. Продолжая пользоваться данным сайтом,
+            вы даёте своё согласие на сохранение cookies на Вашем устройстве.
+            <v-btn dark flat color="primary" ripple @click="hideCookieNotifier">Согласен</v-btn>
+        </v-snackbar>
     </v-app>
 </template>
 <script>
+import timeout from '@/util/timeout';
 import MusicPlayer from '@/components/MusicPlayer';
-import connector from '../util/connector';
 
 export default {
     async beforeMount() {
-        this.appView = await connector().check();
+        await this.checkConnection();
     },
     data() {
         return {
-            appView: void 0,
+            loading: true,
+
             clipped: true,
             drawer: false,
             fixed: false,
@@ -121,6 +142,13 @@ export default {
     computed: {
         playerVisible() {
             return this.$store.state.player.visible;
+        },
+        backendAvailable() {
+            return this.$store.state.backendAvailable;
+        },
+
+        cookieNotifier() {
+            return this.$store.state.cookieNotifier;
         }
     },
     methods: {
@@ -130,10 +158,24 @@ export default {
         goSearch() {
             this.$router.push(`/search?q=${this.search}`);
             this.search = '';
+        },
+        async checkConnection() {
+            this.loading = true;
+            await this.$store.dispatch('checkBackend');
+            await timeout(250);
+            this.loading = false;
+        },
+        hideCookieNotifier() {
+            this.$store.dispatch('hideCookieNotifier');
         }
     },
     components: {
         MusicPlayer
+    },
+    mounted() {
+        if (!process.server) {
+            this.$store.dispatch('renderCookieNotifier');
+        }
     }
 };
 </script>
