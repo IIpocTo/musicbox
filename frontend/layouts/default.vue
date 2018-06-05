@@ -112,6 +112,11 @@
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
         </v-footer>
+        <v-snackbar multi-line top :timeout="0" :value="cookieNotifier">
+            Этот сайт использует cookies. Продолжая пользоваться данным сайтом,
+            вы даёте своё согласие на сохранение cookies на Вашем устройстве.
+            <v-btn dark flat color="primary" ripple @click="hideCookieNotifier">Согласен</v-btn>
+        </v-snackbar>
     </v-app>
 </template>
 <script>
@@ -140,6 +145,10 @@ export default {
         },
         backendAvailable() {
             return this.$store.state.backendAvailable;
+        },
+
+        cookieNotifier() {
+            return this.$store.state.cookieNotifier;
         }
     },
     methods: {
@@ -155,10 +164,18 @@ export default {
             await this.$store.dispatch('checkBackend');
             await timeout(250);
             this.loading = false;
+        },
+        hideCookieNotifier() {
+            this.$store.dispatch('hideCookieNotifier');
         }
     },
     components: {
         MusicPlayer
+    },
+    mounted() {
+        if (!process.server) {
+            this.$store.dispatch('renderCookieNotifier');
+        }
     }
 };
 </script>
