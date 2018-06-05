@@ -1,5 +1,5 @@
 <template>
-    <v-bottom-sheet inset :value="true" hide-overlay persistent>
+    <v-bottom-sheet inset :value="playerVisible && backendAvailable" hide-overlay persistent>
         <v-card tile>
             <!-- <v-progress-linear :value="50" height="3" class="my-0"></v-progress-linear> -->
             <v-slider
@@ -59,6 +59,12 @@ export default {
     computed: {
         currentSong() {
             return this.$store.getters['player/currentSong'];
+        },
+        playerVisible() {
+            return this.$store.state.player.visible;
+        },
+        backendAvailable() {
+            return this.$store.state.backendAvailable;
         }
     }
 };
