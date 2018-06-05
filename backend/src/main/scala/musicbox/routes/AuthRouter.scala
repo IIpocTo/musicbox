@@ -24,40 +24,41 @@ case class AuthRouter(service: AuthService)(implicit executionContext: Execution
   val musicboxInvalidateSession: Directive0 = invalidateSession(refreshable, usingCookies)
 
   val route: Route =
-  path("register") {
-    post {
-      entity(as[RegisterRequest]) { rr =>
-        logger.info(s"Register with $rr")
-        onSuccess(service.register(rr)) { inserted =>
-          if (inserted) complete(StatusCodes.Created)
-          else complete(StatusCodes.Conflict, "Error while registering user!")
-        }
-      }
-    }
-  } ~
-  path("login") {
-    post {
-      entity(as[LoginRequest]) { lr =>
-        logger.info(s"Logging with $lr")
-        onSuccess(service.login(lr)) {
-          case Some(id) =>
-            musicboxSetSession(SessionData(id)) { ctx =>
-              ctx.complete(StatusCodes.OK)
+    pathPrefix("auth") {
+      path("register") {
+        post {
+          entity(as[RegisterRequest]) { rr =>
+            logger.info(s"Register with $rr")
+            onSuccess(service.register(rr)) { inserted =>
+              if (inserted) complete(StatusCodes.Created)
+              else complete(StatusCodes.Conflict, "Error while registering user!")
             }
-          case None => complete(StatusCodes.Conflict, "Wrong login data!")
+          }
+        }
+      } ~
+      path("login") {
+        post {
+          entity(as[LoginRequest]) { lr =>
+            logger.info(s"Logging with $lr")
+            onSuccess(service.login(lr)) {
+              case Some(id) =>
+                musicboxSetSession(SessionData(id)) { ctx =>
+                  ctx.complete(StatusCodes.OK)
+                }
+              case None => complete(StatusCodes.Conflict, "Wrong login data!")
+            }
+          }
+        }
+      } ~
+      path("logout") {
+        post {
+          musicboxRequiredSession { session =>
+            musicboxInvalidateSession { ctx =>
+              logger.info(s"Logging out $session")
+              ctx.complete(StatusCodes.OK, "ok")
+            }
+          }
         }
       }
     }
-  } ~
-  path("logout") {
-    post {
-      musicboxRequiredSession { session =>
-        musicboxInvalidateSession { ctx =>
-          logger.info(s"Logging out $session")
-          ctx.complete(StatusCodes.OK, "ok")
-        }
-      }
-    }
-  }
-
 }
