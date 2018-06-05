@@ -16,7 +16,7 @@
 * Nikita
 1. Container with warning of cookies (06/05)
 2. List of cards in "artists"/"albums" pages. (06/05)
-3. Configure player with API to make able communication with it through SDK wrapper (06/06)
+3. Configure player with API to make able communication with it through SDK wrapper (06/05-06)
 
 * Daniil
 1. Add into document:
