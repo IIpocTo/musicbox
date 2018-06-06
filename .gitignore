@@ -1,10 +1,27 @@
-# Created by .ignore support plugin (hsz.mobi)
-.idea/
+# WorkSpace
+**/.idea
+**.iml
+**/target
+*.sublime-workspace
+
+# Mac
+.DS_Store
+
+# Maven
+# Sbt
+**/log/
+**/target/
+
+# Gradle
+**/build/
+**/gradle/
+**/.gradle/
+
+# Frontent
 frontend/node_modules/
 frontend/build/
-backend/project/target/
-backend/target/
-*.sublime-workspace
+
+# Scripts
 scripts/build/
 scripts/dist/
 scripts/spotify_importer.egg-info
