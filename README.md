@@ -12,15 +12,16 @@ Updated: 06/06/2018 01:45
 
 * Alexander
 1. (implemented) Server-side authentication (06/05)
-2. Docker container for nginx (06/05)
-3. API for artists, albums, tracks resource pages (06/05-06)
+2. (implemented) API endpoint /me (06/06)
+3. Docker container for nginx (06/06)
+4. API for artists, albums, tracks resource pages (06/05-06)
 
 * Nikita
 1. (implemented) Container with warning of cookies (06/05)
-2. List of cards in "artists"/"albums" pages. (06/05)
-3. Configure player with API to make able communication with it through SDK wrapper (06/05-06)
-4. (implemented) Controller of user authenticated on site (middleware/store etc.) (06/06)
-5. (implemented) Redirect onto profile when logged successfully, show messages on error while login and register and on successful registration (06/06)
+2. (implemented) Controller of user authenticated on site (middleware/store etc.) (06/05)
+3. (implemented) Redirect onto profile when logged successfully, show messages on error while login and register and on successful registration (06/06)
+2. List of cards in "artists"/"albums" pages. (06/06)
+3. Configure player with API to make able communication with it through SDK wrapper (06/06-07)
 
 * Daniil
 1. Add into document:
