@@ -4,6 +4,7 @@ import sys
 from pymongo import MongoClient
 from bson import ObjectId, DBRef
 from multiprocessing.pool import ThreadPool
+from datetime import datetime
 
 def id(id):
 	return ObjectId(id[:12].encode('utf-8'))
@@ -67,6 +68,8 @@ def collect_artists(artist):
 		lambda x: DBRef(collection='albums', id=id(x['id'])),
 		albums_by_artist
 		))
+		global res_albums
+		global res_tracks
 		global number
 		number = number + 1
 		print('Artist: {}/{}...'.format(number, len(ids)))
@@ -80,7 +83,7 @@ def collect_artists(artist):
 				))
 				alb['name'] = album['name']
 				alb['image'] = album['images'][0]['url'] if len(album['images']) > 0 else ""
-				alb['release_date'] = album['release_date']
+				alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y-%m-%d')
 				track_by_albums = sp.album_tracks(album['id'])['items']
 				alb['tracks'] = list(map(
 					lambda x: DBRef(collection='tracks', id=id(x['id'])),
@@ -110,7 +113,7 @@ def collect_artists(artist):
 							tr['key'] = features['key']
 							tr['valence'] = features['valence']
 							tr['liveness'] = features['liveness']
-							tr['time_signature'] = features['time_signature']
+							tr['timeSignature'] = features['time_signature']
 						res_tracks.append(tr)
 					except Exception:
 						continue
