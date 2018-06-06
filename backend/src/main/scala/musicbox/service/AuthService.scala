@@ -1,7 +1,7 @@
 package musicbox.service
 
 import musicbox.db.UserDao
-import musicbox.modeles.Models.{LoginRequest, RegisterRequest, User}
+import musicbox.models.Models.{LoginRequest, RegisterRequest, User}
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.{ExecutionContext, Future}

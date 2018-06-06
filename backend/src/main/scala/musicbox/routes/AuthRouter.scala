@@ -8,7 +8,7 @@ import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import musicbox.session.SessionOptions._
 import musicbox.SessionData
 import musicbox.MusicboxSessionManager._
-import musicbox.modeles.Models.{LoginRequest, RegisterRequest}
+import musicbox.models.Models.{LoginRequest, RegisterRequest}
 import musicbox.service.AuthService
 import musicbox.session.directives.SessionDirectives._
 
@@ -18,10 +18,10 @@ case class AuthRouter(service: AuthService)(implicit executionContext: Execution
     extends StrictLogging {
 
   def musicboxSetSession(value: SessionData): Directive0 =
-    setSession(refreshable, usingCookies, value)
+    setSession(refreshable, usingHeaders, value)
 
-  val musicboxRequiredSession: Directive1[SessionData] = requiredSession(refreshable, usingCookies)
-  val musicboxInvalidateSession: Directive0 = invalidateSession(refreshable, usingCookies)
+  val musicboxRequiredSession: Directive1[SessionData] = requiredSession(refreshable, usingHeaders)
+  val musicboxInvalidateSession: Directive0 = invalidateSession(refreshable, usingHeaders)
 
   val route: Route =
     pathPrefix("auth") {
@@ -57,6 +57,14 @@ case class AuthRouter(service: AuthService)(implicit executionContext: Execution
               logger.info(s"Logging out $session")
               ctx.complete(StatusCodes.OK, "ok")
             }
+          }
+        }
+      } ~
+      path("refresh") {
+        get {
+          musicboxRequiredSession { _ => ctx =>
+            logger.info(s"Refresh with headers: ${ctx.request.headers}")
+            ctx.complete(StatusCodes.OK)
           }
         }
       }

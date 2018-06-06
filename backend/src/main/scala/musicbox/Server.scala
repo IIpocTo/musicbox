@@ -9,7 +9,6 @@ import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.io.StdIn
 
 object Server extends App with StrictLogging {
 
@@ -29,12 +28,4 @@ object Server extends App with StrictLogging {
   val bindingFuture = Http().bindAndHandle(routesLogged, interface, port)
   logger.info(s"Server online at http://$interface:$port/")
 
-  StdIn.readLine()
-
-  bindingFuture
-    .flatMap(_.unbind())
-    .onComplete { _ =>
-      system.terminate()
-      logger.info("Server stopped")
-    }
 }

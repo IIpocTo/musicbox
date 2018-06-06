@@ -1,4 +1,4 @@
-package musicbox.modeles
+package musicbox.models
 
 import reactivemongo.bson.BSONObjectID
 import reactivemongo.bson.Macros.Annotations.Key
