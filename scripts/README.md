@@ -2,7 +2,7 @@ Script for importing data from Spotify Web API
 
 ## Prerequisites
 
-* Python 2.7
+* Python 2.7 OR 3.6
 
 ## Install dependencies
 

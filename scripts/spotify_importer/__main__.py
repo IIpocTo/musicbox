@@ -161,7 +161,7 @@ if __name__ == '__main__':
         client_credentials_manager=client_credentials_manager
     )
 
-    artists = sp.artists(['4UXqAaa6dQYAk18Lv7PEgX'])['artists']
+    artists = sp.artists(ids)['artists']
     res_artists = []
     res_albums = []
     res_tracks = []
