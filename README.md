@@ -8,12 +8,13 @@ Updated: 06/06/2018 01:45
 1. (implemented) Python script for importing data from spotify (06/05)
 2. (implemented) Client-side authentication (06/05)
 3. State for artists/albums/tracks based onto server API, render data in cards onto pages (06/06)
-4. Connecting to Spotify Web Playback SDK (09/06-07)
+4. Connecting to Spotify Web Playback SDK (06/06-07)
+5. Authorizing in Spotify from the application (06/06)
 
 * Alexander
 1. (implemented) Server-side authentication (06/05)
 2. (implemented) API endpoint /me (06/06)
-3. Docker container for nginx (06/06)
+3. Validation of request data (06/06)
 4. API for artists, albums, tracks resource pages (06/05-06)
 
 * Nikita
@@ -24,7 +25,8 @@ Updated: 06/06/2018 01:45
 3. Configure player with API to make able communication with it through SDK wrapper (06/06-07)
 
 * Daniil
-1. Add into document:
-  - On Server: DI, monads, catz (06/05)
-  - On Client: Nuxt, vuetify, vue, vuex, node-fetch, es6 (06/05)
-  - Communication: csrf token auth with access/refresh tokens (06/05-06)
+1. Docker container for nginx (06/06)
+2. Add into document:
+  - On Server: DI, monads, catz (06/06)
+  - On Client: Nuxt, vuetify, vue, vuex, node-fetch, es6 (06/06)
+  - Communication: csrf token auth with access/refresh tokens (06/06)
