@@ -8,12 +8,24 @@ if (process.browser) {
             state: '34fFs29kd09'
         };
         url.search = new URLSearchParams(params);
-        fetch(url, {
-        })
-            .then(res => console.log(res) || res.json())
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
-        const token = 'BQBdWCzfGgdNID-YUTBVRzSpaFUeisRvISjq15dfanOSgcrm3pKYA4DRn_oyalqUBIo0je5iYDb1rwCMk-zVgErme5wkPH3CDRwAmdgspDKuwHswhmOgZ-dGeUN4hK86kFgFewBJFgZmgDsoRds_WL_Qrmw';
+        fetch(url).then(res => console.log(res));
+        // const clientId = '86e0507752d24428bbe832e27044c281';
+        // const secretId = 'a6da5cd275d84571899c708c53bd10b6';
+        // url.search = new URLSearchParams(params);
+        // const clientStr = `${clientId}:${secretId}`;
+        // fetch('https://accounts.spotify.com/authorize')
+        // fetch('https://accounts.spotify.com/api/token', {
+        //    headers: {
+        //        'Authorization': `Basic ${btoa(clientStr)}`
+        //    },
+        //    method: 'POST',
+        //    body: JSON.stringify({
+        //        gran_type: 'client_credentials'
+        //    })
+        // })
+        //    .then(res => console.log(res.status) || res.json())
+        //    .then(res => console.log(res));
+        const token = 'Z2VvcmdlY2FycG93QGdtYWlsLmNvbTpBR0RwYU4wNWJybkRyMTAvZFNHdGZDYklzVVBobmRZdw';
         const player = new global.Spotify.Player({
             name: 'Web Playback SDK Quick Start Player',
             getOAuthToken: cb => { cb(token); }
