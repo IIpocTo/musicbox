@@ -5,7 +5,7 @@ from datetime import datetime
 from multiprocessing.pool import ThreadPool
 from pymongo import MongoClient
 from spotipy.oauth2 import SpotifyClientCredentials
-
+import time
 
 def id(id):
     return ObjectId(id[:12].encode('utf-8'))
@@ -56,7 +56,6 @@ ids = [
 
 number = 0
 
-
 def collect_artists(artist):
     try:
         el = {}
@@ -65,7 +64,7 @@ def collect_artists(artist):
         el['image'] = artist['images'][0]['url']
         el['_id'] = id(artist['id'])
         el['popularity'] = artist['popularity']
-        albums_by_artist = sp.artist_albums(artist['id'], limit=50)['items']
+        albums_by_artist = sp.artist_albums(artist['id'], limit=25)['items']
         el['albums'] = list(map(
             lambda x: DBRef(collection='albums',
                             id=id(x['id'])),
@@ -92,10 +91,12 @@ def collect_artists(artist):
                 else:
                     alb['image'] = ""
                 if album['release_date_precision'] == 'day':
-                    alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y-%m-%d')
+                    alb['releaseDate'] = time.mktime(
+                        datetime.strptime(album['release_date'], '%Y-%m-%d').timetuple()) 
                 else:
                     if album['release_date_precision'] == 'year':
-                        alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y')
+                        alb['releaseDate'] = time.mktime(
+                            datetime.strptime(album['release_date'], '%Y').timetuple())
                     else:
                         alb['releaseDate'] = None
                 track_by_albums = sp.album_tracks(album['id'])['items']
@@ -181,9 +182,9 @@ if __name__ == '__main__':
             artists.remove()
             albums.remove()
             tracks.remove()
-            artists.insert_many(res_artists)
-            albums.insert_many(res_albums)
-            tracks.insert_many(res_tracks)
+            artists.insert(res_artists)
+            albums.insert(res_albums)
+            tracks.insert(res_tracks)
         else:
             for artist in res_artists:
                 artist_without_id = dict(artist)
