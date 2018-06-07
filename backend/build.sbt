@@ -4,6 +4,7 @@ lazy val macwireVersion = "2.3.1"
 
 lazy val root = (project in file(".")).settings(
   name := "musicbox-backend",
+  crossPaths := false,
   scalaVersion := "2.12.6",
   version := "0.1",
   scalacOptions := Seq(
