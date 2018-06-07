@@ -7,7 +7,7 @@
             app
         >
             <v-list>
-                <template v-if="!loggedIn">
+                <template v-if="!authorized">
                     <v-list-tile to="/login?tab=login" exact>
                         <v-list-tile-action>
                             <v-icon>input</v-icon>
@@ -22,6 +22,16 @@
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>Регистрация</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </template>
+                <template v-else>
+                    <v-list-tile @click.prevent="logout" exact>
+                        <v-list-tile-action>
+                            <v-icon>input</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Выйти</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </template>
@@ -49,7 +59,7 @@
                         <v-list-tile-title>Плейлисты</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-if="loggedIn" to="/recommends">
+                <v-list-tile v-if="authorized" to="/recommends">
                     <v-list-tile-action>
                         <v-icon>stars</v-icon>
                     </v-list-tile-action>
@@ -122,9 +132,16 @@
 <script>
 import timeout from '@/util/timeout';
 import MusicPlayer from '@/components/MusicPlayer';
+import {mapGetters, mapActions} from 'vuex';
+import jwtDecode from 'jwt-decode';
+import {TOKENS} from '../util/connector';
 
 export default {
     async beforeMount() {
+        const tokenData = jwtDecode(global.localStorage.getItem(TOKENS.AUTHORIZATION));
+        if (tokenData.expires < ~~(Date.now() / 1000)) {
+            this.keepLoggedIn();
+        }
         await this.checkConnection();
     },
     data() {
@@ -135,11 +152,13 @@ export default {
             drawer: false,
             fixed: false,
             title: 'MusicBox',
-            loggedIn: false,
             search: ''
         };
     },
     computed: {
+        ...mapGetters({
+            authorized: 'user/authorized'
+        }),
         playerVisible() {
             return this.$store.state.player.visible;
         },
@@ -152,6 +171,12 @@ export default {
         }
     },
     methods: {
+        ...mapActions({
+            keepLoggedIn: 'user/keepLoggedIn'
+        }),
+        logout() {
+            this.$store.dispatch('user/logout');
+        },
         goHome() {
             this.$router.push('/');
         },

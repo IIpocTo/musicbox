@@ -8,7 +8,7 @@
             <v-flex xs12 md10 lg8>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-alert type="info" v-model="loginAlert" dismissible>
+                        <v-alert type="info" v-model="unAuthorized" dismissible>
                             <span>Чтобы мы могли подбирать Вам персональные рекомендации, вам необходимо представиться. </span>
                             <a
                                 href="#"
@@ -83,10 +83,8 @@ export default {
         this.getArtists();
     },
     data() {
-        // TODO: false if user is logged in
-        let loginAlert = true;
         return {
-            loginAlert
+            unAuthorized: !this.authorized
         };
     },
     methods: {
@@ -99,6 +97,7 @@ export default {
     },
     computed: {
         ...mapGetters({
+            authorized: 'users/authorized',
             artists: 'artists/artists'
         })
     },

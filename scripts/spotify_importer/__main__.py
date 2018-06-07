@@ -65,8 +65,7 @@ def collect_artists(artist):
         el['image'] = artist['images'][0]['url']
         el['_id'] = id(artist['id'])
         el['popularity'] = artist['popularity']
-        albums_by_artist = sp.artist_albums(artist['id'])[
-            'items']
+        albums_by_artist = sp.artist_albums(artist['id'], limit=50)['items']
         el['albums'] = list(map(
             lambda x: DBRef(collection='albums',
                             id=id(x['id'])),
@@ -86,22 +85,27 @@ def collect_artists(artist):
                                     id=id(x['id'])),
                     album['artists']
                 ))
+                alb['type'] = album['album_type']
                 alb['name'] = album['name']
-                alb['image'] = album['images'][0][
-                    'url'] if len(
-                    album['images']) > 0 else ""
-                alb['releaseDate'] = datetime.strptime(
-                    album['release_date'], '%Y-%m-%d')
-                track_by_albums = \
-                sp.album_tracks(album['id'])['items']
+                if album['images'] is not None:
+                    alb['image'] = album['images'][0]['url'] if len(album['images']) > 0 else ""
+                else:
+                    alb['image'] = ""
+                if album['release_date_precision'] == 'day':
+                    alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y-%m-%d')
+                else:
+                    if album['release_date_precision'] == 'year':
+                        alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y')
+                    else:
+                        alb['releaseDate'] = None
+                track_by_albums = sp.album_tracks(album['id'])['items']
                 alb['tracks'] = list(map(
                     lambda x: DBRef(collection='tracks',
                                     id=id(x['id'])),
                     track_by_albums
                 ))
                 res_albums.append(alb)
-                print(
-                '...Album: {}/{} from artist {}'.format(
+                print('...Album: {}/{} from artist {}'.format(
                     j + 1, len(albums_by_artist),
                     el['name']))
                 for k, track in enumerate(track_by_albums):

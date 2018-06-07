@@ -7,9 +7,10 @@ Updated: 06/06/2018 01:45
 * George
 1. (implemented) Python script for importing data from spotify (06/05)
 2. (implemented) Client-side authentication (06/05)
-3. State for artists/albums/tracks based onto server API, render data in cards onto pages (06/06)
-4. Connecting to Spotify Web Playback SDK (06/06-07)
-5. Authorizing in Spotify from the application (06/06)
+3. (implemented) Authorization from cookies to headers, keeping logged after F5 (06/06)
+4. State for artists/albums/tracks based onto server API, render data in cards onto pages (06/06)
+5. Connecting to Spotify Web Playback SDK (06/06-07)
+6. Authorizing in Spotify from the application (06/06)
 
 * Alexander
 1. (implemented) Server-side authentication (06/05)

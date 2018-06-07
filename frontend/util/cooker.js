@@ -32,3 +32,9 @@ export function setCookie(name, value, options) {
 
     document.cookie = updatedCookie;
 }
+
+export function deleteCookie(name) {
+    setCookie(name, '', {
+        expires: -1
+    });
+}
