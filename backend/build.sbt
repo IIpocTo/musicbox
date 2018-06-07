@@ -2,6 +2,8 @@ lazy val akkaVersion = "2.5.12"
 lazy val akkaHttpVersion = "10.1.1"
 lazy val macwireVersion = "2.3.1"
 
+enablePlugins(JavaAppPackaging)
+
 lazy val root = (project in file(".")).settings(
   name := "musicbox-backend",
   crossPaths := false,
