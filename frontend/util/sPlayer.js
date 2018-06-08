@@ -1,6 +1,6 @@
- // import * as Spotify from 'spotify-web-api-js';
- /* eslint-disable camelcase */
- if (process.browser) {
+// import * as Spotify from 'spotify-web-api-js';
+/* eslint-disable camelcase */
+if (process.browser) {
     window.onSpotifyWebPlaybackSDKReady = () => {
         // const s = new Spotify();
         // console.log(s.getAccessToken());
@@ -72,13 +72,13 @@
             spotify_uri: 'spotify:track:7xGfFoTpQ2E7fRF5lN10tr'
         });
     };
- }
+}
 
- /* eslint-enable */
+/* eslint-enable */
 
- export default function () {
+export default function () {
     // const s = new Spotify();
     // console.log(s);
     return {
     };
- }
+}
