@@ -19,7 +19,7 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
   def getArtist(artistId: String): Future[Option[ArtistResponse]] =
     musicboxDao.findArtistById(artistId).map(_.map(artistToResponse))
 
-  def getArtists: Future[Vector[ArtistResponse]] =
-    musicboxDao.findArtists().map(_.map(artistToResponse))
-
+  def getArtists(page: Int, limit: Int): Future[Vector[ArtistResponse]] =
+    if (page <= 0 || limit <= 0) Future.successful(Vector.empty)
+    else musicboxDao.findArtists(page, limit).map(_.map(artistToResponse))
 }

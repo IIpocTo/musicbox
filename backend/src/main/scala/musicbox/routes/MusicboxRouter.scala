@@ -6,7 +6,6 @@ import akka.http.scaladsl.server.Route
 import com.typesafe.scalalogging.StrictLogging
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import musicbox.MusicboxSessionManager._
-import musicbox.models.Models.Artist
 import musicbox.service.MusicboxService
 
 import scala.concurrent.ExecutionContext
@@ -28,16 +27,26 @@ class MusicboxRouter(service: MusicboxService)(implicit executionContext: Execut
               logger.warn(s"No artist with id = $aid")
               complete(StatusCodes.Conflict, "No artist for such aid")
           }
-        case None => complete(StatusCodes.BadRequest, "aid query parameter missing")
+        case None => complete(StatusCodes.BadRequest, "aid query parameter is missing")
       }
     }
   } ~
   path("artists") {
     get {
-      onSuccess(service.getArtists) { artists =>
-        complete(artists)
+      parameters("page".as[Int].?, "limit".as[Int].?) { (page, limit) =>
+        page match {
+          case Some(p) =>
+            limit match {
+              case Some(l) =>
+                logger.info(s"Requested artists with params: page = $page and limit = $limit")
+                onSuccess(service.getArtists(p, l)) { artists =>
+                  complete(artists)
+                }
+              case None => complete(StatusCodes.BadRequest, "page query parameter is missing")
+            }
+          case None => complete(StatusCodes.BadRequest, "limit query parameter is missing")
+        }
       }
     }
   }
-
 }
