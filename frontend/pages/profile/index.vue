@@ -8,16 +8,6 @@ import {mapGetters, mapActions} from 'vuex';
 
 export default {
     name: 'ProfilePage',
-    beforeMount() {
-        console.log('asdassss');
-        this.getMe();
-    },
-    mounted() {
-        console.log('mmmmmm');
-    },
-    updated() {
-        console.log('uuuuu');
-    },
     computed: {
         ...mapGetters({
             user: 'user/user'

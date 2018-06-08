@@ -1,30 +1,27 @@
 import connector, {SERVICES} from '../util/connector';
 
 export const state = () => ({
-    user: null,
-    authorized: false
+    user: null
 });
 
 export const mutations = {
     setUser(state, user) {
         state.user = user;
-    },
-    auth(state, isAuthorized) {
-        state.authorized = isAuthorized;
     }
 };
 
 export const getters = {
     user: state => state.user,
-    authorized: state => state.authorized
+    authorized: state => !!state.user
 };
 
 
 export const actions = {
-    async login({ commit }, { username, password }) {
+    async login({ commit, dispatch }, { username, password }) {
         const result = await connector().login(username, password);
         if (result) {
-            commit('auth', true);
+            await dispatch('getMe');
+
             this.$router.push({
                 path: '/profile'
             });
@@ -34,12 +31,12 @@ export const actions = {
         return result;
     },
     keepLoggedIn({ commit }) {
-        commit('auth', true);
+        // commit('auth', true);
     },
     async logout({ commit }) {
         const result = await connector().logout();
         if (result) {
-            commit('auth', false);
+            commit('setUser', null);
             this.$router.push({
                 path: '/'
             });
@@ -51,10 +48,7 @@ export const actions = {
     async register({ commit, dispatch }, formData) {
         const result = await connector().register(formData);
         if (result) {
-            const result = await dispatch('login', formData);
-            if (result) {
-                commit('auth', true);
-            }
+            await dispatch('login', formData);
         }
         return result;
     },

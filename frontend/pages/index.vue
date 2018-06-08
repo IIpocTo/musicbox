@@ -102,7 +102,7 @@ export default {
 
         unauthorizedNotifierVisible: {
             get() {
-                if (!this.$store.state.user.authorized) {
+                if (!this.$store.state.user.user) {
                     return this.unauthorizedNotifier;
                 } else {
                     return false;
