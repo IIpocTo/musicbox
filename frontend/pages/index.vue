@@ -8,7 +8,7 @@
             <v-flex xs12 md10 lg8>
                 <v-layout row wrap>
                     <v-flex xs12>
-                        <v-alert type="info" v-model="unAuthorized" dismissible>
+                        <v-alert type="info" v-model="unauthorizedNotifierVisible" dismissible>
                             <span>Чтобы мы могли подбирать Вам персональные рекомендации, вам необходимо представиться. </span>
                             <a
                                 href="#"
@@ -84,7 +84,7 @@ export default {
     },
     data() {
         return {
-            unAuthorized: !this.authorized
+            unauthorizedNotifier: true
         };
     },
     methods: {
@@ -97,9 +97,21 @@ export default {
     },
     computed: {
         ...mapGetters({
-            authorized: 'users/authorized',
             artists: 'artists/artists'
-        })
+        }),
+
+        unauthorizedNotifierVisible: {
+            get() {
+                if (!this.$store.state.user.user) {
+                    return this.unauthorizedNotifier;
+                } else {
+                    return false;
+                }
+            },
+            set(value) {
+                this.unauthorizedNotifier = value;
+            }
+        }
     },
     components: {
         ArtistCard,

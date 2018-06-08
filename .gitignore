@@ -25,7 +25,5 @@ frontend/build/
 scripts/build/
 scripts/dist/
 scripts/spotify_importer.egg-info
-scripts/tracks.json
-scripts/artists.json
-scripts/albums.json
 scripts/spotify_importer/__pycache__/
+scripts/google_music/__pycache__/

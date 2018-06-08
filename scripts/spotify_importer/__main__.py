@@ -5,6 +5,7 @@ from datetime import datetime
 from multiprocessing.pool import ThreadPool
 from pymongo import MongoClient
 from spotipy.oauth2 import SpotifyClientCredentials
+import time
 
 
 def id(id):
@@ -56,7 +57,6 @@ ids = [
 
 number = 0
 
-
 def collect_artists(artist):
     try:
         el = {}
@@ -65,7 +65,7 @@ def collect_artists(artist):
         el['image'] = artist['images'][0]['url']
         el['_id'] = id(artist['id'])
         el['popularity'] = artist['popularity']
-        albums_by_artist = sp.artist_albums(artist['id'], limit=50)['items']
+        albums_by_artist = sp.artist_albums(artist['id'], limit=3)['items']
         el['albums'] = list(map(
             lambda x: DBRef(collection='albums',
                             id=id(x['id'])),
@@ -92,54 +92,56 @@ def collect_artists(artist):
                 else:
                     alb['image'] = ""
                 if album['release_date_precision'] == 'day':
-                    alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y-%m-%d')
+                    alb['releaseDate'] = time.mktime(
+                        datetime.strptime(album['release_date'], '%Y-%m-%d').timetuple()) 
                 else:
                     if album['release_date_precision'] == 'year':
-                        alb['releaseDate'] = datetime.strptime(album['release_date'], '%Y')
+                        alb['releaseDate'] = time.mktime(
+                            datetime.strptime(album['release_date'], '%Y').timetuple())
                     else:
                         alb['releaseDate'] = None
                 track_by_albums = sp.album_tracks(album['id'])['items']
-                alb['tracks'] = list(map(
-                    lambda x: DBRef(collection='tracks',
-                                    id=id(x['id'])),
-                    track_by_albums
-                ))
-                res_albums.append(alb)
                 print('...Album: {}/{} from artist {}'.format(
                     j + 1, len(albums_by_artist),
                     el['name']))
-                for k, track in enumerate(track_by_albums):
-                    try:
-                        tr = dict()
-                        tr['_id'] = id(track['id'])
-                        tr['name'] = track['name']
-                        tr['duration'] = track[
-                            'duration_ms']
-                        tr['number'] = track['track_number']
-                        tr['album'] = DBRef(
-                            collection='albums',
-                            id=id(album['id']))
-                        tr['content'] = track['href']
-                        features = sp.audio_features([track['id']])[0]
-                        if features is not None:
-                            tr['loudness'] = features['loudness']
-                            tr['instrumentalness'] = features['instrumentalness']
-                            tr['tempo'] = features['tempo']
-                            tr['acousticness'] = features['acousticness']
-                            tr['mode'] = features['mode']
-                            tr['energy'] = features['energy']
-                            tr['speechiness'] = features['speechiness']
-                            tr['danceability'] = features['danceability']
-                            tr['key'] = features['key']
-                            tr['valence'] = features['valence']
-                            tr['liveness'] = features['liveness']
-                            tr['timeSignature'] = features['time_signature']
-                        res_tracks.append(tr)
-                    except Exception:
-                        continue
+                if track_by_albums is not None:
+                    alb['tracks'] = list(map(
+                        lambda x: DBRef(collection='tracks',
+                                        id=id(x['id'])),
+                        track_by_albums
+                    ))
+                    for k, track in enumerate(track_by_albums):
+                        try:
+                            tr = dict()
+                            tr['_id'] = id(track['id'])
+                            tr['name'] = track['name']
+                            tr['duration'] = track['duration_ms']
+                            tr['number'] = track['track_number']
+                            tr['album'] = DBRef(
+                                collection='albums',
+                                id=id(album['id']))
+                            tr['content'] = track['href']
+                            features = sp.audio_features([track['id']])[0]
+                            if features is not None:
+                                tr['loudness'] = features['loudness']
+                                tr['instrumentalness'] = features['instrumentalness']
+                                tr['tempo'] = features['tempo']
+                                tr['acousticness'] = features['acousticness']
+                                tr['mode'] = features['mode']
+                                tr['energy'] = features['energy']
+                                tr['speechiness'] = features['speechiness']
+                                tr['danceability'] = features['danceability']
+                                tr['key'] = features['key']
+                                tr['valence'] = features['valence']
+                                tr['liveness'] = features['liveness']
+                                tr['timeSignature'] = features['time_signature']
+                            res_tracks.append(tr)
+                        except Exception:
+                            continue
+                res_albums.append(alb)
             except Exception:
                 continue
-        return el;
+        return el
     except Exception:
         pass
 
@@ -181,9 +183,9 @@ if __name__ == '__main__':
             artists.remove()
             albums.remove()
             tracks.remove()
-            artists.insert_many(res_artists)
-            albums.insert_many(res_albums)
-            tracks.insert_many(res_tracks)
+            artists.insert(res_artists)
+            albums.insert(res_albums)
+            tracks.insert(res_tracks)
         else:
             for artist in res_artists:
                 artist_without_id = dict(artist)
@@ -215,11 +217,11 @@ if __name__ == '__main__':
                         '$set': track_without_id})
                 else:
                     tracks.insert_one(track)
-                collection = db.collection_names(
-                    include_system_collections=False)
-                if len(collection) != 3:
-                    print(collection)
-                    sys.exit(3)
+        collection = db.collection_names(
+            include_system_collections=False)
+        if len(collection) != 3:
+            print(collection)
+            sys.exit(3)
     except Exception as e:
         print(e)
         sys.exit(2)

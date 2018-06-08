@@ -26,14 +26,24 @@
                     </v-list-tile>
                 </template>
                 <template v-else>
-                    <v-list-tile @click.prevent="logout" exact>
+                    <v-list-tile to="/profile" exact class="profile-list-tile">
                         <v-list-tile-action>
-                            <v-icon>input</v-icon>
+                            <v-icon :color="$route.path === '/profile' ? 'primary': void 0">person</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Выйти</v-list-tile-title>
+                            <v-list-tile-title>{{ user.username }}</v-list-tile-title>
+                            <v-list-tile-sub-title>Страница профиля</v-list-tile-sub-title>
                         </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-tooltip right>
+                                <v-btn flat icon slot="activator" @click.native.prevent="logout">
+                                    <v-icon>input</v-icon>
+                                </v-btn>
+                                <span>Выход</span>
+                            </v-tooltip>
+                        </v-list-tile-action>
                     </v-list-tile>
+                    <v-divider class="mb-2"></v-divider>
                 </template>
                 <v-list-tile to="/artists">
                     <v-list-tile-action>
@@ -88,10 +98,16 @@
             ></v-text-field>
         </v-toolbar>
         <v-content>
+            <v-snackbar
+                v-model="snackbarVisible"
+                :color="snackbar.color"
+                :timeout="4000"
+                top right auto-height
+            >{{ snackbar.text }}</v-snackbar>
             <v-container>
                 <nuxt v-if="backendAvailable"/>
                 <v-layout v-else row justify-center class="pt-5">
-                    <v-flex xs12 md8 lg6 xl4>
+                    <v-flex xs12 md8 lg6 xl4 v-if="!loading">
                         <v-card>
                             <v-card-title class="title">
                                 <v-icon large color="error" class="mr-3">warning</v-icon>
@@ -110,6 +126,7 @@
                             </v-card-actions>
                         </v-card>
                     </v-flex>
+                    <v-progress-circular v-else indeterminate color="primary"></v-progress-circular>
                 </v-layout>
             </v-container>
             <div v-if="playerVisible && backendAvailable" style="height: 100px;"></div>
@@ -118,7 +135,18 @@
             :fixed="fixed" app
             dark class="px-3"
         >
-            <music-player></music-player>
+            <v-tooltip right>
+                <v-fab-transition slot="activator">
+                    <v-btn
+                        v-show="!playerVisible && backendAvailable"
+                        small fixed left bottom fab
+                        dark color="primary"
+                        @click="revealPlayer"
+                    ><v-icon>arrow_drop_up</v-icon></v-btn>
+                </v-fab-transition>
+                <span>Показать плеер</span>
+            </v-tooltip>
+            <music-player-controls />
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
         </v-footer>
@@ -131,16 +159,20 @@
 </template>
 <script>
 import timeout from '@/util/timeout';
-import MusicPlayer from '@/components/MusicPlayer';
+import MusicPlayerControls from '@/components/player/MusicPlayerControls';
 import {mapGetters, mapActions} from 'vuex';
 import jwtDecode from 'jwt-decode';
 import {TOKENS} from '../util/connector';
 
+
 export default {
     async beforeMount() {
-        const tokenData = jwtDecode(global.localStorage.getItem(TOKENS.AUTHORIZATION));
-        if (tokenData.expires < ~~(Date.now() / 1000)) {
-            this.keepLoggedIn();
+        const token = global.localStorage.getItem(TOKENS.AUTHORIZATION);
+        if (token) {
+            const tokenData = jwtDecode(token);
+            if (tokenData.expires * 1000 < Date.now()) {
+                this.keepLoggedIn();
+            }
         }
         await this.checkConnection();
     },
@@ -157,7 +189,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            authorized: 'user/authorized'
+            authorized: 'user/authorized',
+            user: 'user/user'
         }),
         playerVisible() {
             return this.$store.state.player.visible;
@@ -168,7 +201,13 @@ export default {
 
         cookieNotifier() {
             return this.$store.state.cookieNotifier;
-        }
+        },
+
+        snackbarVisible: {
+            get() { return this.$store.state.snackbar.visible; },
+            set(value) { this.$store.commit('showSnackbar', value); }
+        },
+        snackbar() { return this.$store.state.snackbar; }
     },
     methods: {
         ...mapActions({
@@ -192,15 +231,24 @@ export default {
         },
         hideCookieNotifier() {
             this.$store.dispatch('hideCookieNotifier');
+        },
+
+        revealPlayer() {
+            this.$store.commit('player/setVisibility', true);
         }
     },
     components: {
-        MusicPlayer
+        MusicPlayerControls
     },
     mounted() {
-        if (!process.server) {
-            this.$store.dispatch('renderCookieNotifier');
-        }
+        this.$store.dispatch('renderCookieNotifier');
     }
 };
 </script>
+<style lang="stylus">
+.profile-list-tile
+    height 6em
+
+    & .list__tile
+        height 100%
+</style>

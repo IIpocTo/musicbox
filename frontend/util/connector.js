@@ -10,7 +10,10 @@ export const SERVER = {
 export const SERVICES = {
     albums: 'albums',
     artists: 'artists',
+    artist: 'artist',
+    album: 'album',
     users: 'users',
+    me: 'user/profile/me',
     tracks: 'tracks',
     search: 'search'
 };
@@ -22,9 +25,9 @@ export const TOKENS = {
     ACCESS: '_sessiondata'
 };
 
-if (process.browser) {
-    require('../util/sPlayer');
-}
+// if (process.browser) {
+//    require('../util/sPlayer');
+// }
 
 const server = `${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${SERVER.V_API}`;
 
@@ -67,7 +70,8 @@ function check() {
 }
 
 function get(route, params = {}) {
-    if (SERVICES[route] === void 0) return void 0;
+    // if (SERVICES[route] === void 0) return void 0;
+    if (route === void 0) return void 0;
     const q = params.query ? `?${params.query}` : '';
     return fetch(`${server}/${route}${q}`, {
         ...params,
