@@ -10,6 +10,8 @@ export const SERVER = {
 export const SERVICES = {
     albums: 'albums',
     artists: 'artists',
+    artist: 'artist',
+    album: 'album',
     users: 'users',
     me: 'user/profile/me',
     tracks: 'tracks',

@@ -11,17 +11,25 @@
     </div>
 </template>
 <script>
+import {mapActions, mapGetters} from 'vuex';
+
 export default {
     name: 'AlbumsPage',
-    data() {
-        return {
-            albums: []
-        };
+    beforeMount() {
+        this.getAlbums();
+    },
+    computed: {
+        ...mapGetters({
+            albums: 'albums/albums'
+        })
     },
     methods: {
         showAlbum() {
 
-        }
+        },
+        ...mapActions({
+            getAlbums: 'albums/getAlbums'
+        })
     }
 };
 </script>
