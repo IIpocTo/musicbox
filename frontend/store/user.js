@@ -1,4 +1,4 @@
-import connector from '../util/connector';
+import connector, {SERVICES} from '../util/connector';
 
 export const state = () => ({
     user: null,
@@ -59,12 +59,10 @@ export const actions = {
         return result;
     },
     getMe({ commit, dispatch }) {
-        console.log('asda');
-        return connector().get('user/profile/me', { auth: true }).then(result => {
-            if (result) {
-                commit('setUser', result);
-            }
-            return result;
+        return connector().get(SERVICES.me, { auth: true }).then(result => {
+            return result.json();
+        }).then(user => {
+            commit('setUser', user);
         });
     }
 };

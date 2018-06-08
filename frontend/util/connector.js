@@ -11,6 +11,7 @@ export const SERVICES = {
     albums: 'albums',
     artists: 'artists',
     users: 'users',
+    me: 'user/profile/me',
     tracks: 'tracks',
     search: 'search'
 };
@@ -67,7 +68,8 @@ function check() {
 }
 
 function get(route, params = {}) {
-    if (SERVICES[route] === void 0) return void 0;
+    // if (SERVICES[route] === void 0) return void 0;
+    if (route === void 0) return void 0;
     const q = params.query ? `?${params.query}` : '';
     return fetch(`${server}/${route}${q}`, {
         ...params,
