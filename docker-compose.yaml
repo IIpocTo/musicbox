@@ -1,0 +1,21 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: "front-mb"
+    ports:
+      - "3000:3000"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: "back-mb"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - storage
+  storage:
+    container_name: "storage-mb"
+    image: "mongo:3-jessie"
