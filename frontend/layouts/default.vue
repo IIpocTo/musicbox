@@ -135,8 +135,10 @@
             :fixed="fixed" app
             dark class="px-3"
         >
-            <music-player :sources="audioSources" :loop="true"></music-player>
-            <v-spacer></v-spacer>
+            <div v-if="audioSources.length > 0">
+                <music-player :sources="audioSources" :loop="true" :autoplay="true" />
+            </div>
+            <v-spacer />
             <div>&copy; 2018 TITANY</div>
         </v-footer>
         <v-snackbar multi-line top :timeout="0" :value="cookieNotifier">
@@ -167,8 +169,7 @@ export default {
     },
     data() {
         return {
-            audioSources: [
-            ],
+            audioSources: [],
             loading: true,
 
             clipped: true,
