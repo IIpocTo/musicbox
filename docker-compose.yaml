@@ -1,5 +1,13 @@
 version: '3'
 services:
+  nginx:
+    container_name: "nginx-mb"
+    image: "nginx"
+    volumes:
+      - ./infra/nginx.conf:/etc/nginx/nginx.conf
+    links:
+      - backend
+      - frontend
   frontend:
     build:
       context: ./frontend
@@ -18,4 +26,6 @@ services:
       - storage
   storage:
     container_name: "storage-mb"
-    image: "mongo:3-jessie"
+    image: "mongo:3.4"
+    ports:
+      - "27017:27017"
