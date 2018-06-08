@@ -7,7 +7,7 @@
         <v-card tile>
             <!-- <v-progress-linear :value="50" height="3" class="my-0"></v-progress-linear> -->
             <v-slider
-                v-model="progress"
+                v-model="player.progress"
                 step="0"
                 hide-details
                 thumb-label
@@ -34,7 +34,7 @@
                     </v-list-tile-action>
                     <v-list-tile-action :class="{ 'mx-3': $vuetify.breakpoint.mdAndUp }">
                         <v-btn icon @click="togglePlayback">
-                            <v-icon v-if="playing">pause</v-icon>
+                            <v-icon v-if="player.playing">pause</v-icon>
                             <v-icon v-else>play_arrow</v-icon>
                         </v-btn>
                     </v-list-tile-action>
@@ -65,14 +65,19 @@
                 </v-list-tile>
             </v-list>
         </v-card>
+        <howler-player
+            v-if="sources.length"
+            ref="player"
+            :audio-sources="sources"
+            loop autoplay
+        ></howler-player>
     </v-bottom-sheet>
 </template>
 <script>
-import VueHowler from 'vue-howler';
+import HowlerPlayer from './HowlerPlayer';
 
 export default {
-    mixins: [VueHowler],
-    name: 'MusicPlayer',
+    name: 'MusicPlayerControls',
     data() {
         return {
             menu: false,
@@ -94,6 +99,16 @@ export default {
         },
         backendAvailable() {
             return this.$store.state.backendAvailable;
+        },
+
+        sources() {
+            return [];
+        },
+        player() {
+            return this.$refs.player || ({
+                progress: 0,
+                playing: false
+            });
         }
     },
     methods: {
@@ -115,7 +130,14 @@ export default {
         getNext() {
         },
         getPrev() {
+        },
+        togglePlayback() {
+            this.$refs.player.togglePlayback();
         }
+    },
+
+    components: {
+        HowlerPlayer
     }
 };
 </script>

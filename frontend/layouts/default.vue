@@ -146,8 +146,7 @@
                 </v-fab-transition>
                 <span>Показать плеер</span>
             </v-tooltip>
-            <music-player></music-player>
-            <music-player :sources="audioSources" :loop="true" :autoplay="true" />
+            <music-player-controls />
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
         </v-footer>
@@ -160,7 +159,7 @@
 </template>
 <script>
 import timeout from '@/util/timeout';
-import MusicPlayer from '@/components/MusicPlayer';
+import MusicPlayerControls from '@/components/player/MusicPlayerControls';
 import {mapGetters, mapActions} from 'vuex';
 import jwtDecode from 'jwt-decode';
 import {TOKENS} from '../util/connector';
@@ -179,7 +178,6 @@ export default {
     },
     data() {
         return {
-            audioSources: [],
             loading: true,
 
             clipped: true,
@@ -240,12 +238,10 @@ export default {
         }
     },
     components: {
-        MusicPlayer
+        MusicPlayerControls
     },
     mounted() {
-        if (!process.server) {
-            this.$store.dispatch('renderCookieNotifier');
-        }
+        this.$store.dispatch('renderCookieNotifier');
     }
 };
 </script>
