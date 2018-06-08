@@ -1,7 +1,11 @@
 import { default as connector, SERVICES } from '../util/connector';
 
 export const actions = {
-    getArtists: (context) => connector().get(SERVICES.artists).then(res => context.commit('set', res))
+    async getArtists({ commit }) {
+        const result = await connector().get(SERVICES.artists);
+        console.log(result);
+        commit('set', result.data || []);
+    }
 };
 
 export const state = () => ({

@@ -10,7 +10,6 @@
                 v-model="player.progress"
                 step="0"
                 hide-details
-                thumb-label
                 :max="1" :min="0"
                 color="primary"
                 class="pa-0 ma-0 music-player-slider"
@@ -18,13 +17,16 @@
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar tile size="60" class="mr-2">
-                        <img src="@/assets/image/oomph.jpg" alt="album cover">
+                        <img src="@/assets/image/oomph.jpg" alt="album cover" v-if="currentSong">
                     </v-list-tile-avatar>
-                    <v-list-tile-content>
+                    <v-list-tile-content v-if="currentSong">
                         <v-list-tile-title>{{ currentSong.title }}</v-list-tile-title>
                         <v-list-tile-sub-title>
                             {{ currentSong.artist.title }} &mdash; {{ currentSong.album.title }}
                         </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-content v-else>
+                        <v-list-tile-title>Нет музыки</v-list-tile-title>
                     </v-list-tile-content>
                     <v-spacer/>
                     <v-list-tile-action>
