@@ -91,7 +91,7 @@
             <v-container>
                 <nuxt v-if="backendAvailable"/>
                 <v-layout v-else row justify-center class="pt-5">
-                    <v-flex xs12 md8 lg6 xl4>
+                    <v-flex xs12 md8 lg6 xl4 v-if="!loading">
                         <v-card>
                             <v-card-title class="title">
                                 <v-icon large color="error" class="mr-3">warning</v-icon>
@@ -110,6 +110,7 @@
                             </v-card-actions>
                         </v-card>
                     </v-flex>
+                    <v-progress-circular v-else indeterminate color="primary"></v-progress-circular>
                 </v-layout>
             </v-container>
             <div v-if="playerVisible && backendAvailable" style="height: 100px;"></div>
