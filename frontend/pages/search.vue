@@ -41,14 +41,10 @@
                 <v-tab-item
                     key="tracks"
                 >
-                    <div v-if="Array.isArray(result.tracks) && result.tracks.length > 0">
-                        <v-flex xs6 lg4 v-for="(value, key) in result.tracks" :key="key">
-                            Адын трек
-                        </v-flex>
-                    </div>
-                    <div v-else>
-                        Не найдено композиций
-                    </div>
+                    <m-playlist
+                        :tracks="result.tracks || []"
+                        no-data-text="Треков не найдено"
+                    ></m-playlist>
                 </v-tab-item>
             </v-tabs-items>
         </v-card-text>
@@ -58,6 +54,7 @@
 import connector from '../util/connector';
 import ArtistCard from '@/components/ArtistCard';
 import AlbumCard from '@/components/AlbumCard';
+import MPlaylist from '@/components/MPlaylist';
 import CardGrid from '@/components/common/CardGrid';
 
 export default {
@@ -92,7 +89,8 @@ export default {
     components: {
         ArtistCard,
         AlbumCard,
-        CardGrid
+        CardGrid,
+        MPlaylist
     },
     watch: {
         tab(nval, oval) {

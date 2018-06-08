@@ -28,7 +28,7 @@
         </v-list-tile>
         <v-list-tile v-if="!tracks.length">
             <v-list-tile-content>
-                <v-list-tile-title class="text-xs-center">Плейлист пуст</v-list-tile-title>
+                <v-list-tile-title class="text-xs-center">{{ noDataText }}</v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
     </v-list>
@@ -47,6 +47,10 @@ export default {
         showTitle: {
             type: Boolean,
             default: false
+        },
+        noDataText: {
+            type: String,
+            default: 'Плейлист пуст'
         }
     },
     components: {
