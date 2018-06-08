@@ -45,5 +45,7 @@ module.exports = {
                 });
             }
         }
-    }
+    },
+
+    mode: 'spa'
 };

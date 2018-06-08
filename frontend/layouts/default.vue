@@ -147,6 +147,7 @@ export default {
             }
         }
         await this.checkConnection();
+        await this.$store.dispatch('user/getMe');
     },
     data() {
         return {
