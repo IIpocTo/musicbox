@@ -3,7 +3,13 @@ import connector from '@/util/connector';
 export const state = () => ({
     sidebar: false,
     backendAvailable: false,
-    cookieNotifier: false
+    cookieNotifier: false,
+
+    snackbar: {
+        visible: false,
+        color: 'info',
+        text: ''
+    }
 });
 
 export const mutations = {
@@ -15,6 +21,24 @@ export const mutations = {
     },
     setCookieNotifier(state, value) {
         state.cookieNotifier = value;
+    },
+
+    showSnackbar(state, visible) {
+        state.snackbar.visible = visible;
+    },
+    showError(state, { error = null, text = 'Ошибка!' } = {}) {
+        state.snackbar.visible = true;
+        state.snackbar.color = 'error';
+        let message = text;
+        if (error) {
+            message += ' ' + (error.message || String(error));
+        }
+        state.snackbar.text = message;
+    },
+    showSuccess(state, { text = 'Успешно' } = {}) {
+        state.snackbar.visible = true;
+        state.snackbar.color = 'success';
+        state.snackbar.text = text;
     }
 };
 

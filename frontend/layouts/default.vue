@@ -26,14 +26,24 @@
                     </v-list-tile>
                 </template>
                 <template v-else>
-                    <v-list-tile @click.prevent="logout" exact>
+                    <v-list-tile to="/profile" exact class="profile-list-tile">
                         <v-list-tile-action>
-                            <v-icon>input</v-icon>
+                            <v-icon :color="$route.path === '/profile' ? 'primary': void 0">person</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Выйти</v-list-tile-title>
+                            <v-list-tile-title>{{ user.username }}</v-list-tile-title>
+                            <v-list-tile-sub-title>Страница профиля</v-list-tile-sub-title>
                         </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-tooltip right>
+                                <v-btn flat icon slot="activator" @click.native.prevent="logout">
+                                    <v-icon>input</v-icon>
+                                </v-btn>
+                                <span>Выход</span>
+                            </v-tooltip>
+                        </v-list-tile-action>
                     </v-list-tile>
+                    <v-divider class="mb-2"></v-divider>
                 </template>
                 <v-list-tile to="/artists">
                     <v-list-tile-action>
@@ -88,6 +98,12 @@
             ></v-text-field>
         </v-toolbar>
         <v-content>
+            <v-snackbar
+                v-model="snackbarVisible"
+                :color="snackbar.color"
+                :timeout="4000"
+                top right auto-height
+            >{{ snackbar.text }}</v-snackbar>
             <v-container>
                 <nuxt v-if="backendAvailable"/>
                 <v-layout v-else row justify-center class="pt-5">
@@ -164,7 +180,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            authorized: 'user/authorized'
+            authorized: 'user/authorized',
+            user: 'user/user'
         }),
         playerVisible() {
             return this.$store.state.player.visible;
@@ -175,7 +192,13 @@ export default {
 
         cookieNotifier() {
             return this.$store.state.cookieNotifier;
-        }
+        },
+
+        snackbarVisible: {
+            get() { return this.$store.state.snackbar.visible; },
+            set(value) { this.$store.commit('showSnackbar', value); }
+        },
+        snackbar() { return this.$store.state.snackbar; }
     },
     methods: {
         ...mapActions({
@@ -211,3 +234,10 @@ export default {
     }
 };
 </script>
+<style lang="stylus">
+.profile-list-tile
+    height 6em
+
+    & .list__tile
+        height 100%
+</style>
