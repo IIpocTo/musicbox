@@ -1,5 +1,5 @@
 <template>
-    <v-card :height="height">
+    <v-card :height="height" class="artist-card">
         <v-card-media
             :src="artist.image"
             height="250px"
@@ -8,7 +8,7 @@
         >
         </v-card-media>
         <v-card-title class="headline">{{ artist.name }}</v-card-title>
-        <v-card-text>
+        <v-card-text class="tags">
             <v-chip
                 v-for="(genre, i) in artist.genres"
                 :key="i"
@@ -22,21 +22,22 @@
                 outline
                 color="primary"
             ><v-icon>play_arrow</v-icon>Слушать</v-btn>
-            <v-btn
-                icon ripple
-                flat color="red"
-            ><v-icon>favorite</v-icon></v-btn>
+            <like-btn v-model="like"></like-btn>
         </v-card-actions>
     </v-card>
 </template>
 <script>
 import * as i18n from '../util/i18n';
+import LikeBtn from '@/components/common/LikeBtn';
 
 export default {
     name: 'ArtistCard',
     props: {
         artist: Object,
         height: String
+    },
+    data() {
+        return { like: false };
     },
     methods: {
         translate(value) {
@@ -45,6 +46,18 @@ export default {
         showPage(id) {
             this.$router.push(`/artists/${id}`);
         }
+    },
+    components: {
+        LikeBtn
     }
 };
 </script>
+<style lang="stylus" scoped>
+.artist-card
+    display flex
+    flex-direction column
+    flex-wrap no-wrap
+
+    & .tags
+        flex-grow: 2
+</style>
