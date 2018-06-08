@@ -135,6 +135,17 @@
             :fixed="fixed" app
             dark class="px-3"
         >
+            <v-tooltip right>
+                <v-fab-transition slot="activator">
+                    <v-btn
+                        v-show="!playerVisible && backendAvailable"
+                        small fixed left bottom fab
+                        dark color="primary"
+                        @click="revealPlayer"
+                    ><v-icon>arrow_drop_up</v-icon></v-btn>
+                </v-fab-transition>
+                <span>Показать плеер</span>
+            </v-tooltip>
             <music-player></music-player>
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
@@ -219,6 +230,10 @@ export default {
         },
         hideCookieNotifier() {
             this.$store.dispatch('hideCookieNotifier');
+        },
+
+        revealPlayer() {
+            this.$store.commit('player/setVisibility', true);
         }
     },
     components: {

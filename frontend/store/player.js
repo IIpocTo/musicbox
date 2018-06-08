@@ -39,3 +39,9 @@ export const getters = {
         return state.playlist.content[state.position];
     }
 };
+
+export const mutations = {
+    setVisibility(state, value) {
+        state.visible = value;
+    }
+};
