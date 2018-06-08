@@ -4,10 +4,9 @@ setup(name='spotify_importer',
       version='1.0',
       description='Spotify import data',
       author='George Carpow',
-      packages=['spotify_importer', 'google_music'],
+      packages=['spotify_importer'],
       install_requires=[
           'pymongo',
           'spotipy',
-          'gmusicapi'
       ],
       )
