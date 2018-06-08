@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card :height="height">
         <v-card-media :src="album.image" height="250px"></v-card-media>
         <v-card-title class="headline">
             <span>
@@ -36,7 +36,8 @@
 export default {
     name: 'ArtistCard',
     props: {
-        album: Object
+        album: Object,
+        height: String
     }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card :height="height">
         <v-card-media
             :src="artist.image"
             height="250px"
@@ -35,7 +35,8 @@ import * as i18n from '../util/i18n';
 export default {
     name: 'ArtistCard',
     props: {
-        artist: Object
+        artist: Object,
+        height: String
     },
     methods: {
         translate(value) {

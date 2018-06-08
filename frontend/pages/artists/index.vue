@@ -1,7 +1,7 @@
 <template>
     <card-grid :items="artists" no-data-full-width>
         <template slot-scope="{ item }">
-            <artist-card :artist="item"></artist-card>
+            <artist-card :artist="item" height="100%"></artist-card>
         </template>
         <v-alert :value="true" type="info" slot="no-data">
             Не найдено исполнителей
