@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            Ваш поисковый запрос: {{ query }}
+            Результаты поиска по запросу "<b>{{ query }}</b>"
         </v-card-title>
         <v-tabs
             v-model="tab"
@@ -17,38 +17,34 @@
                 <v-tab-item
                     key="artists"
                 >
-                    <div v-if="Array.isArray(result.artists) && result.artists.length > 0">
-                        <v-flex xs6 lg4 v-for="(value, key) in result.artists" :key="key">
-                            <artist-card :artist="value"></artist-card>
-                        </v-flex>
-                    </div>
-                    <div v-else>
-                        Не найдено исполнителей
-                    </div>
+                    <card-grid :items="result.artists || []" no-data-full-width>
+                        <template slot-scope="{ item }">
+                            <artist-card :artist="item"></artist-card>
+                        </template>
+                        <v-alert :value="true" type="info" slot="no-data">
+                            Не найдено исполнителей
+                        </v-alert>
+                    </card-grid>
                 </v-tab-item>
                 <v-tab-item
                     key="albums"
                 >
-                    <div v-if="Array.isArray(result.albums) && result.albums.length > 0">
-                        <v-flex xs6 lg4 v-for="(value, key) in result.albums" :key="key">
-                            <album-card :album="value"></album-card>
-                        </v-flex>
-                    </div>
-                    <div v-else>
-                        Не найдено альбомов
-                    </div>
+                    <card-grid :items="result.albums || []" no-data-full-width>
+                        <template slot-scope="{ item }">
+                            <album-card :album="item"></album-card>
+                        </template>
+                        <v-alert :value="true" type="info" slot="no-data">
+                            Не найдено альбомов
+                        </v-alert>
+                    </card-grid>
                 </v-tab-item>
                 <v-tab-item
                     key="tracks"
                 >
-                    <div v-if="Array.isArray(result.tracks) && result.tracks.length > 0">
-                        <v-flex xs6 lg4 v-for="(value, key) in result.tracks" :key="key">
-                            Адын трек
-                        </v-flex>
-                    </div>
-                    <div v-else>
-                        Не найдено композиций
-                    </div>
+                    <m-playlist
+                        :tracks="result.tracks || []"
+                        no-data-text="Треков не найдено"
+                    ></m-playlist>
                 </v-tab-item>
             </v-tabs-items>
         </v-card-text>
@@ -58,6 +54,8 @@
 import connector from '../util/connector';
 import ArtistCard from '@/components/ArtistCard';
 import AlbumCard from '@/components/AlbumCard';
+import MPlaylist from '@/components/MPlaylist';
+import CardGrid from '@/components/common/CardGrid';
 
 export default {
     name: 'SearchPage',
@@ -90,18 +88,17 @@ export default {
     },
     components: {
         ArtistCard,
-        AlbumCard
+        AlbumCard,
+        CardGrid,
+        MPlaylist
     },
     watch: {
         tab(nval, oval) {
             if (nval !== oval) {
                 this.$router.push({
                     query: {
-                        tab: nval === '0'
-                            ? 'artists'
-                            : nval === '1'
-                                ? 'albums'
-                                : 'tracks'
+                        tab: ['artists', 'albums', 'tracks'][nval] || '',
+                        q: this.query
                     }
                 });
             }

@@ -5,28 +5,25 @@ export const state = () => ({
         title: 'True Beauty Is So Painful — Oomph!',
         id: '',
         content: [
-            // {
-            //     title: 'True Beauty Is So Painful',
-            //     url: 'todo://music.mp3',
-            //     id: '',
-            //     artist: {
-            //         title: 'Oomph!',
-            //         id: ''
-            //     },
-            //     album: {
-            //         title: 'True Beauty Is So Painful',
-            //         id: ''
-            //     }
-            // }
+            {
+                title: 'True Beauty Is So Painful',
+                url: 'todo://music.mp3',
+                id: '',
+                artist: {
+                    title: 'Oomph!',
+                    id: ''
+                },
+                album: {
+                    title: 'True Beauty Is So Painful',
+                    id: ''
+                }
+            }
         ]
     },
 
-    position: 0,
     repeatPlaylist: true,
     repeatSong: false,
-    shuffle: false,
-
-    volume: 1
+    shuffle: false
 });
 
 export const getters = {

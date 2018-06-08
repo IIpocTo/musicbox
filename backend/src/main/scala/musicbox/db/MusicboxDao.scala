@@ -2,9 +2,9 @@ package musicbox.db
 
 import musicbox.db.Connection.musicboxDb
 import musicbox.models.Models.Artist
-import reactivemongo.api.Cursor
+import reactivemongo.api.{Cursor, QueryOpts}
 import reactivemongo.api.collections.bson.BSONCollection
-import reactivemongo.bson.{document, BSONDocument, BSONDocumentHandler, BSONObjectID, Macros}
+import reactivemongo.bson.{BSONDocument, BSONDocumentHandler, BSONObjectID, Macros, document}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -22,12 +22,13 @@ class MusicboxDao(implicit ec: ExecutionContext) {
     } getOrElse Future.successful(None)
   }
 
-  def findArtists(): Future[Vector[Artist]] = {
+  def findArtists(page: Int, limit: Int): Future[Vector[Artist]] = {
     artistCollection.flatMap(
       _.find(BSONDocument())
         .sort(document("popularity" -> -1))
+        .skip((page - 1) * limit)
         .cursor[Artist]()
-        .collect[Vector](50, Cursor.FailOnError[Vector[Artist]]())
+        .collect[Vector](limit, Cursor.FailOnError[Vector[Artist]]())
     )
   }
 

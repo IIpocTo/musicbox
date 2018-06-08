@@ -1,7 +1,7 @@
 <template>
     <card-grid :items="artists" no-data-full-width>
         <template slot-scope="{ item }">
-            <artist-card :artist="item"></artist-card>
+            <artist-card :artist="item" height="100%"></artist-card>
         </template>
         <v-alert :value="true" type="info" slot="no-data">
             Не найдено исполнителей
@@ -16,8 +16,14 @@ import ArtistCard from '@/components/ArtistCard';
 
 export default {
     name: 'ArtistsPage',
+    data() {
+        return {
+            page: 1,
+            limit: 50
+        };
+    },
     beforeMount() {
-        this.getArtists();
+        this.getArtists({ page: this.page, limit: this.limit });
     },
     methods: {
         ...mapActions({
