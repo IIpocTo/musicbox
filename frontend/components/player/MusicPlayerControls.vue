@@ -7,7 +7,11 @@
         <v-card tile>
             <transition name="slide-y-reverse-transition">
                 <div v-if="showPlaylist">
-                    <v-subheader>Текущий плейлист</v-subheader>
+                    <v-layout>
+                        <v-subheader>Текущий плейлист</v-subheader>
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="showPlaylist = false"><v-icon>close</v-icon></v-btn>
+                    </v-layout>
                     <v-divider></v-divider>
                     <v-list>
                         <v-list-tile avatar>
@@ -43,6 +47,22 @@
             />
             <v-list>
                 <v-list-tile avatar>
+                    <v-list-tile-action>
+                        <v-btn icon @click="getPrev">
+                            <v-icon>fast_rewind</v-icon>
+                        </v-btn>
+                    </v-list-tile-action>
+                    <v-list-tile-action>
+                        <v-btn icon @click="togglePlayback">
+                            <v-icon v-if="player.playing">pause</v-icon>
+                            <v-icon v-else>play_arrow</v-icon>
+                        </v-btn>
+                    </v-list-tile-action>
+                    <v-list-tile-action class="mx-0">
+                        <v-btn icon @click="getNext">
+                            <v-icon>fast_forward</v-icon>
+                        </v-btn>
+                    </v-list-tile-action>
                     <v-list-tile-avatar tile size="60" class="mr-2">
                         <img src="@/assets/image/oomph.jpg" alt="album cover" v-if="currentSong">
                     </v-list-tile-avatar>
@@ -53,24 +73,53 @@
                         </v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-content v-else>
-                        <v-list-tile-title>Нет музыки</v-list-tile-title>
+                        <v-list-tile-title class="grey--text">Нет музыки</v-list-tile-title>
                     </v-list-tile-content>
                     <v-spacer/>
-                    <v-list-tile-action>
-                        <v-btn icon @click="getPrev">
-                            <v-icon>fast_rewind</v-icon>
-                        </v-btn>
+                    <v-list-tile-action class="mx-0">
+                        <v-tooltip top>
+                            <v-btn
+                                slot="activator"
+                                icon :color="repeat === 'all' ? 'primary' : void 0"
+                                @click="setRepeat('all')"
+                            >
+                                <v-icon>repeat</v-icon>
+                            </v-btn>
+                            <span>Повторять весь плейлист</span>
+                        </v-tooltip>
                     </v-list-tile-action>
-                    <v-list-tile-action :class="{ 'mx-3': $vuetify.breakpoint.mdAndUp }">
-                        <v-btn icon @click="togglePlayback">
-                            <v-icon v-if="player.playing">pause</v-icon>
-                            <v-icon v-else>play_arrow</v-icon>
-                        </v-btn>
+                    <v-list-tile-action class="mx-0">
+                        <v-tooltip top>
+                            <v-btn
+                                slot="activator"
+                                icon :color="repeat === 'one' ? 'primary' : void 0"
+                                @click="setRepeat('one')"
+                            >
+                                <v-icon>repeat_one</v-icon>
+                            </v-btn>
+                            <span>Повторять текущую композицию</span>
+                        </v-tooltip>
                     </v-list-tile-action>
-                    <v-list-tile-action :class="{ 'mr-2': $vuetify.breakpoint.mdAndUp }">
-                        <v-btn icon @click="getNext">
-                            <v-icon>fast_forward</v-icon>
-                        </v-btn>
+                    <v-list-tile-action class="mx-0">
+                        <v-menu
+                            v-model="volumeMenu"
+                            min-width="300"
+                            class="white"
+                            left top offset-x
+                        >
+                            <v-btn icon slot="activator">
+                                <v-icon>volume_up</v-icon>
+                            </v-btn>
+                            <v-card class="pa-1">
+                                <v-slider
+                                    v-model="player.volume"
+                                    prepend-icon="volume_up"
+                                    :min="0" :max="1" :step="0"
+                                    hide-details
+                                    class="pt-1"
+                                ></v-slider>
+                            </v-card>
+                        </v-menu>
                     </v-list-tile-action>
                     <v-list-tile-action class="px-0">
                         <v-menu v-model="menu" top offset-y>
@@ -118,7 +167,10 @@ export default {
                 { icon: 'favorite', text: 'Мне нравится', action: 'likeSong' }
             ],
 
-            showPlaylist: false
+            showPlaylist: false,
+
+            repeat: 'none',
+            volumeMenu: false
         };
     },
     computed: {
@@ -142,6 +194,7 @@ export default {
         player() {
             return this.$refs.player || ({
                 progress: 0,
+                volume: 0.5,
                 playing: false
             });
         }
@@ -158,7 +211,7 @@ export default {
             this.$store.commit('player/setVisibility', false);
         },
         goToPlaylist() {
-            // TODO
+            this.showPlaylist = true;
         },
 
 
@@ -168,6 +221,10 @@ export default {
         },
         togglePlayback() {
             this.$refs.player.togglePlayback();
+        },
+        setRepeat(mode) {
+            if (this.repeat === mode) this.repeat = 'none';
+            else this.repeat = mode;
         }
     },
 

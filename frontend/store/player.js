@@ -23,9 +23,7 @@ export const state = () => ({
 
     repeatPlaylist: true,
     repeatSong: false,
-    shuffle: false,
-
-    volume: 1
+    shuffle: false
 });
 
 export const getters = {
