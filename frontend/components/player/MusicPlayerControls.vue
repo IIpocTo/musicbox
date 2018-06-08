@@ -13,26 +13,9 @@
                         <v-btn icon @click="showPlaylist = false"><v-icon>close</v-icon></v-btn>
                     </v-layout>
                     <v-divider></v-divider>
-                    <v-list>
-                        <v-list-tile avatar>
-                            <v-list-tile-avatar tile>
-                                <img src="@/assets/image/oomph.jpg">
-                            </v-list-tile-avatar>
-                            <v-list-tile-content>
-                                <v-list-tile-title>True Beauty Is So Painful</v-list-tile-title>
-                                <v-list-tile-sub-title>Oomph! &mdash; True Beauty Is So Painful</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                            <v-list-tile-action>
-                                <v-btn icon><v-icon>play_arrow</v-icon></v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-action>
-                                <v-btn icon><v-icon>playlist_add</v-icon></v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-action>
-                                <v-btn icon><v-icon>favorite</v-icon></v-btn>
-                            </v-list-tile-action>
-                        </v-list-tile>
-                    </v-list>
+                    <m-playlist
+                        :tracks="playlist.content"
+                    ></m-playlist>
                     <v-divider class="mb-3"></v-divider>
                 </div>
             </transition>
@@ -76,6 +59,9 @@
                         <v-list-tile-title class="grey--text">Нет музыки</v-list-tile-title>
                     </v-list-tile-content>
                     <v-spacer/>
+                    <v-list-tile-action class="mx-0">
+                        <like-btn v-model="like"></like-btn>
+                    </v-list-tile-action>
                     <v-list-tile-action class="mx-0">
                         <v-tooltip top>
                             <v-btn
@@ -153,6 +139,8 @@
 </template>
 <script>
 import HowlerPlayer from './HowlerPlayer';
+import MPlaylist from '@/components/MPlaylist';
+import LikeBtn from '@/components/common/LikeBtn';
 
 export default {
     name: 'MusicPlayerControls',
@@ -163,14 +151,16 @@ export default {
             menuItems: [
                 { icon: 'visibility_off', text: 'Спрятать плеер', action: 'hidePlayer' },
                 { icon: 'playlist_play', text: 'К плейлисту', action: 'goToPlaylist' },
-                { icon: 'playlist_add', text: 'Добавить в плейлист', action: 'addToPlaylist' },
-                { icon: 'favorite', text: 'Мне нравится', action: 'likeSong' }
+                { icon: 'playlist_add', text: 'Добавить в плейлист', action: 'addToPlaylist' }
+                // { icon: 'favorite', text: 'Мне нравится', action: 'likeSong' }
             ],
 
             showPlaylist: false,
 
             repeat: 'none',
-            volumeMenu: false
+            volumeMenu: false,
+
+            like: false
         };
     },
     computed: {
@@ -229,7 +219,9 @@ export default {
     },
 
     components: {
-        HowlerPlayer
+        HowlerPlayer,
+        MPlaylist,
+        LikeBtn
     }
 };
 </script>
