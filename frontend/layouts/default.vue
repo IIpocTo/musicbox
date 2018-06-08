@@ -119,7 +119,7 @@
             :fixed="fixed" app
             dark class="px-3"
         >
-            <music-player></music-player>
+            <music-player :sources="audioSources" :loop="true"></music-player>
             <v-spacer></v-spacer>
             <div>&copy; 2018 TITANY</div>
         </v-footer>
@@ -137,6 +137,7 @@ import {mapGetters, mapActions} from 'vuex';
 import jwtDecode from 'jwt-decode';
 import {TOKENS} from '../util/connector';
 
+
 export default {
     async beforeMount() {
         const token = global.localStorage.getItem(TOKENS.AUTHORIZATION);
@@ -150,6 +151,8 @@ export default {
     },
     data() {
         return {
+            audioSources: [
+            ],
             loading: true,
 
             clipped: true,

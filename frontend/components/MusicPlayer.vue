@@ -29,7 +29,7 @@
                         </v-btn>
                     </v-list-tile-action>
                     <v-list-tile-action :class="{ 'mx-3': $vuetify.breakpoint.mdAndUp }">
-                        <v-btn icon>
+                        <v-btn icon @click="togglePlayback">
                             <v-icon>pause</v-icon>
                         </v-btn>
                     </v-list-tile-action>
@@ -49,7 +49,10 @@
     </v-bottom-sheet>
 </template>
 <script>
+import VueHowler from 'vue-howler';
+
 export default {
+    mixins: [VueHowler],
     name: 'MusicPlayer',
     data() {
         return {
