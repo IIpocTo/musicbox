@@ -5,6 +5,33 @@
         hide-overlay persistent
     >
         <v-card tile>
+            <transition name="slide-y-reverse-transition">
+                <div v-if="showPlaylist">
+                    <v-subheader>Текущий плейлист</v-subheader>
+                    <v-divider></v-divider>
+                    <v-list>
+                        <v-list-tile avatar>
+                            <v-list-tile-avatar tile>
+                                <img src="@/assets/image/oomph.jpg">
+                            </v-list-tile-avatar>
+                            <v-list-tile-content>
+                                <v-list-tile-title>True Beauty Is So Painful</v-list-tile-title>
+                                <v-list-tile-sub-title>Oomph! &mdash; True Beauty Is So Painful</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                            <v-list-tile-action>
+                                <v-btn icon><v-icon>play_arrow</v-icon></v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-action>
+                                <v-btn icon><v-icon>playlist_add</v-icon></v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-action>
+                                <v-btn icon><v-icon>favorite</v-icon></v-btn>
+                            </v-list-tile-action>
+                        </v-list-tile>
+                    </v-list>
+                    <v-divider class="mb-3"></v-divider>
+                </div>
+            </transition>
             <!-- <v-progress-linear :value="50" height="3" class="my-0"></v-progress-linear> -->
             <v-slider
                 v-model="player.progress"
@@ -89,7 +116,9 @@ export default {
                 { icon: 'playlist_play', text: 'К плейлисту', action: 'goToPlaylist' },
                 { icon: 'playlist_add', text: 'Добавить в плейлист', action: 'addToPlaylist' },
                 { icon: 'favorite', text: 'Мне нравится', action: 'likeSong' }
-            ]
+            ],
+
+            showPlaylist: false
         };
     },
     computed: {
@@ -101,6 +130,10 @@ export default {
         },
         backendAvailable() {
             return this.$store.state.backendAvailable;
+        },
+
+        playlist() {
+            return this.$store.state.player.playlist;
         },
 
         sources() {
