@@ -1,23 +1,19 @@
-const isProtectedRoute = route => {
-    if (route.path.endsWith('profile')) return true;
-    return false;
-};
-
 export default function (ctx) {
-    const { req, redirect, route, store } = ctx;
-    if (process.server && !req) return;
-    const isLoginPage = route.path.indexOf('login') !== -1;
-    const isAuthenticated = !!store.state.user;
+    const { redirect, route, store } = ctx;
+    const isLoginPage = route.path === '/login';
+    const isAuthenticated = store.getters['user/authorized'];
 
     if (isLoginPage && isAuthenticated) {
         return redirect({
             path: '/'
         });
     }
-    if (isProtectedRoute(route) && !isAuthenticated) {
+    if (!isAuthenticated) {
         return redirect({
             path: '/login',
             query: { next: route.path }
         });
     }
+
+    console.log('FUCK', isAuthenticated, isLoginPage);
 };

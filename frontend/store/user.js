@@ -52,11 +52,17 @@ export const actions = {
         }
         return result;
     },
-    getMe({ commit, dispatch }) {
-        return connector().get(SERVICES.me, { auth: true }).then(result => {
-            return result.json();
-        }).then(user => {
-            commit('setUser', user);
-        });
+    async getMe({ commit, dispatch }) {
+        const result = await connector().get(SERVICES.me, { auth: true });
+        const user = await result.json();
+        commit('setUser', user);
+    },
+
+    async nuxtServerInit({ dispatch }, context) {
+        try {
+            await dispatch('getMe');
+        } catch (e) {
+            context.redirect('/login');
+        }
     }
 };
