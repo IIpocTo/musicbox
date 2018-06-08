@@ -21,7 +21,6 @@ export const state = () => ({
         ]
     },
 
-    position: 0,
     repeatPlaylist: true,
     repeatSong: false,
     shuffle: false,
