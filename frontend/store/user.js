@@ -58,11 +58,14 @@ export const actions = {
         commit('setUser', user);
     },
 
-    async nuxtServerInit({ dispatch }, context) {
-        try {
-            await dispatch('getMe');
-        } catch (e) {
-            context.redirect('/login');
-        }
+    async changePassword({ commit }, { password }) {
+        // TODO
+    },
+    async updatePersonalData({ commit }, updatedData) {
+        // TODO
+    },
+    async removeAccount({ commit }, { password }) {
+        // TODO
+        throw new Error('Вы никогда не сможете удалить свой аккаунт, ахахахаха');
     }
 };
