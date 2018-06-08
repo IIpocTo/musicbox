@@ -221,7 +221,6 @@ export default {
         },
         goSearch() {
             this.$router.push(`/search?q=${this.search}`);
-            this.search = '';
         },
         async checkConnection() {
             this.loading = true;

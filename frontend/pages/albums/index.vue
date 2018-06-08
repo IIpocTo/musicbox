@@ -1,17 +1,17 @@
 <template>
-    <div>
-        <v-card
-            hover
-            raised
-            v-for="(value, key) in albums" :key="key"
-            @click.prevent="() => showAlbum(value.id)"
-        >
-            {{ value.name }}
-        </v-card>
-    </div>
+    <card-grid :items="albums" no-data-full-width>
+        <template slot-scope="{ item }">
+            <album-card :album="item"></album-card>
+        </template>
+        <v-alert :value="true" type="info" slot="no-data">
+            Не найдено альбомов
+        </v-alert>
+    </card-grid>
 </template>
 <script>
 import {mapActions, mapGetters} from 'vuex';
+import CardGrid from '@/components/common/CardGrid';
+import AlbumCard from '@/components/AlbumCard';
 
 export default {
     name: 'AlbumsPage',
@@ -30,6 +30,10 @@ export default {
         ...mapActions({
             getAlbums: 'albums/getAlbums'
         })
+    },
+    components: {
+        CardGrid,
+        AlbumCard
     }
 };
 </script>

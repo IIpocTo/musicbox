@@ -1,17 +1,18 @@
 <template>
-    <div>
-        <v-card
-            hover
-            raised
-            v-for="(value, key) in artists" :key="key"
-            @click.prevent="showArtist(value.id)"
-        >
-            {{ value.name }}
-        </v-card>
-    </div>
+    <card-grid :items="artists" no-data-full-width>
+        <template slot-scope="{ item }">
+            <artist-card :artist="item"></artist-card>
+        </template>
+        <v-alert :value="true" type="info" slot="no-data">
+            Не найдено исполнителей
+        </v-alert>
+    </card-grid>
 </template>
 <script>
+// eslint-disable-next-line no-unused-vars
 import { mapActions, mapGetters } from 'vuex';
+import CardGrid from '@/components/common/CardGrid';
+import ArtistCard from '@/components/ArtistCard';
 
 export default {
     name: 'ArtistsPage',
@@ -23,7 +24,6 @@ export default {
             getArtists: 'artists/getArtists'
         }),
         showArtist(id) {
-            // eslint-disable-next-line
             console.log(id);
             this.$router.push(`/artists/${id}`);
         }
@@ -32,6 +32,11 @@ export default {
         ...mapGetters({
             artists: 'artists/artists'
         })
+    },
+
+    components: {
+        ArtistCard,
+        CardGrid
     }
 };
 </script>

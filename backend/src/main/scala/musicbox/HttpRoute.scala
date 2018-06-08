@@ -4,12 +4,12 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{Directive, ExceptionHandler, RejectionHandler, Route}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
-import musicbox.routes.{AuthRouter, UserRouter}
+import musicbox.routes.{AuthRouter, MusicboxRouter, UserRouter}
 import musicbox.session.directives.csrf.CsrfDirectives.randomTokenCsrfProtection
 import musicbox.session.directives.csrf.CsrfOptions.checkHeader
 import musicbox.MusicboxSessionManager._
-import musicbox.db.UserDao
-import musicbox.service.{AuthService, UserService}
+import musicbox.db.{MusicboxDao, UserDao}
+import musicbox.service.{AuthService, MusicboxService, UserService}
 import com.softwaremill.macwire._
 
 import scala.concurrent.ExecutionContext
@@ -17,12 +17,16 @@ import scala.concurrent.ExecutionContext
 class HttpRoute(implicit executionContext: ExecutionContext) {
 
   private lazy val userDao: UserDao = wire[UserDao]
+  private lazy val musicboxDao: MusicboxDao = wire[MusicboxDao]
 
   private lazy val authService: AuthService = wire[AuthService]
   private lazy val authRouter: AuthRouter = wire[AuthRouter]
 
   private lazy val userService: UserService = wire[UserService]
   private lazy val userRouter: UserRouter = wire[UserRouter]
+
+  private lazy val musicboxService: MusicboxService = wire[MusicboxService]
+  private lazy val musicboxRouter: MusicboxRouter = wire[MusicboxRouter]
 
   val rejectionHandler: RejectionHandler =
     corsRejectionHandler.withFallback(RejectionHandler.default)
@@ -41,7 +45,7 @@ class HttpRoute(implicit executionContext: ExecutionContext) {
         handleErrors {
           randomTokenCsrfProtection(checkHeader) {
             pathPrefix("v1") {
-              authRouter.route ~ userRouter.route ~
+              authRouter.route ~ userRouter.route ~ musicboxRouter.route ~
               path("healthcheck") {
                 get {
                   complete("OK")

@@ -15,44 +15,15 @@ def id(id):
 ids = [
     '58lV9VcRSjABbAbfWS6skp',  # Bon Jovi
     '27T030eWyCQRmDyuvr1kxY',  # Scorpions
-    '6SLAMfhOi7UJI0fMztaK0m',  # Rainbow
     '568ZhdwyaiCyOGJRtNYhWf',  # Deep Purple
     '7oPftvlwr6VrsViSDV7fJY',  # Green Day
-    '5LfGQac0EIXyAN8aUwmNAQ',  # The Offspring
     '5Pwc4xIPtQLFEnJriah9YJ',  # OneRepublic
-    '5SHxzwjek1Pipl1Yk11UHv',  # Tom Grennan
-    '4f9iBmdUOhQWeP7dcAn1pf',  # Rag'n'Bone Man
     '5ggxe6RGD8zHfaCbwTdtw5',  # Алиса
-    '3mF9V7H7yo9AwMXHt08Q9f',  # Б.Т.Р.
     '0ICn3Cbc4mMeLmTvwnqXYu',  # Ария
     '68YlHHmtFXbIFOPp8pMutS',  # Щурците
-    '3FUY2gzHeIiaesXtOAdB7A',  # Train
-    '0zOcE3mg9nS6l3yxt1Y0bK',  # The Fray
-    '4DToQR3aKrHQSSRzSz8Nzt',  # The Hives
-    '6cmp7ut7okJAgJOSaMAVf3',  # Machinae Supremacy
     '3WrFJ7ztbogyGnTHbHJFl2',  # The Beatles
     '293zczrfYafIItmnmM3coR',  # Chuck Berry
     '6deZN1bslXzeGvOLaLMOIF',  # Nickelback
-    '4dpARuHxo51G3z768sgnrY',  # Adele 21...
-    '2mZITUvfEwrKlksoGpHTsM',  # Oomph!
-    '64LCTpIu9Iji2EPaxxPpxF',  # Joe Dassin
-    '76ptJV8617638xrpeoUtzl',  # The Rasmus
-    '0R9s1t65CdGRCJx5OaaPE2',  # Нуки
-    '3b8QkneNDz4JHKKKlLgYZg',  # Florida Georgia Line
-    '4oUHIQIBe0LHzYfvXNW4QM',  # Morgan Wallen
-    '1vCWHaC5f2uS3yhpwWbIA6',  # Avicii
-    '5pL8Q5xbDLEDE6JvYMXX9u',  # Nu:logic
-    '1wzBqAvtFexgKHjt7i3ena',  # Fred & V Graphics
-    '5TgQ66WuWkoQ2xYxaSTnVP',  # Netsky
-    '2xiIXseIJcq3nG7C8fHeBj',  # Three Days Grace
-    '0RqtSIYZmd4fiBKVFqyIqD',  # Thirty Seconds to Mars
-    '3EhbVgyfGd7HkpsagwL9GS',  # Alice Cooper
-    '7Ey4PD4MYsKc5I2dolUwbH',  # Aerosmith
-    '2eLrVxwm6t4QeaORq5w8VW',  # Григорий Лепс
-    '06HL4z0CvFAxyc27GXpf02',  # Taylor Swift
-    '53XhwfbYqKCa1cC15pYq2q',  # Imagine Dragons
-    '3w4VAlllkAWI6m0AV0Gn6a',  # Hurts
-    '4UXqAaa6dQYAk18Lv7PEgX'  # Fall Out Boy
 ]
 
 number = 0
@@ -71,6 +42,7 @@ def collect_artists(artist):
                             id=id(x['id'])),
             albums_by_artist
         ))
+        print(albums_by_artist)
         global res_albums
         global res_tracks
         global number
