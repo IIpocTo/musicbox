@@ -14,7 +14,7 @@
             <v-tab-item
                 key="artists"
             >
-                <div v-if="result.artists.length > 0">
+                <div v-if="Array.isArray(result.artists) && result.artists.length > 0">
                     <v-flex xs6 lg4 v-for="(value, key) in result.artists" :key="key">
                         <artist-card :artist="value"></artist-card>
                     </v-flex>
@@ -26,7 +26,7 @@
             <v-tab-item
                 key="albums"
             >
-                <div v-if="result.albums.length > 0">
+                <div v-if="Array.isArray(result.albums) && result.albums.length > 0">
                     <v-flex xs6 lg4 v-for="(value, key) in result.albums" :key="key">
                         <album-card :album="value"></album-card>
                     </v-flex>
@@ -38,7 +38,7 @@
             <v-tab-item
                 key="tracks"
             >
-                <div v-if="result.tracks.length > 0">
+                <div v-if="Array.isArray(result.tracks) && result.tracks.length > 0">
                     <v-flex xs6 lg4 v-for="(value, key) in result.tracks" :key="key">
                         Адын трек
                     </v-flex>

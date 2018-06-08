@@ -22,9 +22,9 @@ export const TOKENS = {
     ACCESS: '_sessiondata'
 };
 
-if (process.browser) {
-    require('../util/sPlayer');
-}
+// if (process.browser) {
+//    require('../util/sPlayer');
+// }
 
 const server = `${SERVER.PROTOCOL}://${SERVER.HOST}:${SERVER.PORT}/${SERVER.V_API}`;
 

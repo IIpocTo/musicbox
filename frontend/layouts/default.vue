@@ -138,9 +138,12 @@ import {TOKENS} from '../util/connector';
 
 export default {
     async beforeMount() {
-        const tokenData = jwtDecode(global.localStorage.getItem(TOKENS.AUTHORIZATION));
-        if (tokenData.expires < ~~(Date.now() / 1000)) {
-            this.keepLoggedIn();
+        const token = global.localStorage.getItem(TOKENS.AUTHORIZATION);
+        if (token) {
+            const tokenData = jwtDecode(token);
+            if (tokenData.expires * 1000 < Date.now()) {
+                this.keepLoggedIn();
+            }
         }
         await this.checkConnection();
     },
