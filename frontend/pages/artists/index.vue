@@ -16,8 +16,14 @@ import ArtistCard from '@/components/ArtistCard';
 
 export default {
     name: 'ArtistsPage',
+    data() {
+        return {
+            page: 1,
+            limit: 50
+        };
+    },
     beforeMount() {
-        this.getArtists();
+        this.getArtists({ page: this.page, limit: this.limit });
     },
     methods: {
         ...mapActions({

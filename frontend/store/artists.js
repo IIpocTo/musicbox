@@ -1,10 +1,10 @@
 import { default as connector, SERVICES } from '../util/connector';
 
 export const actions = {
-    async getArtists({ commit }) {
-        const result = await connector().get(SERVICES.artists);
-        console.log(result);
-        commit('set', result.data || []);
+    async getArtists({ commit }, { page, limit }) {
+        const result = await connector().get(SERVICES.artists, { query: `page=${page}&limit=${limit}` });
+        const artists = await result.json();
+        commit('set', artists || []);
     }
 };
 

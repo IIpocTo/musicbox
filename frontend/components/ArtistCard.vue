@@ -10,12 +10,12 @@
         <v-card-title class="headline">{{ artist.name }}</v-card-title>
         <v-card-text>
             <v-chip
-                v-for="(tag, i) in artist.tags"
+                v-for="(genre, i) in artist.genres"
                 :key="i"
                 label
                 dark color="primary"
                 class="white--text"
-            ><v-icon left>label</v-icon>{{ tag }}</v-chip>
+            ><v-icon left>label</v-icon>{{ translate(genre) }}</v-chip>
         </v-card-text>
         <v-card-actions>
             <v-btn
@@ -30,12 +30,17 @@
     </v-card>
 </template>
 <script>
+import * as i18n from '../util/i18n';
+
 export default {
     name: 'ArtistCard',
     props: {
         artist: Object
     },
     methods: {
+        translate(value) {
+            return i18n.t(value);
+        },
         showPage(id) {
             this.$router.push(`/artists/${id}`);
         }
