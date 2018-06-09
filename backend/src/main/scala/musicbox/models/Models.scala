@@ -69,4 +69,12 @@ object Models {
     tracks: Seq[TrackResponse]
   )
 
+  case class AlbumResponseWithoutTracks(
+   id: String,
+   artistsId: Seq[String],
+   name: String,
+   image: String,
+   releaseDate: LocalDate,
+  )
+
 }

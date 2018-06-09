@@ -40,6 +40,15 @@ class MusicboxDao(implicit ec: ExecutionContext) {
     } getOrElse Future.successful(None)
   }
 
+  def findAlbums(page: Int, limit: Int): Future[Vector[Album]] = {
+    albumCollection.flatMap(
+      _.find(BSONDocument())
+          .skip((page - 1) * limit)
+          .cursor[Album]()
+          .collect[Vector](limit, Cursor.FailOnError[Vector[Album]]())
+    )
+  }
+
   def findTrackById(trackId: String): Future[Option[Track]] = {
     BSONObjectID.parse(trackId) map { objId =>
       trackCollection.flatMap(_.find(document("_id" -> objId)).one[Track])

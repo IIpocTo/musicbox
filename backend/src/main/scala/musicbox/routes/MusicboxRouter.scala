@@ -65,5 +65,23 @@ class MusicboxRouter(service: MusicboxService)(implicit executionContext: Execut
           case None => complete(StatusCodes.BadRequest, "id query parameter is missing")
         }
       }
+    } ~
+    path("albums") {
+      get {
+        parameters("page".as[Int].?, "limit".as[Int].?) { (page, limit) =>
+          page match {
+            case Some(p) =>
+              limit match {
+                case Some(l) =>
+                  logger.info(s"Requested artists with params: page = $page and limit = $limit")
+                  onSuccess(service.getAlbums(p, l)) { albums =>
+                    complete(albums)
+                  }
+                case None => complete(StatusCodes.BadRequest, "page query parameter is missing")
+              }
+            case None => complete(StatusCodes.BadRequest, "limit query parameter is missing")
+          }
+        }
+      }
     }
 }

@@ -37,6 +37,15 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
       tracks.flatten.map(trackToResponse)
     )
 
+  private def albumToResponseWithoutTracks(album: Album): AlbumResponseWithoutTracks =
+    AlbumResponseWithoutTracks(
+      album.id.stringify,
+      album.artists.map(_.id.stringify),
+      album.name,
+      album.image,
+      Instant.ofEpochMilli(album.releaseDate.toLong).atZone(ZoneId.systemDefault()).toLocalDate
+    )
+
   def futureToFutureTry[T](fut: Future[T]): Future[Try[T]] =
     fut.map(Success(_)).recover({ case x => Failure(x) })
 
@@ -46,6 +55,10 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
   def getArtists(page: Int, limit: Int): Future[Vector[ArtistResponse]] =
     if (page <= 0 || limit <= 0) Future.successful(Vector.empty)
     else musicboxDao.findArtists(page, limit).map(_.map(artistToResponse))
+
+  def getAlbums(page: Int, limit: Int): Future[Vector[AlbumResponseWithoutTracks]] =
+    if (page <= 0 || limit <= 0) Future.successful(Vector.empty)
+    else musicboxDao.findAlbums(page, limit).map(_.map(albumToResponseWithoutTracks))
 
   def getAlbum(albumId: String): Future[Option[AlbumResponse]] = {
     musicboxDao.findAlbumById(albumId).flatMap {
