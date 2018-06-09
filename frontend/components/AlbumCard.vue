@@ -29,6 +29,7 @@
             <v-btn
                 outline
                 color="primary"
+                @click="play"
             ><v-icon>play_arrow</v-icon>Слушать</v-btn>
             <like-btn v-model="like"></like-btn>
         </v-card-actions>
@@ -53,6 +54,22 @@ export default {
             const m = date.month;
             const sm = m < 10 ? '0' + m : '' + m;
             return `${date.day}.${sm}.${date.year}`;
+        }
+    },
+    methods: {
+        play() {
+            this.$store.commit('player/play', {
+                playlist: {
+                    content: this.album.tracks.map(t => Object.assign(
+                        {
+                            album: this.album,
+                            artist: this.album.artist
+                        },
+                        t
+                    )),
+                    name: this.album.name
+                }
+            });
         }
     },
     components: {
