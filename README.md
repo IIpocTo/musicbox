@@ -1,33 +1,57 @@
-# musicbox
+# Musicbox
 
-## Roadmap from 06/05/2018 to 06/09/2018:
+Musicbox is a web application for listenting to music. It is developed in purpose of porting Spotify possibilities with some extra features into Russian market. Musicbox is totally free of use.
 
-Updated: 06/06/2018 01:45
+## Getting Started
 
-* George
-1. (implemented) Python script for importing data from spotify (06/05)
-2. (implemented) Client-side authentication (06/05)
-3. (implemented) Authorization from cookies to headers, keeping logged after F5 (06/06)
-4. State for artists/albums/tracks based onto server API, render data in cards onto pages (06/06)
-5. Connecting to Spotify Web Playback SDK (06/06-07)
-6. Authorizing in Spotify from the application (06/06)
+For getting started just follow installing instruction for tuning the environment and launching the server. Then simply got to ``` http://127.0.0.1:3000 ``` to get onto the site.
 
-* Alexander
-1. (implemented) Server-side authentication (06/05)
-2. (implemented) API endpoint /me (06/06)
-3. Validation of request data (06/06)
-4. API for artists, albums, tracks resource pages (06/05-06)
+### Prerequisites
 
-* Nikita
-1. (implemented) Container with warning of cookies (06/05)
-2. (implemented) Controller of user authenticated on site (middleware/store etc.) (06/05)
-3. (implemented) Redirect onto profile when logged successfully, show messages on error while login and register and on successful registration (06/06)
-2. List of cards in "artists"/"albums" pages. (06/06)
-3. Configure player with API to make able communication with it through SDK wrapper (06/06-07)
+* [SBT](https://www.scala-sbt.org)
+* [NPM](https://www.npmjs.com)
+* [NODE](https://nodejs.org/en/)
+* Python 2.7
 
-* Daniil
-1. Docker container for nginx (06/06)
-2. Add into document:
-  - On Server: DI, monads, catz (06/06)
-  - On Client: Nuxt, vuetify, vue, vuex, node-fetch, es6 (06/06)
-  - Communication: csrf token auth with access/refresh tokens (06/06)
+### Installing
+
+Make sure you have prerequisites installed. Then execute the following instructions from the project folder. Replace calling ``` sudo ``` on windows machine with nothing using admin rights.
+
+```
+cd scripts
+sudo python setup.py install
+cd ../frontend
+npm i
+npm run build
+cd ../backend
+sbt compile
+```
+Now you are ready to launch the server and the client. To run the server call ``` sbt run ``` from the backend folder. To run the client call ``` npm run dev ``` to run the client in development mode or ``` npm start ``` to run in production.
+
+## Running the tests
+
+To run tests from the project make calls from both backend (``` sbt test ```) and frontend (``` npm t ```) folders.
+
+## Built With
+
+* [Nuxt.js](https://ru.nuxtjs.org) - The framework used
+* [Webpack](https://webpack.js.org) - Assets bundler
+
+## Contributing
+
+Musicbox is open for pull requests from anyone.
+
+## Versioning
+
+* 0.0.1 Version
+
+## Authors
+
+* **Alexander Filshin** - *Initial work* - [IIpocTo](https://github.com/IIpocTo)
+* **George Carpow** - *Initial work* - [eakarpov](https://github.com/eakarpov)
+* **Nikita Ivanov** - *Initial work* - [BobNobrain](https://github.com/BobNobrain)
+* **Daniil Azarnov** - *Initial work* - [DanilAzarnov](https://github.com/DanilAzarnov)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
