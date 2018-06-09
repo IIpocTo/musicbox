@@ -9,7 +9,7 @@
             </span>
             <span class="grey--text">
                 &nbsp;&mdash;
-                {{ album.artist.name }}
+                {{ album.artists[0].name }}
             </span>
         </v-card-title>
         <v-card-text class="tags">
@@ -44,6 +44,9 @@ export default {
         album: Object,
         height: String
     },
+    beforeMount() {
+        console.log(this.album);
+    },
     data() {
         return { like: false };
     },
@@ -63,7 +66,7 @@ export default {
                     content: this.album.tracks.map(t => Object.assign(
                         {
                             album: this.album,
-                            artist: this.album.artist
+                            artist: this.album.artists[0]
                         },
                         t
                     )),

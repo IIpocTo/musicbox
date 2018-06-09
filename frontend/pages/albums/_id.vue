@@ -90,12 +90,12 @@ export default {
                     throw new Error('Указанного альбома не существует');
                 }
 
-                const creator = result.artistsId[0];
-                const artist = await this.$store.dispatch('remote/getById', {
-                    name: 'artists',
-                    id: creator
-                });
-                this.artist = artist;
+                const creator = result.artists[0];
+                // const artist = await this.$store.dispatch('remote/getById', {
+                //     name: 'artists',
+                //     id: creator
+                // });
+                this.artist = creator;
             } catch (error) {
                 this.error = error.message || String(error);
                 this.data = null;

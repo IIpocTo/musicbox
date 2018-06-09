@@ -13,6 +13,13 @@ const hash = {
     tracks: { single: 'track', qId: 'tid' }
 };
 
+const deserializeAlbum = albumData => {
+    if (!albumData.artist) albumData.artist = albumData.artists[0];
+    // if (!albumData.artistsId)
+    if (!albumData.tracks) albumData.tracks = [];
+    return albumData;
+};
+
 export const state = () => ({
     artists: [],
     albums: [],
@@ -26,7 +33,8 @@ export const mutations = {
         for (let i = 0; i < entities.length; i++) {
             const e = entities[i];
             if (existing.includes(e[idName])) {
-                continue;
+                const [old] = getById(collection, e[idName], idName);
+                Object.assign(old, e);
             } else {
                 collection.push(e);
             }
@@ -42,11 +50,7 @@ export const actions = {
         let data = await result.json();
 
         if (name === 'albums') {
-            data = data.map(a => Object.assign(a, {
-                artist: a.artistsId[0],
-                artistsId: a.artistsId.map(b => b.id),
-                tracks: []
-            }));
+            data = data.map(deserializeAlbum);
         }
 
         // const oldLen = state[name].length;
