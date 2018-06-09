@@ -22,7 +22,7 @@
                 </div>
             </transition>
             <v-slider
-                v-model="player.progress"
+                v-model="progress"
                 step="0"
                 hide-details
                 :max="1" :min="0"
@@ -107,12 +107,13 @@
                             left top offset-x
                         >
                             <v-btn icon slot="activator">
-                                <v-icon>volume_up</v-icon>
+                                <v-icon>{{ volumeIcon }}</v-icon>
                             </v-btn>
                             <v-card class="pa-1">
                                 <v-slider
-                                    v-model="player.volume"
-                                    prepend-icon="volume_up"
+                                    v-model="volume"
+                                    :prepend-icon="volumeIcon"
+                                    :prepend-icon-cb="() => toggleMute()"
                                     :min="0" :max="1" :step="0"
                                     hide-details
                                     class="pt-1"
@@ -145,8 +146,9 @@
         <howler-player
             v-if="sources.length"
             ref="player"
-            :audio-sources="sources"
-            loop autoplay
+            :sources="sources"
+            :loop="repeat === 'one'"
+            autoplay
         ></howler-player>
     </v-bottom-sheet>
 </template>
@@ -164,7 +166,9 @@ export default {
             repeat: 'none',
             volumeMenu: false,
             shuffle: false,
-            like: false
+            like: false,
+
+            playerInstance: null
         };
     },
     computed: {
@@ -199,14 +203,36 @@ export default {
         },
 
         sources() {
-            return [];
+            if (!this.playlist || !this.currentSong) return [];
+            const realUrl = this.currentSong.url;
+            console.log(realUrl);
+            return ['https://raw.githubusercontent.com/BobNobrain/temp-static/master/Dethklok%20-%20Fansong.mp3'];
         },
         player() {
-            return this.$refs.player || ({
+            if (this.playerInstance) return this.playerInstance;
+            return {
                 progress: 0,
                 volume: 0.5,
                 playing: false
-            });
+            };
+        },
+
+        // fuck vue-howler's lazy author who didn't managed to do this himself
+        progress: {
+            get() {
+                return this.player.progress;
+            },
+            set(value) {
+                this.player.setProgress(value);
+            }
+        },
+        volume: {
+            get() {
+                return this.player.volume;
+            },
+            set(value) {
+                this.player.setVolume(value);
+            }
         },
 
         shuffledPositions() {
@@ -220,6 +246,15 @@ export default {
             }
             console.log('shuffle!', result);
             return result;
+        },
+
+        volumeIcon() {
+            if (!this.playerInstance) return 'volume_up';
+            if (this.playerInstance.muted) return 'volume_off';
+            const volume = this.playerInstance.volume;
+            if (volume < 0.1) return 'volume_mute';
+            if (volume < 0.5) return 'volume_down';
+            return 'volume_up';
         }
     },
     methods: {
@@ -276,6 +311,24 @@ export default {
         setRepeat(mode) {
             if (this.repeat === mode) this.repeat = 'none';
             else this.repeat = mode;
+        },
+
+        toggleMute() {
+            if (this.playerInstance) {
+                this.playerInstance.toggleMute();
+            }
+        }
+    },
+
+    watch: {
+        sources(nval) {
+            if (nval.length) {
+                this.$nextTick(() => {
+                    this.playerInstance = this.$refs.player;
+                });
+            } else {
+                this.playerInstance = null;
+            }
         }
     },
 
