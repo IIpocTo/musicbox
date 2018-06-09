@@ -157,6 +157,13 @@ import HowlerPlayer from './HowlerPlayer';
 import MPlaylist from '@/components/MPlaylist';
 import LikeBtn from '@/components/common/LikeBtn';
 
+const music = [
+    'https://raw.githubusercontent.com/BobNobrain/temp-static/master/03.%20Passage%20of%20the%20Crane.mp3',
+    'https://raw.githubusercontent.com/BobNobrain/temp-static/master/Dethklok%20-%20Fansong.mp3',
+    'https://raw.githubusercontent.com/BobNobrain/temp-static/master/10.%20Corium.mp3',
+    'https://raw.githubusercontent.com/BobNobrain/temp-static/master/Orpheus%20Omega%20-%20Tomorrow\'s%20Friends%20%20Yesterday\'s%20Ghosts.mp3'
+];
+
 export default {
     name: 'MusicPlayerControls',
     data() {
@@ -204,9 +211,9 @@ export default {
 
         sources() {
             if (!this.playlist || !this.currentSong) return [];
-            const realUrl = this.currentSong.url;
+            const realUrl = this.currentSong.content;
             console.log(realUrl);
-            return ['https://raw.githubusercontent.com/BobNobrain/temp-static/master/Dethklok%20-%20Fansong.mp3'];
+            return [music[this.position % 4]];
         },
         player() {
             if (this.playerInstance) return this.playerInstance;
