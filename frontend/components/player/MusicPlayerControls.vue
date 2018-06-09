@@ -147,8 +147,9 @@
             v-if="sources.length"
             ref="player"
             :sources="sources"
-            :loop="repeat === 'one'"
+            loop
             autoplay
+            @end="onPlaybackEnd"
         ></howler-player>
     </v-bottom-sheet>
 </template>
@@ -324,6 +325,12 @@ export default {
             if (this.playerInstance) {
                 this.playerInstance.toggleMute();
             }
+        },
+
+        onPlaybackEnd() {
+            if (this.repeat === 'one') return;
+            if (this.hasNext) this.getNext();
+            else this.playerInstance.stop();
         }
     },
 

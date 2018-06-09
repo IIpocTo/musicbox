@@ -22,8 +22,9 @@
             <v-btn
                 outline
                 color="primary"
-                :to="'/artists/' + artist.id"
-            ><v-icon left>album</v-icon>К альбомам</v-btn>
+                :too="'/artists/' + artist.id"
+                @click="play"
+            ><v-icon left>play_arrow</v-icon>Слушать</v-btn>
             <like-btn v-model="like"></like-btn>
         </v-card-actions>
     </v-card>
@@ -45,6 +46,31 @@ export default {
     },
     data() {
         return { like: false };
+    },
+    methods: {
+        async play() {
+            try {
+                const albumsIds = this.artist.albumsIds.slice(0, 3);
+                const queries = albumsIds.map(id => this.$store.dispatch('remote/getById', {
+                    name: 'albums',
+                    id
+                }));
+                const albums = await Promise.all(queries);
+                const tracks = albums.reduce((a, n) => a.concat(n.tracks.map(t => Object.assign({
+                    artist: this.artist,
+                    album: n
+                }, t))), []);
+
+                this.$store.commit('player/play', {
+                    playlist: {
+                        content: tracks,
+                        title: this.artist.name
+                    }
+                });
+            } catch (error) {
+                this.$store.commit('showError', { error, text: 'Ошибка загрузки треков' });
+            }
+        }
     },
     components: {
         LikeBtn
