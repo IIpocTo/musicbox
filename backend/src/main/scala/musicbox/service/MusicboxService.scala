@@ -27,10 +27,10 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
       track.content
     )
 
-  private def albumToResponse(album: Album, tracks: Seq[Option[Track]]): AlbumResponse =
+  private def albumToResponse(album: Album, tracks: Seq[Option[Track]], artists: Seq[Option[Artist]]): AlbumResponse =
     AlbumResponse(
       album.id.stringify,
-      album.artists.map(_.id.stringify),
+      artists.flatten.map(artistToResponse),
       album.name,
       album.image,
       Instant.ofEpochMilli(album.releaseDate.toLong).atZone(ZoneId.systemDefault()).toLocalDate,
@@ -66,7 +66,12 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
         val seqTracks = album.tracks
           .map(_.id.stringify)
           .map(id => musicboxDao.findTrackById(id))
-        Future.sequence(seqTracks).map(Option(_)).map(_.map(albumToResponse(album, _)))
+        val seqArtists = album.artists
+            .map(_.id.stringify)
+            .map(id => musicboxDao.findArtistById(id))
+        Future.sequence(seqTracks).zip(Future.sequence(seqArtists))
+          .map(Option(_))
+          .map(opt => opt.map(pair =>  albumToResponse(album, pair._1, pair._2)))
       case None => Future.successful(None)
     }
   }
