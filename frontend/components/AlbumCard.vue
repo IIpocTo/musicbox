@@ -1,6 +1,8 @@
 <template>
     <v-card :height="height" class="album-card">
-        <v-card-media :src="album.image" height="250px"></v-card-media>
+        <nuxt-link :to="'/albums/' + album.id">
+            <v-card-media :src="album.image" height="250px"></v-card-media>
+        </nuxt-link>
         <v-card-title class="headline">
             <span>
                 {{ album.name }}

@@ -1,20 +1,24 @@
 <template>
     <v-list>
         <template v-if="showTitle">
-            <v-subheader>{{ title }}</v-subheader>
+            <v-subheader>
+                {{ name }}
+                <span v-if="showCount" class="grey--text ml-3 body-1">({{ tracks.length }} треков)</span>
+            </v-subheader>
             <v-divider></v-divider>
         </template>
         <v-list-tile
             v-for="(track, i) in tracks"
             :key="i"
             avatar
+            @click="playTrack(i)"
         >
             <v-list-tile-avatar tile>
-                <img :src="track.album.cover">
+                <img :src="track.album.image">
             </v-list-tile-avatar>
             <v-list-tile-content>
-                <v-list-tile-title>{{ track.title }}</v-list-tile-title>
-                <v-list-tile-sub-title>{{ track.artist.title }} &mdash; {{ track.album.title }}</v-list-tile-sub-title>
+                <v-list-tile-title>{{ track.name }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ track.artist.name }} &mdash; {{ track.album.name }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
                 <v-btn icon><v-icon>play_arrow</v-icon></v-btn>
@@ -40,7 +44,7 @@ export default {
     name: 'MPlaylist',
     props: {
         tracks: Array,
-        title: {
+        name: {
             type: String,
             default: ''
         },
@@ -48,10 +52,17 @@ export default {
             type: Boolean,
             default: false
         },
+        showCount: {
+            type: Boolean,
+            default: false
+        },
         noDataText: {
             type: String,
             default: 'Плейлист пуст'
         }
+    },
+    methods: {
+        playTrack() {}
     },
     components: {
         LikeBtn
