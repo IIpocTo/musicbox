@@ -18,12 +18,18 @@ ids = [
     '568ZhdwyaiCyOGJRtNYhWf',  # Deep Purple
     '7oPftvlwr6VrsViSDV7fJY',  # Green Day
     '5Pwc4xIPtQLFEnJriah9YJ',  # OneRepublic
-    '5ggxe6RGD8zHfaCbwTdtw5',  # Алиса
-    '0ICn3Cbc4mMeLmTvwnqXYu',  # Ария
-    '68YlHHmtFXbIFOPp8pMutS',  # Щурците
+    # '5ggxe6RGD8zHfaCbwTdtw5',  # Алиса
+    # '0ICn3Cbc4mMeLmTvwnqXYu',  # Ария
+    # '68YlHHmtFXbIFOPp8pMutS',  # Щурците
     '3WrFJ7ztbogyGnTHbHJFl2',  # The Beatles
     '293zczrfYafIItmnmM3coR',  # Chuck Berry
-    '6deZN1bslXzeGvOLaLMOIF',  # Nickelback
+    '6deZN1bslXzeGvOLaLMOIF',  # Nickelback,
+    '0OdUWJ0sBjDrqHygGUXeCF',
+    '0oSGxfWSnnOXhD2fKuz2Gy',
+    '3dBVyJ7JuOMt4GE9607Qin',
+    '4tZwfgrHOc3mvqYlEYSvVi',
+    '7ae4vgLLhir2MCjyhgbGOQ'
+    # '5RBdF1pJSLF3ugc2Y2PoB8'
 ]
 
 number = 0
@@ -36,7 +42,7 @@ def collect_artists(artist):
         el['image'] = artist['images'][0]['url']
         el['_id'] = id(artist['id'])
         el['popularity'] = artist['popularity']
-        albums_by_artist = sp.artist_albums(artist['id'], limit=3)['items']
+        albums_by_artist = sp.artist_albums(artist['id'], limit=10)['items']
         el['albums'] = list(map(
             lambda x: DBRef(collection='albums',
                             id=id(x['id'])),
@@ -65,7 +71,7 @@ def collect_artists(artist):
                     alb['image'] = ""
                 if album['release_date_precision'] == 'day':
                     alb['releaseDate'] = time.mktime(
-                        datetime.strptime(album['release_date'], '%Y-%m-%d').timetuple()) 
+                        datetime.strptime(album['release_date'], '%Y-%m-%d').timetuple())
                 else:
                     if album['release_date_precision'] == 'year':
                         alb['releaseDate'] = time.mktime(

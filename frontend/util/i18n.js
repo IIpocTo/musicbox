@@ -81,7 +81,14 @@ const translations = {
     'jump up': 'Джамп-ап',
     'jungle': 'Джангл',
     'russian punk': 'Русский панк',
-    'bulgarian rock': 'Болгарский рок'
+    'bulgarian rock': 'Болгарский рок',
+    'folk-pop': 'Фолк-поп',
+    'dance rock': 'Дэнс-рок',
+    'indie folk': 'Инди-фолк',
+    'indie pop': 'Инди-поп',
+    'electro': 'Электро',
+    'electronic': 'Электронная музыка',
+    'new wave': 'Нью-вейв'
 };
 
 export function t(key) {

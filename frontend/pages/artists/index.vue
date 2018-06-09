@@ -56,10 +56,6 @@ export default {
         fetchMore() {
             this.page++;
             this.getArtists();
-        },
-        showArtist(id) {
-            console.log(id);
-            this.$router.push(`/artists/${id}`);
         }
     },
     computed: {
