@@ -22,7 +22,8 @@
             <v-btn
                 outline
                 color="primary"
-            ><v-icon>play_arrow</v-icon>Слушать</v-btn>
+                :to="'/artists/' + artist.id"
+            ><v-icon left>album</v-icon>К альбомам</v-btn>
             <like-btn v-model="like"></like-btn>
         </v-card-actions>
     </v-card>

@@ -11,6 +11,8 @@
             v-for="(track, i) in tracks"
             :key="i"
             avatar
+            :color="i === currentSongIndex ? 'primary' : void 0"
+            :class="{ 'current-song': i === currentSongIndex }"
             @click="playTrack(i)"
         >
             <v-list-tile-avatar tile>
@@ -20,7 +22,7 @@
                 <v-list-tile-title>{{ track.name }}</v-list-tile-title>
                 <v-list-tile-sub-title>{{ track.artist.name }} &mdash; {{ track.album.name }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-list-tile-action>
+            <v-list-tile-action v-if="i !== currentSongIndex">
                 <v-btn icon @click="() => {}"><v-icon>play_arrow</v-icon></v-btn>
             </v-list-tile-action>
             <v-list-tile-action>
@@ -61,8 +63,23 @@ export default {
             default: 'Плейлист пуст'
         }
     },
+    computed: {
+        currentSongId() {
+            const song = this.$store.getters['player/currentSong'];
+            if (song) return song.id;
+            return NaN; // to be unequal to anything
+        },
+        currentSongIndex() {
+            const id = this.currentSongId;
+            for (let i = 0; i < this.tracks.length; i++) {
+                if (this.tracks[i].id === id) return i;
+            }
+            return -1;
+        }
+    },
     methods: {
         playTrack(i) {
+            if (i === this.currentSongIndex) return;
             this.$store.commit('player/play', {
                 playlist: {
                     name: this.name || 'Безымянный плейлист',
@@ -77,3 +94,10 @@ export default {
     }
 };
 </script>
+<style lang="stylus" scoped>
+.current-song
+    background rgba(0, 0, 0, 0.1)
+    transition background 200ms
+    &:hover
+        background unset
+</style>
