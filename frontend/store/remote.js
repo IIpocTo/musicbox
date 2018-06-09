@@ -7,10 +7,10 @@ function getById(arr, id, idName = 'id') {
     return [null, -1];
 }
 
-const singleNames = {
-    artists: 'artist',
-    albums: 'album',
-    tracks: 'track'
+const hash = {
+    artists: { single: 'artist', qId: 'aid' },
+    albums: { single: 'album', qId: 'aid' },
+    tracks: { single: 'track', qId: 'tid' }
 };
 
 export const state = () => ({
@@ -49,7 +49,12 @@ export const actions = {
     async getById({ commit, state }, { name, id }) {
         const [cached] = getById(state[name], id);
         if (cached) return cached;
-        const result = await connector.get(SERVICES[singleNames[name]]);
+        const result = await connector().get(
+            SERVICES[hash[name].single],
+            {
+                query: `${hash[name].qId}=${id}`
+            }
+        );
         if (result) {
             const data = await result.json();
             commit('mergeNew', { name, entities: [data] });
