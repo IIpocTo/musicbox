@@ -4,6 +4,7 @@ export const state = () => ({
     sidebar: false,
     backendAvailable: false,
     cookieNotifier: false,
+    dark: false,
 
     snackbar: {
         visible: false,
@@ -39,6 +40,10 @@ export const mutations = {
         state.snackbar.visible = true;
         state.snackbar.color = 'success';
         state.snackbar.text = text;
+    },
+
+    setDark(state, value) {
+        state.dark = value;
     }
 };
 

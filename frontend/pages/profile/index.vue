@@ -7,6 +7,15 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
+                <div class="title">Настройки внешнего вида</div>
+                <v-switch
+                    v-model="darkTheme"
+                    label="Тёмная тема"
+                    color="primary"
+                ></v-switch>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-text>
                 <div class="title">Персональные данные</div>
                 <v-layout row justify-center>
                     <v-flex xs12 md8 lg6>
@@ -165,7 +174,13 @@ export default {
     computed: {
         ...mapGetters({
             user: 'user/user'
-        })
+        }),
+        darkTheme: {
+            get() { return this.$store.state.dark; },
+            set(value) {
+                this.$store.commit('setDark', value);
+            }
+        }
     },
     methods: {
         ...mapActions({

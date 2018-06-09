@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app :dark="dark">
         <v-navigation-drawer
             :clipped="clipped"
             v-model="drawer"
@@ -207,7 +207,11 @@ export default {
             get() { return this.$store.state.snackbar.visible; },
             set(value) { this.$store.commit('showSnackbar', value); }
         },
-        snackbar() { return this.$store.state.snackbar; }
+        snackbar() { return this.$store.state.snackbar; },
+
+        dark() {
+            return this.$store.state.dark;
+        }
     },
     methods: {
         ...mapActions({
