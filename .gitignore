@@ -27,3 +27,5 @@ scripts/dist/
 scripts/spotify_importer.egg-info
 scripts/spotify_importer/__pycache__/
 scripts/google_music/__pycache__/
+
+backend/project/plugins.sbt

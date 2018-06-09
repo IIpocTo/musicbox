@@ -16,16 +16,16 @@ class MusicboxRouter(service: MusicboxService)(implicit executionContext: Execut
   val route: Route =
   path("artist") {
     get {
-      parameters("aid".?) {
-        case Some(aid) =>
-          logger.info(s"Requested artist with aid = $aid")
-          onSuccess(service.getArtist(aid)) {
+      parameters("id".?) {
+        case Some(id) =>
+          logger.info(s"Requested artist with id = $id")
+          onSuccess(service.getArtist(id)) {
             case Some(artist) =>
               logger.info(s"Returning artist: $artist")
               complete(artist)
             case None =>
-              logger.warn(s"No artist with id = $aid")
-              complete(StatusCodes.Conflict, "No artist for such aid")
+              logger.warn(s"No artist with id = $id")
+              complete(StatusCodes.Conflict, "No artist for such id")
           }
         case None => complete(StatusCodes.BadRequest, "aid query parameter is missing")
       }
@@ -48,5 +48,22 @@ class MusicboxRouter(service: MusicboxService)(implicit executionContext: Execut
         }
       }
     }
-  }
+  } ~
+    path("album") {
+      get {
+        parameters("id".?) {
+          case Some(id) =>
+            logger.info(s"Requested album with id = $id")
+            onSuccess(service.getAlbum(id)) {
+              case Some(album) =>
+                logger.info(s"Returning album: $album")
+                complete(album)
+              case None =>
+                logger.warn(s"No artist with id = $id")
+                complete(StatusCodes.Conflict, "No artist for such id")
+            }
+          case None => complete(StatusCodes.BadRequest, "id query parameter is missing")
+        }
+      }
+    }
 }

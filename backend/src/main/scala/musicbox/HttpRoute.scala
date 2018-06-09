@@ -39,6 +39,7 @@ class HttpRoute(implicit executionContext: ExecutionContext) {
   handleRejections(rejectionHandler) &
   handleExceptions(exceptionHandler)
 
+
   val routes: Route =
     handleErrors {
       cors() {
