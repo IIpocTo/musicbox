@@ -95,8 +95,10 @@ export default {
                     })
                 );
                 const results = await Promise.all(queries);
-                console.log(results);
-                this.albums = results;
+                this.albums = results.map(albumData => Object.assign(
+                    { artist: result },
+                    albumData
+                ));
             } catch (error) {
                 this.error = error.message || String(error);
                 this.data = null;

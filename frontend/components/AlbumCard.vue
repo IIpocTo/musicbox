@@ -12,12 +12,16 @@
         </v-card-title>
         <v-card-text class="tags">
             <v-chip
-                v-for="(tag, i) in album.tags"
-                :key="i"
+                v-if="releaseDate"
                 label
                 dark color="primary"
-                class="white--text"
-            ><v-icon left>label</v-icon>{{ tag }}</v-chip>
+                class="white--text body-2"
+            ><v-icon left>calendar_today</v-icon>{{ releaseDate }}</v-chip>
+            <v-chip
+                label
+                outline color="primary"
+                class="white--text body-2"
+            ><v-icon left color="primary">library_music</v-icon>{{ album.tracks.length }} треков</v-chip>
         </v-card-text>
         <v-card-actions>
             <v-btn
@@ -39,6 +43,15 @@ export default {
     },
     data() {
         return { like: false };
+    },
+    computed: {
+        releaseDate() {
+            const date = this.album.releaseDate;
+            if (!date) return false;
+            const m = date.month;
+            const sm = m < 10 ? '0' + m : '' + m;
+            return `${date.day}.${sm}.${date.year}`;
+        }
     },
     components: {
         LikeBtn

@@ -8,8 +8,8 @@ function getById(arr, id, idName = 'id') {
 }
 
 const hash = {
-    artists: { single: 'artist', qId: 'aid' },
-    albums: { single: 'album', qId: 'aid' },
+    artists: { single: 'artist', qId: 'id' },
+    albums: { single: 'album', qId: 'id' },
     tracks: { single: 'track', qId: 'tid' }
 };
 
