@@ -61,7 +61,7 @@
                         <v-list-tile-title>Альбомы</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile to="/playlists">
+                <v-list-tile to="/playlists" v-if="authorized">
                     <v-list-tile-action>
                         <v-icon>playlist_play</v-icon>
                     </v-list-tile-action>

@@ -21,13 +21,13 @@
                 <v-list-tile-sub-title>{{ track.artist.name }} &mdash; {{ track.album.name }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
-                <v-btn icon><v-icon>play_arrow</v-icon></v-btn>
+                <v-btn icon @click="() => {}"><v-icon>play_arrow</v-icon></v-btn>
             </v-list-tile-action>
             <v-list-tile-action>
-                <v-btn icon><v-icon>playlist_add</v-icon></v-btn>
+                <v-btn icon @click.native.stop="() => {}"><v-icon>playlist_add</v-icon></v-btn>
             </v-list-tile-action>
             <v-list-tile-action>
-                <like-btn></like-btn>
+                <like-btn @click.native.stop></like-btn>
             </v-list-tile-action>
         </v-list-tile>
         <v-list-tile v-if="!tracks.length">
@@ -62,7 +62,15 @@ export default {
         }
     },
     methods: {
-        playTrack() {}
+        playTrack(i) {
+            this.$store.commit('player/play', {
+                playlist: {
+                    name: this.name || 'Безымянный плейлист',
+                    content: this.tracks
+                },
+                position: i
+            });
+        }
     },
     components: {
         LikeBtn

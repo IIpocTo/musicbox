@@ -13,13 +13,14 @@
                         <v-btn icon @click="showPlaylist = false"><v-icon>close</v-icon></v-btn>
                     </v-layout>
                     <v-divider></v-divider>
-                    <m-playlist
-                        :tracks="playlist.content"
-                    ></m-playlist>
-                    <v-divider class="mb-3"></v-divider>
+                    <div class="playlist-wrapper">
+                        <m-playlist
+                            :tracks="playlist ? playlist.content : []"
+                        ></m-playlist>
+                        <v-divider class="mb-3"></v-divider>
+                    </div>
                 </div>
             </transition>
-            <!-- <v-progress-linear :value="50" height="3" class="my-0"></v-progress-linear> -->
             <v-slider
                 v-model="player.progress"
                 step="0"
@@ -31,28 +32,28 @@
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-action>
-                        <v-btn icon @click="getPrev">
+                        <v-btn icon :disabled="!hasPrev" @click="getPrev">
                             <v-icon>fast_rewind</v-icon>
                         </v-btn>
                     </v-list-tile-action>
                     <v-list-tile-action>
-                        <v-btn icon @click="togglePlayback">
+                        <v-btn icon :disabled="!currentSong" @click="togglePlayback">
                             <v-icon v-if="player.playing">pause</v-icon>
                             <v-icon v-else>play_arrow</v-icon>
                         </v-btn>
                     </v-list-tile-action>
                     <v-list-tile-action class="mx-0">
-                        <v-btn icon @click="getNext">
+                        <v-btn icon :disabled="!hasNext" @click="getNext">
                             <v-icon>fast_forward</v-icon>
                         </v-btn>
                     </v-list-tile-action>
                     <v-list-tile-avatar tile size="60" class="mr-2">
-                        <img src="@/assets/image/oomph.jpg" alt="album cover" v-if="currentSong">
+                        <img :src="currentSong.album.image" alt="album cover" v-if="currentSong">
                     </v-list-tile-avatar>
                     <v-list-tile-content v-if="currentSong">
-                        <v-list-tile-title>{{ currentSong.title }}</v-list-tile-title>
+                        <v-list-tile-title>{{ currentSong.name }}</v-list-tile-title>
                         <v-list-tile-sub-title>
-                            {{ currentSong.artist.title }} &mdash; {{ currentSong.album.title }}
+                            {{ currentSong.artist.name }} &mdash; {{ currentSong.album.name }}
                         </v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-content v-else>
@@ -60,16 +61,28 @@
                     </v-list-tile-content>
                     <v-spacer/>
                     <v-list-tile-action class="mx-0">
-                        <like-btn v-model="like"></like-btn>
+                        <like-btn v-model="like" v-if="currentSong"></like-btn>
                     </v-list-tile-action>
                     <v-list-tile-action class="mx-0">
                         <v-tooltip top>
                             <v-btn
                                 slot="activator"
-                                icon :color="repeat === 'all' ? 'primary' : void 0"
+                                icon
+                                @click="shuffle = !shuffle"
+                            >
+                                <v-icon :color="shuffle ? 'primary' : void 0">shuffle</v-icon>
+                            </v-btn>
+                            <span>Перемешать</span>
+                        </v-tooltip>
+                    </v-list-tile-action>
+                    <v-list-tile-action class="mx-0">
+                        <v-tooltip top>
+                            <v-btn
+                                slot="activator"
+                                icon
                                 @click="setRepeat('all')"
                             >
-                                <v-icon>repeat</v-icon>
+                                <v-icon :color="repeat === 'all' ? 'primary' : void 0">repeat</v-icon>
                             </v-btn>
                             <span>Повторять весь плейлист</span>
                         </v-tooltip>
@@ -78,10 +91,10 @@
                         <v-tooltip top>
                             <v-btn
                                 slot="activator"
-                                icon :color="repeat === 'one' ? 'primary' : void 0"
+                                icon
                                 @click="setRepeat('one')"
                             >
-                                <v-icon>repeat_one</v-icon>
+                                <v-icon :color="repeat === 'one' ? 'primary' : void 0">repeat_one</v-icon>
                             </v-btn>
                             <span>Повторять текущую композицию</span>
                         </v-tooltip>
@@ -147,35 +160,42 @@ export default {
     data() {
         return {
             menu: false,
-
-            menuItems: [
-                { icon: 'visibility_off', text: 'Спрятать плеер', action: 'hidePlayer' },
-                { icon: 'playlist_play', text: 'К плейлисту', action: 'goToPlaylist' },
-                { icon: 'playlist_add', text: 'Добавить в плейлист', action: 'addToPlaylist' }
-                // { icon: 'favorite', text: 'Мне нравится', action: 'likeSong' }
-            ],
-
             showPlaylist: false,
-
             repeat: 'none',
             volumeMenu: false,
-
+            shuffle: false,
             like: false
         };
     },
     computed: {
-        currentSong() {
-            return this.$store.getters['player/currentSong'];
+        currentSong() { return this.$store.getters['player/currentSong']; },
+        playerVisible() { return this.$store.state.player.visible; },
+        backendAvailable() { return this.$store.state.backendAvailable; },
+        playlist() { return this.$store.state.player.playlist; },
+        position() { return this.$store.state.player.position; },
+
+        hasPrev() {
+            if (!this.playlist) return false;
+            if (this.repeat === 'all') return true;
+            if (!this.shuffle) return this.position > 0;
+            return this.shuffledPositions[0] !== this.position;
         },
-        playerVisible() {
-            return this.$store.state.player.visible;
-        },
-        backendAvailable() {
-            return this.$store.state.backendAvailable;
+        hasNext() {
+            if (!this.playlist) return false;
+            if (this.repeat === 'all') return true;
+            if (!this.shuffle) return this.position < this.playlist.content.length - 1;
+            return this.shuffledPositions[this.shuffledPositions.length - 1] !== this.position;
         },
 
-        playlist() {
-            return this.$store.state.player.playlist;
+        menuItems() {
+            const result = [
+                { icon: 'visibility_off', text: 'Спрятать плеер', action: 'hidePlayer' },
+                { icon: 'playlist_play', text: 'К плейлисту', action: 'goToPlaylist' }
+            ];
+            if (this.currentSong) {
+                result.push({ icon: 'playlist_add', text: 'Добавить в плейлист', action: 'addToPlaylist' });
+            }
+            return result;
         },
 
         sources() {
@@ -187,6 +207,19 @@ export default {
                 volume: 0.5,
                 playing: false
             });
+        },
+
+        shuffledPositions() {
+            const tracks = this.playlist.content;
+            console.log('shuffle!');
+            const l = tracks.length;
+            const result = new Array(l).fill(null).map((_, i) => i);
+            for (let i = l - 1; i > 0; i--) {
+                const r = (Math.random() * (i - 1)) | 0;
+                [result[r], result[i]] = [result[i], result[r]];
+            }
+            console.log('shuffle!', result);
+            return result;
         }
     },
     methods: {
@@ -206,8 +239,36 @@ export default {
 
 
         getNext() {
+            let position = this.$store.state.player.position;
+            if (this.shuffle) {
+                for (let i = 0; i < this.shuffledPositions.length; i++) {
+                    if (this.shuffledPositions[i] === position) {
+                        const nextI = (i + 1) % this.shuffledPositions.length;
+                        position = this.shuffledPositions[nextI];
+                        break;
+                    }
+                }
+            } else {
+                position += 1;
+                if (position >= this.playlist.content.length) position = 0;
+            }
+            this.$store.commit('player/setPosition', position);
         },
         getPrev() {
+            let position = this.$store.state.player.position;
+            if (this.shuffle) {
+                for (let i = 0; i < this.shuffledPositions.length; i++) {
+                    if (this.shuffledPositions[i] === position) {
+                        const prevI = (i - 1 + this.shuffledPositions.length) % this.shuffledPositions.length;
+                        position = this.shuffledPositions[prevI];
+                        break;
+                    }
+                }
+            } else {
+                position -= 1;
+                if (position < 0) position = this.playlist.content.length - 1;
+            }
+            this.$store.commit('player/setPosition', position);
         },
         togglePlayback() {
             this.$refs.player.togglePlayback();
@@ -225,3 +286,8 @@ export default {
     }
 };
 </script>
+<style lang="stylus" scoped>
+.playlist-wrapper
+    max-height 60vh
+    overflow-y auto
+</style>

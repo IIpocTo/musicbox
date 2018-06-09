@@ -1,39 +1,13 @@
 export const state = () => ({
     visible: true,
 
-    playlist: {
-        title: 'True Beauty Is So Painful — Oomph!',
-        id: '',
-        content: [
-            {
-                title: 'True Beauty Is So Painful',
-                url: 'todo://music.mp3',
-                id: '',
-                artist: {
-                    title: 'Oomph!',
-                    id: ''
-                },
-                album: {
-                    title: 'True Beauty Is So Painful',
-                    id: ''
-                }
-            }
-        ]
-    },
-
-    repeatPlaylist: true,
-    repeatSong: false,
-    shuffle: false
+    playlist: null,
+    position: 0
 });
 
 export const getters = {
-    hasNextSong(state) {
-        return state.repeatPlaylist || state.position !== state.playlist.content.length - 1;
-    },
-    hasPrevSong(state) {
-        return state.repeatPlaylist || state.position !== 0;
-    },
     currentSong(state) {
+        if (!state.playlist) return null;
         return state.playlist.content[state.position] || null;
     }
 };
@@ -41,5 +15,14 @@ export const getters = {
 export const mutations = {
     setVisibility(state, value) {
         state.visible = value;
+    },
+
+    play(state, { playlist, position = 0 }) {
+        state.playlist = playlist;
+        state.position = position;
+    },
+
+    setPosition(state, value) {
+        state.position = value;
     }
 };
