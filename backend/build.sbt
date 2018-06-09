@@ -35,6 +35,9 @@ lazy val root = (project in file(".")).settings(
     "org.scalatest" %% "scalatest" % "3.0.5" % Test,
     "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
     "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
+    "com.github.swagger-akka-http" %% "swagger-akka-http" % "0.14.0",
+    "org.webjars" % "swagger-ui" % "3.17.0",
+    "org.webjars" % "webjars-locator" % "0.32"
   )
 )

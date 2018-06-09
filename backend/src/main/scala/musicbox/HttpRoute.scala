@@ -10,6 +10,7 @@ import musicbox.session.directives.csrf.CsrfOptions.checkHeader
 import musicbox.MusicboxSessionManager._
 import musicbox.db.{MusicboxDao, UserDao}
 import musicbox.service.{AuthService, MusicboxService, UserService}
+import musicbox.swagger.SwaggerDocService
 import com.softwaremill.macwire._
 
 import scala.concurrent.ExecutionContext
@@ -40,6 +41,9 @@ class HttpRoute(implicit executionContext: ExecutionContext) {
   handleExceptions(exceptionHandler)
 
 
+  def assets = pathPrefix("swagger") {
+    getFromResourceDirectory("swagger") ~ pathSingleSlash(get(redirect("index.html", StatusCodes.PermanentRedirect))) }
+
   val routes: Route =
     handleErrors {
       cors() {
@@ -53,7 +57,7 @@ class HttpRoute(implicit executionContext: ExecutionContext) {
                 }
               }
             }
-          }
+          } ~ assets ~ SwaggerDocService.routes
         }
       }
     }

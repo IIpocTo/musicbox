@@ -12,7 +12,9 @@ import musicbox.session.SessionOptions.{refreshable, usingHeaders}
 import musicbox.session.directives.SessionDirectives.requiredSession
 
 import scala.concurrent.ExecutionContext
+import io.swagger.annotations._
 
+@Api(value="/user")
 class UserRouter(service: UserService)(implicit executionContext: ExecutionContext)
     extends StrictLogging {
 
