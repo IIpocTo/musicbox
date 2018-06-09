@@ -1,21 +1,22 @@
 <template>
     <v-card :height="height" class="artist-card">
-        <v-card-media
-            :src="artist.image"
-            height="250px"
-            @click.prevent="() => showPage(artist.id)"
-            :style="{ cursor: 'pointer' }"
-        >
-        </v-card-media>
+        <nuxt-link :to="'/artists/' + artist.id">
+            <v-card-media
+                :src="artist.image"
+                height="250px"
+                :style="{ cursor: 'pointer' }"
+            >
+            </v-card-media>
+        </nuxt-link>
         <v-card-title class="headline">{{ artist.name }}</v-card-title>
         <v-card-text class="tags">
             <v-chip
-                v-for="(genre, i) in artist.genres"
+                v-for="(genre, i) in genresTranslated"
                 :key="i"
                 label
                 dark color="primary"
                 class="white--text"
-            ><v-icon left>label</v-icon>{{ translate(genre) }}</v-chip>
+            ><v-icon left>label</v-icon>{{ genre }}</v-chip>
         </v-card-text>
         <v-card-actions>
             <v-btn
@@ -27,25 +28,22 @@
     </v-card>
 </template>
 <script>
-import * as i18n from '../util/i18n';
 import LikeBtn from '@/components/common/LikeBtn';
+import GenreRenderer from '@/mixins/GenreRenderer';
 
 export default {
     name: 'ArtistCard',
+    mixins: [GenreRenderer('artist')],
     props: {
         artist: Object,
-        height: String
+        height: String,
+        short: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return { like: false };
-    },
-    methods: {
-        translate(value) {
-            return i18n.t(value);
-        },
-        showPage(id) {
-            this.$router.push(`/artists/${id}`);
-        }
     },
     components: {
         LikeBtn
