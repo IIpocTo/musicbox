@@ -62,7 +62,7 @@ object Models {
 
   case class AlbumResponse(
     id: String,
-    artistsId: Seq[ArtistResponse],
+    artists: Seq[ArtistResponse],
     name: String,
     image: String,
     releaseDate: LocalDate,
