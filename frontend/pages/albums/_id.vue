@@ -18,7 +18,9 @@
                             xs12 md7 lg8
                             class="pa-3"
                         >
-                            <div class="title">{{ data.name }}</div>
+                            <div class="title">
+                                {{ data.name }} <span class="grey--text"> &mdash; {{ artist.name }}</span>
+                            </div>
                             <div class="my-3" v-if="releaseDate">
                                 <v-icon>calendar_today</v-icon>
                                 <span class="body-2 ml-2">Дата выхода:</span>
