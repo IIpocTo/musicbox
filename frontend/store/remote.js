@@ -39,7 +39,16 @@ export const actions = {
         const result = await connector().get(SERVICES[name], {
             query: `page=${page}&limit=${limit}`
         });
-        const data = await result.json();
+        let data = await result.json();
+
+        if (name === 'albums') {
+            data = data.map(a => Object.assign(a, {
+                artist: a.artistsId[0],
+                artistsId: a.artistsId.map(b => b.id),
+                tracks: []
+            }));
+        }
+
         // const oldLen = state[name].length;
         commit('mergeNew', { name, entities: data });
         // return state[name].length - oldLen;
