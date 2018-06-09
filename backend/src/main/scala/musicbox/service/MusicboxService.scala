@@ -27,7 +27,11 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
       track.content
     )
 
-  private def albumToResponse(album: Album, tracks: Seq[Option[Track]], artists: Seq[Option[Artist]]): AlbumResponse =
+  private def albumToResponse(
+    album: Album,
+    tracks: Seq[Option[Track]],
+    artists: Seq[Option[Artist]]
+  ): AlbumResponse =
     AlbumResponse(
       album.id.stringify,
       artists.flatten.map(artistToResponse),
@@ -37,10 +41,13 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
       tracks.flatten.map(trackToResponse)
     )
 
-  private def albumToResponseWithoutTracks(album: Album): AlbumResponseWithoutTracks =
+  private def albumToResponseWithoutTracks(
+    album: Album,
+    artists: Seq[Option[Artist]]
+  ): AlbumResponseWithoutTracks =
     AlbumResponseWithoutTracks(
       album.id.stringify,
-      album.artists.map(_.id.stringify),
+      artists.flatten.map(artistToResponse),
       album.name,
       album.image,
       Instant.ofEpochMilli(album.releaseDate.toLong).atZone(ZoneId.systemDefault()).toLocalDate
@@ -58,7 +65,18 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
 
   def getAlbums(page: Int, limit: Int): Future[Vector[AlbumResponseWithoutTracks]] =
     if (page <= 0 || limit <= 0) Future.successful(Vector.empty)
-    else musicboxDao.findAlbums(page, limit).map(_.map(albumToResponseWithoutTracks))
+    else
+      musicboxDao
+        .findAlbums(page, limit)
+        .map(
+          list =>
+            Future.sequence(list.map(album => {
+              val albums =
+                album.artists.map(dbref => musicboxDao.findArtistById(dbref.id.stringify))
+              Future.sequence(albums).map(seq => albumToResponseWithoutTracks(album, seq))
+            }))
+        )
+        .flatten
 
   def getAlbum(albumId: String): Future[Option[AlbumResponse]] = {
     musicboxDao.findAlbumById(albumId).flatMap {
@@ -67,11 +85,13 @@ class MusicboxService(musicboxDao: MusicboxDao)(implicit executionContext: Execu
           .map(_.id.stringify)
           .map(id => musicboxDao.findTrackById(id))
         val seqArtists = album.artists
-            .map(_.id.stringify)
-            .map(id => musicboxDao.findArtistById(id))
-        Future.sequence(seqTracks).zip(Future.sequence(seqArtists))
+          .map(_.id.stringify)
+          .map(id => musicboxDao.findArtistById(id))
+        Future
+          .sequence(seqTracks)
+          .zip(Future.sequence(seqArtists))
           .map(Option(_))
-          .map(opt => opt.map(pair =>  albumToResponse(album, pair._1, pair._2)))
+          .map(opt => opt.map(pair => albumToResponse(album, pair._1, pair._2)))
       case None => Future.successful(None)
     }
   }
