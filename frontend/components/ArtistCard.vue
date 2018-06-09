@@ -10,7 +10,7 @@
         <v-card-title class="headline">{{ artist.name }}</v-card-title>
         <v-card-text class="tags">
             <v-chip
-                v-for="(genre, i) in artist.genres"
+                v-for="(genre, i) in genres"
                 :key="i"
                 label
                 dark color="primary"
@@ -34,10 +34,20 @@ export default {
     name: 'ArtistCard',
     props: {
         artist: Object,
-        height: String
+        height: String,
+        short: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return { like: false };
+    },
+    computed: {
+        genres() {
+            if (this.short) return this.artist.genres.slice(0, 3);
+            return this.artist.genres;
+        }
     },
     methods: {
         translate(value) {

@@ -64,8 +64,15 @@
                             </v-list>
                         </v-card>
                     </v-flex>
-                    <v-flex xs6 lg4 v-for="(value, key) in artists" :key="key">
-                        <artist-card :artist="value"></artist-card>
+                    <template v-if="!loading">
+                        <card-grid :items="artists">
+                            <template slot-scope="{ item }">
+                                <artist-card :artist="item" height="100%" short></artist-card>
+                            </template>
+                        </card-grid>
+                    </template>
+                    <v-flex v-else xs12 class="text-xs-center">
+                        <v-progress-circular indeterminate color="primary"></v-progress-circular>
                     </v-flex>
                 </v-layout>
             </v-flex>
@@ -73,32 +80,39 @@
     </v-container>
 </template>
 <script>
+import CardGrid from '@/components/common/CardGrid';
 import ArtistCard from '@/components/ArtistCard';
 import AlbumCard from '@/components/AlbumCard';
-import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: 'HomePage',
-    beforeMount() {
+    mounted() {
         this.getArtists();
     },
     data() {
         return {
-            unauthorizedNotifier: true
+            unauthorizedNotifier: true,
+            loading: false
         };
     },
     methods: {
         showLoginForm() {
             this.$router.push('/login?tab=login');
         },
-        ...mapActions({
-            getArtists: 'artists/getArtists'
-        })
+        async getArtists() {
+            this.loading = true;
+            await this.$store.dispatch('remote/list', {
+                name: 'artists',
+                page: 1,
+                limit: 6
+            });
+            this.loading = false;
+        }
     },
     computed: {
-        ...mapGetters({
-            artists: 'artists/artists'
-        }),
+        artists() {
+            return this.$store.state.remote.artists.slice(0, 6);
+        },
 
         unauthorizedNotifierVisible: {
             get() {
@@ -115,7 +129,8 @@ export default {
     },
     components: {
         ArtistCard,
-        AlbumCard
+        AlbumCard,
+        CardGrid
     }
 };
 </script>
