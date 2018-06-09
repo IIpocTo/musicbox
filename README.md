@@ -8,9 +8,10 @@ For getting started just follow installing instruction for tuning the environmen
 
 ### Prerequisites
 
-* [SBT](https://www.scala-sbt.org)
-* [NPM](https://www.npmjs.com)
-* [NODE](https://nodejs.org/en/)
+* [sbt](https://www.scala-sbt.org)
+* [npm](https://www.npmjs.com)
+* [Node.js](https://nodejs.org/en/)
+* [MongoDB](https://mongodb.com)
 * Python 2.7
 
 ### Installing
@@ -27,6 +28,10 @@ cd ../backend
 sbt compile
 ```
 Now you are ready to launch the server and the client. To run the server call ``` sbt run ``` from the backend folder. To run the client call ``` npm run dev ``` to run the client in development mode or ``` npm start ``` to run in production.
+
+### Import data to your db
+
+Read [README.md](scripts/README.md) in scripts folder for import script description. Call the script to fill your database with data.
 
 ## Running the tests
 
@@ -54,4 +59,4 @@ Musicbox is open for pull requests from anyone.
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details
