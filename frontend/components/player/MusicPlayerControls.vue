@@ -103,7 +103,6 @@
                         <v-menu
                             v-model="volumeMenu"
                             min-width="300"
-                            class="white"
                             left top offset-x
                         >
                             <v-btn icon slot="activator">
