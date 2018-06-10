@@ -7,12 +7,28 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-                <div class="title">Настройки внешнего вида</div>
+                <div class="title mb-3">Настройки внешнего вида</div>
                 <v-switch
                     v-model="darkTheme"
                     label="Тёмная тема"
                     color="primary"
+                    hide-details
                 ></v-switch>
+                <div class="body-2 mt-2">Цветовая схема:</div>
+                <card-grid :items="colorSchemes">
+                    <template slot-scope="{ item }">
+                        <v-card
+                            dark height="100"
+                            :style="'background-color: ' + item.color + '; cursor: pointer;'"
+                            @click.native="applyColor(item.color)"
+                        >
+                            <v-card-text>
+                                {{ item.text }}
+                                <v-icon v-if="item.color === $vuetify.theme.primary">check</v-icon>
+                            </v-card-text>
+                        </v-card>
+                    </template>
+                </card-grid>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-text>
@@ -144,7 +160,9 @@
     </v-container>
 </template>
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import colors from 'vuetify/es5/util/colors';
+import CardGrid from '@/components/common/CardGrid';
 
 export default {
     name: 'ProfilePage',
@@ -167,7 +185,19 @@ export default {
             },
 
             deleteDialog: false,
-            deletePassword: ''
+            deletePassword: '',
+
+            colorSchemes: [
+                { color: colors.yellow.darken2, text: 'Классическая' },
+                { color: colors.blue.lighten1, text: 'Морской бриз' },
+                { color: colors.green.darken3, text: 'Хвойная' },
+                { color: colors.indigo.base, text: 'Строгая' },
+                { color: colors.deepPurple.base, text: 'Фиолетовая' },
+                { color: colors.red.darken1, text: 'Экспрессивная' },
+                { color: colors.deepOrange.darken4, text: 'Мрачная' },
+                { color: colors.blueGrey.base, text: 'Спокойная' },
+                { color: colors.amber.base, text: 'Солнечная' }
+            ]
         };
     },
 
@@ -238,7 +268,16 @@ export default {
             this.deleteDialog = false;
             this.deletePassword = '';
             this.loading.removal = false;
+        },
+
+        applyColor(color) {
+            this.$vuetify.theme.primary = color;
+            window.localStorage.setItem('musicboxColorScheme', JSON.stringify({ primary: color }));
         }
+    },
+
+    components: {
+        CardGrid
     }
 };
 </script>

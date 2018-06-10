@@ -44,6 +44,11 @@ export const mutations = {
 
     setDark(state, value) {
         state.dark = value;
+        window.localStorage.setItem('musicboxDark', String(value));
+    },
+    checkIsDark(state, value) {
+        const result = window.localStorage.getItem('musicboxDark');
+        state.dark = result === 'true';
     }
 };
 

@@ -167,6 +167,10 @@ import {TOKENS} from '../util/connector';
 
 export default {
     async beforeMount() {
+        const colors = JSON.parse(window.localStorage.getItem('musicboxColorScheme') || '{}');
+        Object.assign(this.$vuetify.theme, colors);
+        this.$store.commit('checkIsDark');
+
         const token = global.localStorage.getItem(TOKENS.AUTHORIZATION);
         if (token) {
             const tokenData = jwtDecode(token);
