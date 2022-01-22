@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "jwt-decode": "^2.2.0",
-    "node-fetch": "^2.1.2",
+    "node-fetch": "^3.1.1",
     "nuxt": "^1.0.0",
     "vue-howler": "^0.7.0",
     "vuetify": "^1.0.0"
